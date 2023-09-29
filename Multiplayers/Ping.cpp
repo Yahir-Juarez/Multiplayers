@@ -32,3 +32,4 @@ int main()
 	std::cin.ignore(10000, '\n');
 	std::cin.ignore(10000, '\n');
 }
+//Me gustaria declararle mi amor pero solo se declarar variables
