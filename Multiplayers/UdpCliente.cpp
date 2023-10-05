@@ -10,12 +10,8 @@ using namespace std;
 void UdpClient(const unsigned short puerto)
 {
 	std::optional<sf::IpAddress> direccion;
+	direccion = IpAddress::getLocalAddress();
 	bool conectado = true;
-	do
-	{
-		cout << "Escribe la Ip desde donde te conectas\n";
-		cin >> direccion;
-	} while (!direccion.has_value());
 	UdpSocket socket;
 	
 	

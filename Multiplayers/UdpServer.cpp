@@ -9,16 +9,17 @@ void UdpServer(const unsigned short puerto)
 	User usuario;
 	servidor.bind_port(&puerto);
 	servidor.conexion(&usuario);
-	while (true)
+	bool servidor_activo = true;
+	while (servidor_activo)
 	{
+		servidor.socket.setBlocking(false);
 		optional<sf::IpAddress> direccion;
 		unsigned short senderPort;
 		Packet paquete;
 		Clock reloj;
 
 		//Solo funciona para un cliente por ahora
-		if (servidor.socket.receive(paquete, direccion, senderPort) != Socket::Status::Done)
-			return;
+		servidor.socket.receive(paquete, direccion, senderPort);
 
 		Time tiempo = reloj.getElapsedTime();
 		float segundos = tiempo.asSeconds();
