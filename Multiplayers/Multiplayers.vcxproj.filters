@@ -32,5 +32,8 @@
     <ClInclude Include="UdpServer.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
+    <ClInclude Include="UdpCliente.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

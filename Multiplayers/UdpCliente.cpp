@@ -4,8 +4,13 @@
 
 using std::cout;
 using std::cin;
-using namespace sf;
-using namespace std;
+using std::string;
+using sf::IpAddress;
+using sf::UdpSocket;
+using sf::Socket;
+using sf::Packet;
+using sf::Clock;
+using sf::Time;
 
 void UdpClient(const unsigned short puerto)
 {
@@ -23,7 +28,7 @@ void UdpClient(const unsigned short puerto)
 	unsigned short senderPort;
 	if (socket.receive(entrada, sizeof(entrada), received, direccion, senderPort) != Socket::Status::Done)
 		return;
-	cout << "El servidor mando: " << quoted(entrada) << "\n";
+	cout << "El servidor mando: " << std::quoted(entrada) << "\n";
 
 
 	while (conectado == true)

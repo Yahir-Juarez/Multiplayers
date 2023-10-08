@@ -1,25 +1,51 @@
 #include "UdpServer.h"
 
-void UdpServer(const unsigned short puerto)
+
+void Server::conexion(User* Data)
+{
+	char in[128];
+	size_t received;
+	optional<sf::IpAddress> direccion;
+	unsigned short senderPort;
+	if (socket.receive(in, sizeof(in), received, direccion, senderPort) != Socket::Status::Done)
+		return;
+
+	Data->direccion = direccion.value();
+	Data->estado = true;
+
+	cout << "El cliente con la IP -> " << direccion.value() << ": " << quoted(in) << "\n";
+
+	const char salida[] = "Te conectaste al servidor";
+	if (socket.send(salida, sizeof(salida), direccion.value(), senderPort) != Socket::Status::Done)
+		return;
+}
+
+void Server::bind_port(const unsigned short* puerto)
+{
+	//socket.bind(Socket::AnyPort); Meojor forma de enlazar el puerto
+	if (socket.bind(*puerto) != Socket::Status::Done)
+		return;
+}
+
+void Server::RunUdpServer(const unsigned short puerto)
 {
 
 	//Se crea un socket
 	//El puerto se hace escucha enlazandose tambien con el socket
-	Server servidor;
 	User usuario;
-	servidor.bind_port(&puerto);
-	servidor.conexion(&usuario);
+	bind_port(&puerto);
+	conexion(&usuario);
 	bool servidor_activo = true;
 	while (servidor_activo)
 	{
-		servidor.socket.setBlocking(false);
+		socket.setBlocking(false);
 		optional<sf::IpAddress> direccion;
 		unsigned short senderPort;
 		Packet paquete;
 		Clock reloj;
 
 		//Solo funciona para un cliente por ahora
-		servidor.socket.receive(paquete, direccion, senderPort);
+		socket.receive(paquete, direccion, senderPort);
 
 		Time tiempo = reloj.getElapsedTime();
 		float segundos = tiempo.asSeconds();
@@ -41,7 +67,7 @@ void UdpServer(const unsigned short puerto)
 				entrada = "Soy el servidor, mensaje recibido.";
 				paquete << entrada << usuario.estado;
 
-				if (servidor.socket.send(paquete, direccion.value(), senderPort) != Socket::Status::Done)
+				if (socket.send(paquete, direccion.value(), senderPort) != Socket::Status::Done)
 					return;
 				cout << "El servidor mando: " << entrada << "\n";
 			}
@@ -54,7 +80,7 @@ void UdpServer(const unsigned short puerto)
 
 				Packet paquete;
 				paquete << desconeccion << desconeccionBool;
-				if (servidor.socket.send(paquete, direccion.value(), senderPort) != Socket::Status::Done)
+				if (socket.send(paquete, direccion.value(), senderPort) != Socket::Status::Done)
 					return;
 				cout << "El servidor mando: " << desconeccion << "\n";
 			}

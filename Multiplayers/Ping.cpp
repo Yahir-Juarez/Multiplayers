@@ -4,11 +4,11 @@
 #include <iomanip>
 #include <optional>
 
+#include "UdpServer.h"
 using namespace sf;
 using namespace std;
 
 void UdpClient(const unsigned short puerto);
-void UdpServer(const unsigned short puerto);
 
 int main()
 {
@@ -18,7 +18,8 @@ int main()
 	cin >> desicion;
 	if (desicion == 's')
 	{
-		UdpServer(puerto);
+		Server servidor;
+		servidor.RunUdpServer(puerto);
 	}
 	else if (desicion == 'c')
 	{
