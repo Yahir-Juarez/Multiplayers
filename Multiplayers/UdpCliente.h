@@ -6,11 +6,19 @@
 #include <iomanip>
 #include <optional>
 
-class User {
+#include "UdpServer.h"
+
+class ConeexionStatus {
 public:
-	sf::UdpSocket socket;
-	bool estado;
+	bool estado = false;
 	std::optional<sf::IpAddress> direccion;
 private:
 
+};
+
+class User : public ConeexionStatus {
+public:
+	void UdpClient(const unsigned short puerto);
+private:
+	sf::UdpSocket socket;
 };

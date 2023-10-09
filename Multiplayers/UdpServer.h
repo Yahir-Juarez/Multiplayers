@@ -17,5 +17,5 @@ private:
 	void conexion(User *data);
 	UdpSocket socket;
 	bool estado;
-
+	vector<string> Clientes = { "Yahir", "JuanCa", "Sergio", "Prince" };
 };

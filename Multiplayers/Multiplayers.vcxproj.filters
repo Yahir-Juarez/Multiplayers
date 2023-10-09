@@ -27,12 +27,18 @@
     <ClCompile Include="UdpServer.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="AplicacionCliente.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UdpServer.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
     <ClInclude Include="UdpCliente.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
+    <ClInclude Include="AplicacionCliente.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
   </ItemGroup>

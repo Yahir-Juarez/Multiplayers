@@ -5,10 +5,9 @@
 #include <optional>
 
 #include "UdpServer.h"
+#include "AplicacionCliente.h"
 using namespace sf;
 using namespace std;
-
-void UdpClient(const unsigned short puerto);
 
 int main()
 {
@@ -23,7 +22,7 @@ int main()
 	}
 	else if (desicion == 'c')
 	{
-		UdpClient(puerto);
+		App aplicacion;
 	}
 	else
 	{
