@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AplicacionCliente.cpp" />
+    <ClCompile Include="Buttons.cpp" />
     <ClCompile Include="MP.cpp" />
     <ClCompile Include="Ping.cpp" />
     <ClCompile Include="UdpCliente.cpp" />
@@ -147,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AplicacionCliente.h" />
+    <ClInclude Include="Buttons.h" />
     <ClInclude Include="UdpCliente.h" />
     <ClInclude Include="UdpServer.h" />
   </ItemGroup>

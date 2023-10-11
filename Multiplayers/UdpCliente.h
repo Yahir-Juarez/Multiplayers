@@ -12,13 +12,16 @@ class ConeexionStatus {
 public:
 	bool estado = false;
 	std::optional<sf::IpAddress> direccion;
+	const unsigned short puerto = 50001;
 private:
 
 };
 
 class User : public ConeexionStatus {
 public:
-	void UdpClient(const unsigned short puerto);
+	bool conexion();
+	bool usuario(const char* salida);
+	void UdpClient();
 private:
 	sf::UdpSocket socket;
 };

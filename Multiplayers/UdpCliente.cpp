@@ -15,24 +15,43 @@ using sf::Packet;
 using sf::Clock;
 using sf::Time;
 
-void User::UdpClient(const unsigned short puerto)
+bool User::conexion()
 {
-	std::optional<sf::IpAddress> direccion;
 	direccion = IpAddress::getLocalAddress();
 	bool conectado = true;
 	if (estado == false)
 	{
-		const char salida[] = "Se conecto al servidor";
+		socket.setBlocking(false);
+		const char salida[] = "Se quiere conectar al servidor";
 		if (socket.send(salida, sizeof(salida), direccion.value(), puerto) != Socket::Status::Done)
-			return;
+		{
+			return false;
+		}
 		char entrada[128];
 		size_t received;
 		unsigned short senderPort;
 		if (socket.receive(entrada, sizeof(entrada), received, direccion, senderPort) != Socket::Status::Done)
-			return;
+		{
+			return false;
+		}
 		cout << "El servidor mando: " << std::quoted(entrada) << "\n";
 		estado = true;
 	}
+	return estado;
+}
+
+bool User::usuario(const char* salida)
+{
+	cout << salida;
+	if (socket.send(salida, sizeof(salida), direccion.value(), puerto) != Socket::Status::Done)
+	{
+		return false;
+	}
+}
+
+void User::UdpClient()
+{
+	bool conectado = true;
 
 	if (estado == true)
 	{

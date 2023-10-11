@@ -15,7 +15,7 @@ void Server::conexion(User* Data)
 
 	cout << "El cliente con la IP -> " << direccion.value() << ": " << quoted(in) << "\n";
 
-	const char salida[] = "Te conectaste al servidor";
+	const char salida[] = "Se mando la solicitud";
 	if (socket.send(salida, sizeof(salida), direccion.value(), senderPort) != Socket::Status::Done)
 		return;
 }
