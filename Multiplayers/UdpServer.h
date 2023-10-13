@@ -14,8 +14,9 @@ public:
 	void RunUdpServer(const unsigned short puerto);\
 private:
 	void bind_port(const unsigned short* puerto);
-	void conexion(User *data);
+	void conexion();
 	UdpSocket socket;
+	User usuario;
 	bool estado;
 	vector<string> Clientes = { "Yahir", "JuanCa", "Sergio", "Prince" };
 };

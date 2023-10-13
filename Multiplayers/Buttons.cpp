@@ -1,27 +1,59 @@
 #include "Buttons.h"
 
-Button::Button(std::string namefile, sf::Vector2f& size, sf::Vector2f& posicion)
+Button::Button()
 {
-	interactiveButton = std::make_unique<sf::RectangleShape>(size);
-	textureButton = std::make_unique < sf::Texture>();
-	textureButton->loadFromFile(namefile);
-	interactiveButton->setTexture(textureButton.get());
-	sf::Vector2f center(interactiveButton->getGeometricCenter().x , interactiveButton->getGeometricCenter().y);
-	interactiveButton->setOrigin(center);
-	interactiveButton->setPosition(posicion);
+
 }
 
-bool Button::buttonEvent(std::shared_ptr<sf::Event>& evento)
+Button::~Button()
 {
 
-	if (evento->type == evento->MouseButtonPressed)
+}
+
+void Button::createButton(std::string namefile, sf::Vector2f& size, sf::Vector2f& posicion)
+{
+	setSizeButton(size);
+	setPositionButton(posicion);
+	setTextureButton(namefile);
+}
+
+void Button::setSizeButton(sf::Vector2f& size)
+{
+	interactiveButton.setSize(size);
+}
+
+void Button::setPositionButton(sf::Vector2f& posicion)
+{
+	interactiveButton.setPosition(posicion);
+}
+
+void Button::setTextureButton(std::string& namefile)
+{
+	sf::Vector2f center(interactiveButton.getGeometricCenter().x, interactiveButton.getGeometricCenter().y);
+	interactiveButton.setOrigin(center);
+	if (!textureButton.loadFromFile(namefile))
 	{
-		if (evento->mouseButton.button == sf::Mouse::Left)
+		std::cout << "no se pudo cargar\n";
+	}
+	interactiveButton.setTexture(&textureButton);
+}
+
+void Button::render(sf::RenderWindow& windowDraw)
+{
+	windowDraw.draw(interactiveButton);
+}
+
+bool Button::buttonEvent(sf::Event& evento)
+{
+
+	if (evento.type == evento.MouseButtonPressed)
+	{
+		if (evento.mouseButton.button == sf::Mouse::Left)
 		{
-			sf::Vector2i mouse_position(evento->mouseButton.x, evento->mouseButton.y);
+			sf::Vector2i mouse_position(evento.mouseButton.x, evento.mouseButton.y);
 
 			sf::Vector2f mouse_position_f(static_cast<float>(mouse_position.x), static_cast<float>(mouse_position.y));
-			if (interactiveButton->getGlobalBounds().contains(mouse_position_f))
+			if (interactiveButton.getGlobalBounds().contains(mouse_position_f))
 			{
 				return true;
 			}

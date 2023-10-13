@@ -3,36 +3,21 @@
 App::App()
 {
 	Vector2u medidaVentana(window_x, window_y);
-	ventana = std::make_shared<sf::RenderWindow>(VideoMode(medidaVentana), "Aplicacion Cliente");
-	eventos = make_shared<Event>();
+	ventana.create(VideoMode(medidaVentana), "Aplicacion Cliente");
 
-	relojTeclado = make_shared<Clock>();
-	Vector2f posicion(window_x/2, window_y/2);
-	Vector2f size(300, 300);
-	inicioSesion = make_unique<Button>("Textures/InicioSesion.png", size, posicion);
+	Vector2f posicionInicio(window_x / 2, window_y / 2);
+	Vector2f sizeInicio(300, 300);
+	inicioSesion.createButton("Textures/InicioSesion.png", sizeInicio, posicionInicio);
 
-	relojButtons = make_shared<Clock>();
 	Vector2f posicionTeclado(window_x - 75, window_y - 50);
 	Vector2f sizeTeclado(100, 50);
-	keyboardOn = make_unique<Button>("Textures/TecladoEncendido.png", sizeTeclado, posicionTeclado);
-	keyboardOff = make_unique<Button>("Textures/TecladoApagado.png", sizeTeclado, posicionTeclado);
+	keyboardOn.createButton("Textures/TecladoEncendido.png", sizeTeclado, posicionTeclado);
+	keyboardOff.createButton("Textures/TecladoApagado.png", sizeTeclado, posicionTeclado);
 	
-	
-	//unsigned int characterSize = 30;
-	//font = make_shared<Font>();
-	//text = make_shared<Text>();
-	/*
-	if (!font->loadFromFile("ASMAN.ttf")) {
+	unsigned int characterSize = 30;
+	if (!font.loadFromFile("ASMAN.ttf")) {
 		// Si no se puede cargar la fuente, muestra un error
 	}
-
-	
-	text->setFont(*font);
-	text->setString("¡Hola, SFML!");
-	text->setCharacterSize(24);
-	text->setFillColor(sf::Color::White);
-	text->setPosition(size);
-	*/
 
 	mainloop();
 }
@@ -44,7 +29,7 @@ App::~App()
 
 void App::mainloop()
 {
-	while (ventana->isOpen())
+	while (ventana.isOpen())
 	{
 		entrada();
 		update();
@@ -54,12 +39,12 @@ void App::mainloop()
 
 void App::entrada()
 {
-	while (ventana->pollEvent(*eventos))
+	while (ventana.pollEvent(eventos))
 	{
-		switch (eventos->type)
+		switch (eventos.type)
 		{
 		case Event::Closed:
-			ventana->close();
+			ventana.close();
 			break;
 		}
 	}
@@ -70,12 +55,12 @@ void App::entrada()
 void App::buttonPressed()
 {
 	Time tiempo;
-	tiempo = relojButtons->getElapsedTime();
+	tiempo = relojButtons.getElapsedTime();
 	float tiempoButtons = tiempo.asSeconds();
 
 	if (tiempoButtons > .5)
 	{
-		if (inicioSesion->buttonEvent(eventos))
+		if (inicioSesion.buttonEvent(eventos))
 		{
 			if (usuario.conexion() == true)
 			{
@@ -85,17 +70,17 @@ void App::buttonPressed()
 			{
 				cout << "No se pudo conectar al servidor" << endl;
 			}
-			relojButtons->restart();
+			relojButtons.restart();
 		}
-		if (keyboardOn->buttonEvent(eventos) && tecladoActivo == true)
+		if (keyboardOn.buttonEvent(eventos) && tecladoActivo == true)
 		{
 			tecladoActivo = false;
-			relojButtons->restart();
+			relojButtons.restart();
 		}
-		else if (keyboardOff->buttonEvent(eventos) && tecladoActivo == false)
+		else if (keyboardOff.buttonEvent(eventos) && tecladoActivo == false)
 		{
 			tecladoActivo = true;
-			relojButtons->restart();
+			relojButtons.restart();
 		}
 	}
 }
@@ -109,24 +94,26 @@ void App::update()
 void App::render()
 {
 	Color rgb(184, 184, 184);
-	ventana->clear(Color(rgb));
+	ventana.clear(Color(rgb));
 	if (estado == Inicio)
 	{
-		ventana->draw(*inicioSesion->interactiveButton);
+		inicioSesion.render(ventana);
 	}
 	else if (estado == InicioUser)
 	{
 		if (tecladoActivo == true)
 		{
-			ventana->draw(*keyboardOn->interactiveButton);
+			keyboardOn.render(ventana);
 		}
 		else
 		{
-			ventana->draw(*keyboardOff->interactiveButton);
+			keyboardOff.render(ventana);
 		}
 	}
-	//ventana->draw(*text);
-	ventana->display();
+	static sf::Text text(font, "¡Hola, SFML!", 24);
+	text.setFillColor(sf::Color::White);
+	ventana.draw(text);
+	ventana.display();
 }
 
 void App::teclado()
@@ -135,156 +122,156 @@ void App::teclado()
 	if (tecladoActivo == true)
 	{
 		Time tiempo;
-		tiempo = relojTeclado->getElapsedTime();
+		tiempo = relojTeclado.getElapsedTime();
 		float tiempoTecla = tiempo.asSeconds();
 		if (tiempoTecla > .18)
 		{
 			if (Keyboard::isKeyPressed(Keyboard::Q))
 			{
 				entradaString += "Q";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::W))
 			{
 				entradaString += "W";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::E))
 			{
 				entradaString += "E";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::R))
 			{
 				entradaString += "R";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::T))
 			{
 				entradaString += "T";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::Y))
 			{
 				entradaString += "Y";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::U))
 			{
 				entradaString += "U";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::I))
 			{
 				entradaString += "I";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::O))
 			{
 				entradaString += "O";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::P))
 			{
 				entradaString += "P";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::A))
 			{
 				entradaString += "A";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::S))
 			{
 				entradaString += "S";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::D))
 			{
 				entradaString += "D";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::F))
 			{
 				entradaString += "F";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::G))
 			{
 				entradaString += "G";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::H))
 			{
 				entradaString += "H";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::J))
 			{
 				entradaString += "J";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::K))
 			{
 				entradaString += "K";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::L))
 			{
 				entradaString += "L";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::Z))
 			{
 				entradaString += "Z";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::X))
 			{
 				entradaString += "X";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::C))
 			{
 				entradaString += "C";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::V))
 			{
 				entradaString += "V";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::B))
 			{
 				entradaString += "B";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::N))
 			{
 				entradaString += "N";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::M))
 			{
 				entradaString += "M";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::Space))
 			{
 				entradaString += " ";
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::Backspace))
 			{
 				entradaString.pop_back();
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::Enter))
 			{
 				usuario.usuario(entradaString.c_str());
 				cout << entradaString << "\n";
 				entradaString.clear();
-				relojTeclado->restart();
+				relojTeclado.restart();
 			}
 		}
 	}

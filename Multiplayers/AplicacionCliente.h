@@ -29,22 +29,21 @@ private:
 	void teclado();
 	void buttonPressed();
 
-	bool tecladoActivo = true;
+	bool tecladoActivo = false;
 
 	string entradaString;
-
-	unique_ptr<Button> inicioSesion;
-	unique_ptr<Button> keyboardOn;
-	unique_ptr<Button> keyboardOff;
-	shared_ptr<Clock> relojTeclado;
-	shared_ptr<Clock> relojButtons;
-	std::shared_ptr<sf::RenderWindow> ventana;
-	std::shared_ptr < sf::Event> eventos;
+	Button inicioSesion;
+	Button keyboardOn;
+	Button keyboardOff;
+	Clock relojTeclado;
+	Clock relojButtons;
+	sf::RenderWindow ventana;
+	sf::Event eventos;
 
 	estadoApp estado;
 
 	bool letterActivo = false;
-	shared_ptr < sf::Font > font;
-	shared_ptr < sf::Text > text;
+	sf::Font font;
+	//sf::Text text;
 	User usuario;
 };

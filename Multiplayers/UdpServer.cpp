@@ -1,7 +1,7 @@
 #include "UdpServer.h"
 
 
-void Server::conexion(User* Data)
+void Server::conexion()
 {
 	char in[128];
 	size_t received;
@@ -9,9 +9,6 @@ void Server::conexion(User* Data)
 	unsigned short senderPort;
 	if (socket.receive(in, sizeof(in), received, direccion, senderPort) != Socket::Status::Done)
 		return;
-
-	Data->direccion = direccion.value();
-	Data->estado = true;
 
 	cout << "El cliente con la IP -> " << direccion.value() << ": " << quoted(in) << "\n";
 
@@ -32,58 +29,66 @@ void Server::RunUdpServer(const unsigned short puerto)
 
 	//Se crea un socket
 	//El puerto se hace escucha enlazandose tambien con el socket
-	User usuario;
+	optional<sf::IpAddress> direccion;
+	unsigned short senderPort;
+	Packet paquete;
+	Clock reloj;
+	socket.setBlocking(false);
 	bind_port(&puerto);
-	conexion(&usuario);
+	conexion();
 	bool servidor_activo = true;
 	while (servidor_activo)
 	{
-		socket.setBlocking(false);
-		optional<sf::IpAddress> direccion;
-		unsigned short senderPort;
-		Packet paquete;
-		Clock reloj;
-
+		char in[128];
+		size_t received;
 		//Solo funciona para un cliente por ahora
-		socket.receive(paquete, direccion, senderPort);
-
-		Time tiempo = reloj.getElapsedTime();
-		float segundos = tiempo.asSeconds();
-		if (segundos > 30)
+		if (socket.receive(in, sizeof(in), received, direccion, senderPort) != Socket::Status::Done)
 		{
-			usuario.estado = false;
+			return;
 		}
-
-
-		if (direccion == usuario.direccion)
+		else
 		{
-			if (usuario.estado == true)
+			usuario.direccion = direccion.value();
+			usuario.estado = true;
+			/*
+			Time tiempo = reloj.getElapsedTime();
+			float segundos = tiempo.asSeconds();
+			if (segundos > 30)
 			{
-				string entrada;
-				paquete >> entrada;
-				cout << "El cliente con la IP -> " << direccion.value() << " mando: " << entrada << "\n";
-
-				paquete.clear();
-				entrada = "Soy el servidor, mensaje recibido.";
-				paquete << entrada << usuario.estado;
-
-				if (socket.send(paquete, direccion.value(), senderPort) != Socket::Status::Done)
-					return;
-				cout << "El servidor mando: " << entrada << "\n";
+				usuario.estado = false;
 			}
-			else
+
+			if (direccion == usuario.direccion)
 			{
-				string desconeccion = "Se te desconecto del servidor";
-				bool desconeccionBool = false;
+				if (usuario.estado == true)
+				{
+					string entrada;
+					paquete >> entrada;
+					cout << "El cliente con la IP -> " << direccion.value() << " mando: " << entrada << "\n";
 
-				cout << "Se desconecto al Cliente\n";
+					paquete.clear();
+					entrada = "Soy el servidor, mensaje recibido.";
+					paquete << entrada << usuario.estado;
 
-				Packet paquete;
-				paquete << desconeccion << desconeccionBool;
-				if (socket.send(paquete, direccion.value(), senderPort) != Socket::Status::Done)
-					return;
-				cout << "El servidor mando: " << desconeccion << "\n";
+					if (socket.send(paquete, direccion.value(), senderPort) != Socket::Status::Done)
+						return;
+					cout << "El servidor mando: " << entrada << "\n";
+				}
+				else
+				{
+					string desconeccion = "Se te desconecto del servidor";
+					bool desconeccionBool = false;
+
+					cout << "Se desconecto al Cliente\n";
+
+					Packet paquete;
+					paquete << desconeccion << desconeccionBool;
+					if (socket.send(paquete, direccion.value(), senderPort) != Socket::Status::Done)
+						return;
+					cout << "El servidor mando: " << desconeccion << "\n";
+				}
 			}
+			*/
 		}
 	}
 }
