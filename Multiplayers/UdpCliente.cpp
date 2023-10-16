@@ -1,7 +1,7 @@
 #include <SFML/Network.hpp>
 #include <iostream>
 #include <optional>
-
+#include <string>
 
 #include "AplicacionCliente.h"
 
@@ -15,35 +15,85 @@ using sf::Packet;
 using sf::Clock;
 using sf::Time;
 
+User::User()
+{
+	socket.setBlocking(false);
+	ipServer = IpAddress::getLocalAddress();
+}
+
 bool User::conexion()
 {
-	direccion = IpAddress::getLocalAddress();
-	bool conectado = true;
+	std::optional<sf::IpAddress> ipServer;
+	ipServer = IpAddress::getLocalAddress();
+	const unsigned short serverPort = 50001;
 	if (estado == false)
 	{
-		socket.setBlocking(false);
-		const char salida[] = "Se quiere conectar al servidor";
-		if (socket.send(salida, sizeof(salida), direccion.value(), puerto) != Socket::Status::Done)
+		const char salida[] = "Coneccion?";
+		if (socket.send(salida, sizeof(salida), ipServer.value(), serverPort) != Socket::Status::Done)
 		{
 			return false;
 		}
-		char entrada[128];
-		size_t received;
-		unsigned short senderPort;
-		if (socket.receive(entrada, sizeof(entrada), received, direccion, senderPort) != Socket::Status::Done)
-		{
-			return false;
-		}
-		cout << "El servidor mando: " << std::quoted(entrada) << "\n";
-		estado = true;
 	}
 	return estado;
 }
 
+////////////////////////Funiciones para recibir mensajes del servidor////////////////////////////////////////
+
+void User::inPutRecive()
+{
+	char entrada[128];
+	size_t received;
+	unsigned short senderPort;
+	if (socket.receive(entrada, sizeof(entrada), received, ipServer, senderPort) != Socket::Status::Done)
+	{
+		return;
+	}
+	else
+	{
+		commandInput(entrada);
+	}
+	cout << "El servidor mando: " << std::quoted(entrada) << "\n";
+}
+
+int contarLetrass(const char* cadena) {
+	int count = 0;
+	for (int i = 0; cadena[i] != '\0'; i++) {
+		count++;
+	}
+	return count;
+}
+
+void User::commandInput(const char* inPutData)
+{
+	string newInPut;
+
+	for (int i = 0; i < contarLetrass(inPutData); i++)
+	{
+		if (inPutData[i] == ' ')
+		{
+			i = contarLetrass(inPutData);
+		}
+		else
+		{
+			newInPut += inPutData[i];
+		}
+	}
+	if (newInPut == "Conectado")
+	{
+		estado = true;
+	}
+	if (newInPut == "Aceptado")
+	{
+
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 bool User::usuario(const char* salida)
 {
 	cout << salida;
-	if (socket.send(salida, sizeof(salida), direccion.value(), puerto) != Socket::Status::Done)
+	if (socket.send(salida, sizeof(salida), ipServer.value(), serverPort) != Socket::Status::Done)
 	{
 		return false;
 	}
@@ -51,11 +101,11 @@ bool User::usuario(const char* salida)
 
 void User::UdpClient()
 {
-	bool conectado = true;
-
+	inPutRecive();
+	/*
 	if (estado == true)
 	{
-		socket.setBlocking(false);
+		/*
 		string x;
 		cin >> x;
 		Packet paquete;
@@ -71,9 +121,11 @@ void User::UdpClient()
 		unsigned short senderPort;
 		if (socket.receive(paquete, direccion, senderPort) == Socket::Status::Done)
 			return;
-		paquete >> x >> conectado;
+		paquete >> x >> estado;
 		Time tiempo = reloj.getElapsedTime();
 		float segundos = tiempo.asSeconds();
 		cout << "El servidor mando: " << x << " \nEl ping fue de " << segundos << " Segundos\n";
+		inPutRecive();
 	}
+	*/
 }

@@ -141,7 +141,9 @@
   <ItemGroup>
     <ClCompile Include="AplicacionCliente.cpp" />
     <ClCompile Include="Buttons.cpp" />
+    <ClCompile Include="KeyBoard.cpp" />
     <ClCompile Include="MP.cpp" />
+    <ClCompile Include="NetWork.cpp" />
     <ClCompile Include="Ping.cpp" />
     <ClCompile Include="UdpCliente.cpp" />
     <ClCompile Include="UdpServer.cpp" />
@@ -149,6 +151,8 @@
   <ItemGroup>
     <ClInclude Include="AplicacionCliente.h" />
     <ClInclude Include="Buttons.h" />
+    <ClInclude Include="KeyBoard.h" />
+    <ClInclude Include="NetWork.h" />
     <ClInclude Include="UdpCliente.h" />
     <ClInclude Include="UdpServer.h" />
   </ItemGroup>

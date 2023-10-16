@@ -1,0 +1,23 @@
+#pragma once
+
+#include <iostream>
+#include <SFML/Graphics.hpp>
+
+#include "UdpServer.h"
+
+enum levelKeyBoard{Client, Password, Chat };
+
+class KeyBoard
+{
+public:
+	void inputKeyBoard(levelKeyBoard& actualKeyBoard, User& actualUser);
+	void render(sf::RenderWindow& windowDraw, int posicionX, int posicionY);
+private:
+	sf::Text atributes(int posicionX, int posicionY);
+	void sendServer(levelKeyBoard& actualKeyBoard, User& actualUser);
+	std::string sInput;
+	sf::Clock reloj;
+	sf::Font letterType;
+
+};
+

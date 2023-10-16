@@ -6,6 +6,7 @@
 
 #include "Buttons.h"
 #include "UdpServer.h"
+#include "KeyBoard.h"
 
 using namespace std;
 using namespace sf;
@@ -26,10 +27,9 @@ private:
 	void entrada();
 	void update();
 	void render();
-	void teclado();
 	void buttonPressed();
 
-	bool tecladoActivo = false;
+	bool activeKeyBoard = true;
 
 	string entradaString;
 	Button inicioSesion;
@@ -39,11 +39,11 @@ private:
 	Clock relojButtons;
 	sf::RenderWindow ventana;
 	sf::Event eventos;
+	KeyBoard interactiveKeyBord;
 
 	estadoApp estado;
+	levelKeyBoard actualKeyboard = Client;
 
 	bool letterActivo = false;
-	sf::Font font;
-	//sf::Text text;
 	User usuario;
 };
