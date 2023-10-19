@@ -5,9 +5,10 @@ using namespace sf;
 void KeyBoard::inputKeyBoard(levelKeyBoard& actualKeyBoard, User& actualUser)
 {
 	sf::Time tiempo;
+	const int limitCharacter = 29;
 	tiempo = reloj.getElapsedTime();
 	float tiempoTecla = tiempo.asSeconds();
-	if (tiempoTecla > .18)
+	if (tiempoTecla > .14)
 	{
 		if (Keyboard::isKeyPressed(Keyboard::Q))
 		{
@@ -139,6 +140,56 @@ void KeyBoard::inputKeyBoard(levelKeyBoard& actualKeyBoard, User& actualUser)
 			sInput += "M";
 			reloj.restart();
 		}
+		else if (Keyboard::isKeyPressed(Keyboard::Num0))
+		{
+			sInput += "0";
+			reloj.restart();
+		}
+		else if (Keyboard::isKeyPressed(Keyboard::Num1))
+		{
+			sInput += "1";
+			reloj.restart();
+		}
+		else if (Keyboard::isKeyPressed(Keyboard::Num2))
+		{
+			sInput += "2";
+			reloj.restart();
+		}
+		else if (Keyboard::isKeyPressed(Keyboard::Num3))
+		{
+			sInput += "3";
+			reloj.restart();
+		}
+		else if (Keyboard::isKeyPressed(Keyboard::Num4))
+		{
+			sInput += "4";
+			reloj.restart();
+		}
+		else if (Keyboard::isKeyPressed(Keyboard::Num5))
+		{
+			sInput += "5";
+			reloj.restart();
+		}
+		else if (Keyboard::isKeyPressed(Keyboard::Num6))
+		{
+			sInput += "6";
+			reloj.restart();
+		}
+		else if (Keyboard::isKeyPressed(Keyboard::Num7))
+		{
+			sInput += "7";
+			reloj.restart();
+		}
+		else if (Keyboard::isKeyPressed(Keyboard::Num8))
+		{
+			sInput += "8";
+			reloj.restart();
+		}
+		else if (Keyboard::isKeyPressed(Keyboard::Num9))
+		{
+			sInput += "9";
+			reloj.restart();
+		}
 		else if (Keyboard::isKeyPressed(Keyboard::Space))
 		{
 			sInput += " ";
@@ -151,19 +202,25 @@ void KeyBoard::inputKeyBoard(levelKeyBoard& actualKeyBoard, User& actualUser)
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Enter))
 		{
+			sendServer(actualUser);
 			sInput.clear();
 			reloj.restart();
 		}
+		if (sInput.size() > limitCharacter && (actualKeyBoard == Client || actualKeyBoard == Password))
+		{
+			sInput.pop_back();
+		}
 	}
 }
-
-void KeyBoard::sendServer(levelKeyBoard& actualKeyBoard, User& actualUser)
+void KeyBoard::sendServer(User& actualUser)
 {
-	if (actualKeyBoard == 0)
+	if (actualUser.enuEstado == InicioUser)
 	{
 		std::string mesasageServer = "User= ";
 		mesasageServer += sInput;
+		cout << mesasageServer << endl;
 		actualUser.usuario(mesasageServer.c_str());
+		cout << "Mensaje enviado---------------------------------------------------------------\n";
 	}
 }
 

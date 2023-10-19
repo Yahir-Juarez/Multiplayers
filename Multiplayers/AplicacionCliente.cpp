@@ -47,7 +47,7 @@ void App::entrada()
 	{
 		interactiveKeyBord.inputKeyBoard(actualKeyboard, usuario);
 	}
-	buttonPressed();
+	buttonPressed(); 
 	
 }
 
@@ -62,14 +62,6 @@ void App::buttonPressed()
 		if (inicioSesion.buttonEvent(eventos))
 		{
 			usuario.conexion();
-			if (usuario.estado == true)
-			{
-				estado = InicioUser;
-			}
-			else
-			{
-				cout << "No se pudo conectar al servidor" << endl;
-			}
 			relojButtons.restart();
 		}
 		if (keyboardOn.buttonEvent(eventos) && activeKeyBoard == true)
@@ -94,11 +86,11 @@ void App::render()
 {
 	Color rgb(184, 184, 184);
 	ventana.clear(Color(rgb));
-	if (estado == Inicio)
+	if (usuario.enuEstado == Inicio)
 	{
 		inicioSesion.render(ventana);
 	}
-	else if (estado == InicioUser)
+	else if (usuario.enuEstado == InicioUser)
 	{
 		if (activeKeyBoard == true)
 		{

@@ -81,6 +81,7 @@ void User::commandInput(const char* inPutData)
 	if (newInPut == "Conectado")
 	{
 		estado = true;
+		enuEstado = InicioUser;
 	}
 	if (newInPut == "Aceptado")
 	{
@@ -92,8 +93,13 @@ void User::commandInput(const char* inPutData)
 
 bool User::usuario(const char* salida)
 {
-	cout << salida;
-	if (socket.send(salida, sizeof(salida), ipServer.value(), serverPort) != Socket::Status::Done)
+	std::optional<sf::IpAddress> ipServer;
+	ipServer = IpAddress::getLocalAddress();
+	const unsigned short serverPort = 50001;
+
+	cout << "Mensaje -> " << salida << " Bytes -> " << strlen(salida) << endl;
+
+	if (socket.send(salida, strlen(salida), ipServer.value(), serverPort) != Socket::Status::Done)
 	{
 		return false;
 	}

@@ -14,10 +14,9 @@ public:
 	void render(sf::RenderWindow& windowDraw, int posicionX, int posicionY);
 private:
 	sf::Text atributes(int posicionX, int posicionY);
-	void sendServer(levelKeyBoard& actualKeyBoard, User& actualUser);
+	void sendServer(User& actualUser);
 	std::string sInput;
 	sf::Clock reloj;
 	sf::Font letterType;
-
 };
 

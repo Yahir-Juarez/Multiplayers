@@ -53,7 +53,7 @@ void Server::inPutRecive()
 	{
 		commandInput(entrada);
 	}
-	cout << "El cliente mando: " << std::quoted(entrada) << "\n";
+	cout << "El cliente mando: " << entrada << "\n";
 }
 
 int contarLetras(const char* cadena) {

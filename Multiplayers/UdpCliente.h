@@ -8,6 +8,7 @@
 
 #include "UdpServer.h"
 
+enum estadoApp { Inicio, InicioUser, InicioPassword, Aplicacion };
 class User {
 public:
 	User();
@@ -15,6 +16,7 @@ public:
 	bool usuario(const char* salida);
 	void UdpClient();
 	bool estado = false;
+	estadoApp enuEstado;
 private:
 	void inPutRecive();
 	void commandInput(const char* inPutData);

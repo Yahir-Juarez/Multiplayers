@@ -34,6 +34,6 @@ private:
 	optional<sf::IpAddress> ipClient;
 	const unsigned short serverPort = 50001;
 	unsigned short senderPort;
-	vector<string> Clientes = { "Yahir", "JuanCa", "Sergio", "Prince" };
+	vector<string> Clientes = { "Yahir", "JuanCa", "Sergio", "Prince" /* */};
 	vector<ClientData> ClientsData;
 };

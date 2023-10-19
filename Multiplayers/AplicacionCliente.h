@@ -5,16 +5,14 @@
 #include <memory>
 
 #include "Buttons.h"
-#include "UdpServer.h"
 #include "KeyBoard.h"
+#include "UdpServer.h"
 
 using namespace std;
 using namespace sf;
 
 constexpr int window_y = 800;
 constexpr int window_x = 1200;
-
-enum estadoApp { Inicio, InicioUser, InicioPassword, Aplicacion };
 
 class App
 {
@@ -41,7 +39,6 @@ private:
 	sf::Event eventos;
 	KeyBoard interactiveKeyBord;
 
-	estadoApp estado;
 	levelKeyBoard actualKeyboard = Client;
 
 	bool letterActivo = false;
