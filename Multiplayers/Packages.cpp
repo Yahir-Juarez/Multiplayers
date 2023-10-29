@@ -56,5 +56,21 @@ Package getPackage(const void* pData, int sizeofData)
 
 bool isPackageValid(const Package& pack)
 {
-	return 0;
+	if (pack.empty() || pack.size() < sizeof(Unit16) + sizeof(Checksum))
+	{
+		return false;
+	}
+	Checksum packCkecksum = 0;
+	Unit16 dataSize = 0;
+	Vector<char> packData;
+
+	memcpy(&packCkecksum, &pack[0], sizeof(packCkecksum));
+	memcpy(&dataSize, &pack[sizeof(packCkecksum)], sizeof(dataSize));
+
+	if (dataSize < 1) return false;
+
+	packData.resize(dataSize);
+	memcpy(&packData[0], &pack[sizeof(packCkecksum) + sizeof(dataSize)], dataSize);
+
+	return (getChecksum(packData.data(), packData.size() == packCkecksum));
 }
