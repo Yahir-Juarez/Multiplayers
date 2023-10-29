@@ -31,8 +31,11 @@ int countSetBits(const void* pData, int sizeofData)
 
 Checksum getChecksum(const void* pData, int sizeofData)
 {
-	Checksum x = 0;
-	return x;
+	static Unit32 firm = 0xFFFF0000;
+	int numBitsData = countSetBits(pData, sizeofData);
+	int dataSize = countSetBits(sizeofData);
+
+	return numBitsData + dataSize + firm;
 }
 
 Package getPackage(const void* pData, int sizeofData)
