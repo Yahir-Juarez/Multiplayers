@@ -205,7 +205,7 @@ void KeyBoard::inputKeyBoard(levelKeyBoard& actualKeyBoard, User& actualUser)
 			sendServer(actualUser);
 			sInput.clear();
 			reloj.restart();
-		}
+		}	
 		if (sInput.size() > limitCharacter && (actualKeyBoard == Client || actualKeyBoard == Password))
 		{
 			sInput.pop_back();

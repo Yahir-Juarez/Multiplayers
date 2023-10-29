@@ -153,6 +153,7 @@
     <ClInclude Include="Buttons.h" />
     <ClInclude Include="KeyBoard.h" />
     <ClInclude Include="NetWork.h" />
+    <ClInclude Include="Packages.h" />
     <ClInclude Include="UdpCliente.h" />
     <ClInclude Include="UdpServer.h" />
   </ItemGroup>
