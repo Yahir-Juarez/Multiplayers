@@ -40,8 +40,18 @@ Checksum getChecksum(const void* pData, int sizeofData)
 
 Package getPackage(const void* pData, int sizeofData)
 {
-	Package x;
-	return x;
+	Package newPackage;
+	Checksum packageChecksum = getChecksum(pData, sizeofData);
+	Unit16 dataSize = sizeofData;
+
+	newPackage.resize(sizeofData + sizeof(short) + sizeof(packageChecksum));
+
+	memcpy(&newPackage[0], &packageChecksum, sizeof(packageChecksum));
+	memcpy(&newPackage[sizeof(packageChecksum)], &dataSize, sizeof(dataSize));
+	memcpy(&newPackage[sizeof(packageChecksum) + sizeof(dataSize)], pData, dataSize);
+
+
+	return newPackage;
 }
 
 bool isPackageValid(const Package& pack)
