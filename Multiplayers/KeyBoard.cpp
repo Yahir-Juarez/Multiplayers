@@ -216,11 +216,13 @@ void KeyBoard::sendServer(User& actualUser)
 {
 	if (actualUser.enuEstado == InicioUser)
 	{
+		Package VCpackageOutput;
 		std::string mesasageServer = "User= ";
 		mesasageServer += sInput;
+		VCpackageOutput = getPackage(mesasageServer.data(), sizeof(mesasageServer));
+		actualUser.usuario(VCpackageOutput);
 		cout << mesasageServer << endl;
-		actualUser.usuario(mesasageServer.c_str());
-		cout << "Mensaje enviado---------------------------------------------------------------\n";
+		cout << "Mensaje enviado-\n";
 	}
 }
 

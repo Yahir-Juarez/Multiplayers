@@ -1,7 +1,7 @@
 #include "Packages.h"
 
 template<typename T>
-int countSetBits(T data) 
+int Packages::countSetBits(T data)
 {
 	int setBits = 0;
 	for (int i = 0; i < sizeof(data) * 8; i++)
@@ -12,7 +12,7 @@ int countSetBits(T data)
 	return setBits;
 }
 
-int countSetBits(const void* pData, int sizeofData)
+int Packages::countSetBits(const void* pData, int sizeofData)
 {
 	int setBits = 0;
 
@@ -29,7 +29,7 @@ int countSetBits(const void* pData, int sizeofData)
 	return setBits;
 }
 
-Checksum getChecksum(const void* pData, int sizeofData)
+Checksum Packages::getChecksum(const void* pData, int sizeofData)
 {
 	static Unit32 firm = 0xFFFF0000;
 	int numBitsData = countSetBits(pData, sizeofData);
@@ -38,7 +38,7 @@ Checksum getChecksum(const void* pData, int sizeofData)
 	return numBitsData + dataSize + firm;
 }
 
-Package getPackage(const void* pData, int sizeofData)
+Package Packages::getPackage(const void* pData, int sizeofData)
 {
 	Package newPackage;
 	Checksum packageChecksum = getChecksum(pData, sizeofData);
@@ -54,7 +54,7 @@ Package getPackage(const void* pData, int sizeofData)
 	return newPackage;
 }
 
-bool isPackageValid(const Package& pack)
+bool Packages::isPackageValid(const Package& pack, Vector<char>& packData)
 {
 	if (pack.empty() || pack.size() < sizeof(Unit16) + sizeof(Checksum))
 	{
@@ -62,7 +62,6 @@ bool isPackageValid(const Package& pack)
 	}
 	Checksum packCkecksum = 0;
 	Unit16 dataSize = 0;
-	Vector<char> packData;
 
 	memcpy(&packCkecksum, &pack[0], sizeof(packCkecksum));
 	memcpy(&dataSize, &pack[sizeof(packCkecksum)], sizeof(dataSize));

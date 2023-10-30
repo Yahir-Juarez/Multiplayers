@@ -11,10 +11,10 @@ using Unit32 = unsigned int;
 using Unit16 = unsigned short;
 using Package = Vector<char>;
 
-template<typename T>
 class Packages
 {
 public:
+	template<typename T>
 	int countSetBits(T data);
 	
 	int countSetBits(const void* pData, int sizeofData);
@@ -23,7 +23,7 @@ public:
 
 	Package getPackage(const void* pData, int sizeofData);
 
-	bool isPackageValid(const Package& pack);
+	bool isPackageValid(const Package& pack, Vector<char>& packData);
 
 };
 

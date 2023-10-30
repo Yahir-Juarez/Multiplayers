@@ -7,19 +7,20 @@
 #include <optional>
 
 #include "UdpServer.h"
+#include "Packages.h"
 
 enum estadoApp { Inicio, InicioUser, InicioPassword, Aplicacion };
-class User {
+class User : public Packages{
 public:
 	User();
 	bool conexion();
-	bool usuario(const char* salida);
+	bool usuario(Package& VCpackageMessage);
 	void UdpClient();
 	bool estado = false;
 	estadoApp enuEstado;
 private:
 	void inPutRecive();
-	void commandInput(const char* inPutData);
+	void commandInput(Package& VCpackageInput);
 	sf::UdpSocket socket;
 	std::optional<sf::IpAddress> ipServer;
 	const unsigned short serverPort = 50001;

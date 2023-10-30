@@ -4,10 +4,11 @@
 #include <SFML/Graphics.hpp>
 
 #include "UdpServer.h"
+#include "Packages.h"
 
 enum levelKeyBoard{Client, Password, Chat };
 
-class KeyBoard
+class KeyBoard : public Packages
 {
 public:
 	void inputKeyBoard(levelKeyBoard& actualKeyBoard, User& actualUser);

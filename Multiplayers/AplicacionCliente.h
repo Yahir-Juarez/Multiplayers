@@ -7,6 +7,7 @@
 #include "Buttons.h"
 #include "KeyBoard.h"
 #include "UdpServer.h"
+#include "Packages.h"
 
 using namespace std;
 using namespace sf;
@@ -14,7 +15,7 @@ using namespace sf;
 constexpr int window_y = 800;
 constexpr int window_x = 1200;
 
-class App
+class App : public Packages
 {
 public:
 	App();

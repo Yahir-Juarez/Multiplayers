@@ -43,17 +43,27 @@ void Server::bind_port(const unsigned short* puerto)
 
 void Server::inPutRecive()
 {
-	char entrada[128];
+	Vector<char> VCpackageInput;
+	VCpackageInput.resize(2048);
 	size_t received;
-	if (socket.receive(entrada, sizeof(entrada), received, ipClient, senderPort) != Socket::Status::Done)
+	if (socket.receive(VCpackageInput.data(), VCpackageInput.size(), received, ipClient, senderPort) != Socket::Status::Done)
 	{
 		return;
 	}
 	else
 	{
-		commandInput(entrada);
+		Vector<char> packData;
+		if (isPackageValid(VCpackageInput, packData))
+		{
+			commandInput(packData);
+			cout << "El cliente mando: ";
+			for (int i = 0; i < packData.size(); i++)
+			{
+				cout << packData[i];
+			}
+			cout << endl;
+		}
 	}
-	cout << "El cliente mando: " << entrada << "\n";
 }
 
 int contarLetras(const char* cadena) {
@@ -64,23 +74,24 @@ int contarLetras(const char* cadena) {
 	return count;
 }
 
-void Server::commandInput(const char* inPutData)
+void Server::commandInput(Package& VCpackageInput)
 {
 	string newInPut;
-	for (int i = 0; i < contarLetras(inPutData); i++)
+	for (int i = 0; i < VCpackageInput.size(); i++)
 	{
-		if (inPutData[i] == ' ')
+		if (VCpackageInput[i] == '\0' || VCpackageInput[i] == ' ')
 		{
-			i = sizeof(inPutData);
+			i = VCpackageInput.size();
 		}
 		else
 		{
-			newInPut += inPutData[i];
+			newInPut += VCpackageInput[i];
 		}
 	}
-	cout << newInPut << endl;
+	cout << "Comando -> " << newInPut << endl;
 	if (newInPut == "Coneccion?")
 	{
+		cout << "entro\n";
 		conexion();
 	}
 	if (newInPut == "Aceptado")

@@ -23,13 +23,15 @@ User::User()
 
 bool User::conexion()
 {
+	Package VCpackageOutput;
 	std::optional<sf::IpAddress> ipServer;
 	ipServer = IpAddress::getLocalAddress();
 	const unsigned short serverPort = 50001;
 	if (estado == false)
 	{
-		const char salida[] = "Coneccion?";
-		if (socket.send(salida, sizeof(salida), ipServer.value(), serverPort) != Socket::Status::Done)
+		string sOutput = "Coneccion?";
+		VCpackageOutput = getPackage(sOutput.data(), sizeof(sOutput));
+		if (socket.send(VCpackageOutput.data(), VCpackageOutput.size(), ipServer.value(), serverPort) != Socket::Status::Done)
 		{
 			return false;
 		}
@@ -41,18 +43,27 @@ bool User::conexion()
 
 void User::inPutRecive()
 {
-	char entrada[128];
+	Vector<char> VCpackageInput;
+	VCpackageInput.resize(2048);
 	size_t received;
 	unsigned short senderPort;
-	if (socket.receive(entrada, sizeof(entrada), received, ipServer, senderPort) != Socket::Status::Done)
+	if (socket.receive(VCpackageInput.data(), VCpackageInput.size(), received, ipServer, senderPort) != Socket::Status::Done)
 	{
 		return;
 	}
 	else
 	{
-		commandInput(entrada);
+		commandInput(VCpackageInput);
 	}
-	cout << "El servidor mando: " << std::quoted(entrada) << "\n";
+	cout << "El servidor mando: ";
+
+	////////////////////////////////////Borrar////////////////////////////////////////
+	for (int i = 0; i << VCpackageInput.size(); i++)
+	{
+		cout << VCpackageInput[i];
+	}
+	cout << endl;
+	//////////////////////////////////////////////////////////////////////////////////
 }
 
 int contarLetrass(const char* cadena) {
@@ -63,19 +74,19 @@ int contarLetrass(const char* cadena) {
 	return count;
 }
 
-void User::commandInput(const char* inPutData)
+void User::commandInput(Package& VCpackageInput)
 {
 	string newInPut;
 
-	for (int i = 0; i < contarLetrass(inPutData); i++)
+	for (int i = 0; i < VCpackageInput.size(); i++)
 	{
-		if (inPutData[i] == ' ')
+		if (VCpackageInput[i] == '\0' || VCpackageInput[i] == ' ')
 		{
-			i = contarLetrass(inPutData);
+			i = VCpackageInput.size();
 		}
 		else
 		{
-			newInPut += inPutData[i];
+			newInPut += VCpackageInput[i];
 		}
 	}
 	if (newInPut == "Conectado")
@@ -91,15 +102,13 @@ void User::commandInput(const char* inPutData)
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool User::usuario(const char* salida)
+bool User::usuario(Package& VCpackageMessage)
 {
 	std::optional<sf::IpAddress> ipServer;
 	ipServer = IpAddress::getLocalAddress();
 	const unsigned short serverPort = 50001;
 
-	cout << "Mensaje -> " << salida << " Bytes -> " << strlen(salida) << endl;
-
-	if (socket.send(salida, strlen(salida), ipServer.value(), serverPort) != Socket::Status::Done)
+	if (socket.send(VCpackageMessage.data(), VCpackageMessage.size(), ipServer.value(), serverPort) != Socket::Status::Done)
 	{
 		return false;
 	}
