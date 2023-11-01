@@ -4,10 +4,11 @@ template<typename T>
 int Packages::countSetBits(T data)
 {
 	int setBits = 0;
-	for (int i = 0; i < sizeof(data) * 8; i++)
+	for (int i = 0; i < sizeof(data) * 8; ++i)
 	{
 		setBits += (data & (1 << i)) ? 1 : 0;
 	}
+	cout << setBits << endl;
 
 	return setBits;
 }
@@ -42,10 +43,12 @@ Package Packages::getPackage(const void* pData, int sizeofData)
 {
 	Package newPackage;
 	Checksum packageChecksum = getChecksum(pData, sizeofData);
-	Unit16 dataSize = sizeofData;
+	cout << packageChecksum;
+	Unit16 dataSize = static_cast<Unit16>(sizeofData);
 
-	newPackage.resize(sizeofData + sizeof(short) + sizeof(packageChecksum));
+	newPackage.resize(sizeofData + sizeof(Unit16) + sizeof(packageChecksum));
 
+	cout << "-->" << newPackage.size();
 	memcpy(&newPackage[0], &packageChecksum, sizeof(packageChecksum));
 	memcpy(&newPackage[sizeof(packageChecksum)], &dataSize, sizeof(dataSize));
 	memcpy(&newPackage[sizeof(packageChecksum) + sizeof(dataSize)], pData, dataSize);

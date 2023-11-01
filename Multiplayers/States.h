@@ -36,7 +36,14 @@ public:
 
 class MsgConnect : public NetworkMessage
 {
-
+public:
+	MsgConnect() {
+	}
+	~MsgConnect() {
+	}
+	Package packData();
+private:
+	string m_msgDATA = "CONNECT";
 };
 
 class MsgUsser : public NetworkMessage
