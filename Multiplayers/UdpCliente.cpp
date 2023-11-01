@@ -58,8 +58,8 @@ void User::inPutRecive()
 		memcpy(pRecivedPackage.data(), VCpackageInput.data(), received);
 		commandInput(VCpackageInput);
 
-		Vector<char> packData;
-		if (isPackageValid(pRecivedPackage, packData))
+		Package realPackage;
+		if (isPackageValid(pRecivedPackage, &realPackage))
 		{
 			commandInput(pRecivedPackage);
 			cout << "El servidor mando: ";

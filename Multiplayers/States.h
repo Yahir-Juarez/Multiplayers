@@ -26,8 +26,6 @@ namespace MESSAGE_TYPE
 	};
 }
 
-#define MESSAGE_TYPE_VAR unsigned short
-
 class NetworkMessage
 {
 public:

@@ -3,6 +3,12 @@
 #include <iostream>
 #include <vector>
 
+using std::string;
+using std::endl;
+using std::cout;
+
+#define MESSAGE_TYPE_VAR unsigned short
+
 template <typename V>
 using Vector = std::vector<V>;
 
@@ -23,7 +29,8 @@ public:
 
 	Package getPackage(const void* pData, int sizeofData);
 
-	bool isPackageValid(const Package& pack, Vector<char>& packData);
+	bool isPackageValid(const Package& pack, Package* pOutPackage = nullptr);
 
+	bool getPackageTypeAndData(const Package& pack, Unit16& msgType, Package& unpackdData);
 };
 

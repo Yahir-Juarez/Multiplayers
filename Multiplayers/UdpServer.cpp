@@ -56,14 +56,14 @@ void Server::inPutRecive()
 		pRecivedPackage.resize(received);
 		memcpy(pRecivedPackage.data(), VCpackageInput.data(), received);
 
-		Vector<char> packData;
-		if (isPackageValid(VCpackageInput, packData))
+		Package realPackage;
+		if (isPackageValid(VCpackageInput, &realPackage))
 		{
-			commandInput(packData);
+			commandInput(realPackage);
 			cout << "El cliente mando: ";
-			for (int i = 0; i < packData.size(); i++)
+			for (int i = 0; i < realPackage.size(); i++)
 			{
-				cout << packData[i];
+				cout << realPackage[i];
 			}
 			cout << endl;
 		}

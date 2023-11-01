@@ -54,7 +54,7 @@ Package Packages::getPackage(const void* pData, int sizeofData)
 	return newPackage;
 }
 
-bool Packages::isPackageValid(const Package& pack, Vector<char>& packData)
+bool Packages::isPackageValid(const Package& pack, Package* pOutPackage)
 {
 	if (pack.empty() || pack.size() < sizeof(Unit16) + sizeof(Checksum))
 	{
@@ -63,13 +63,44 @@ bool Packages::isPackageValid(const Package& pack, Vector<char>& packData)
 	Checksum packCkecksum = 0;
 	Unit16 dataSize = 0;
 
+	Package packData;
+	if (pOutPackage == nullptr)
+	{
+		pOutPackage = &packData;
+	}
+
 	memcpy(&packCkecksum, &pack[0], sizeof(packCkecksum));
 	memcpy(&dataSize, &pack[sizeof(packCkecksum)], sizeof(dataSize));
 
 	if (dataSize < 1) return false;
 
-	packData.resize(dataSize);
-	memcpy(&packData[0], &pack[sizeof(packCkecksum) + sizeof(dataSize)], dataSize);
+	pOutPackage->resize(dataSize);
+	memcpy(pOutPackage->data(), &pack[sizeof(packCkecksum) + sizeof(dataSize)], dataSize);
 
-	return (getChecksum(packData.data(), packData.size() == packCkecksum));
+	return (getChecksum(pOutPackage->data(), pOutPackage->size() == packCkecksum));
+}
+
+bool Packages::getPackageTypeAndData(const Package& pack, Unit16& msgType, Package& unpackdData)
+{
+	if (pack.size() < sizeof(MESSAGE_TYPE_VAR))
+	{
+		return false;
+	}
+
+	cout << pack.size() << endl;
+	for (int i = 0; i < pack.size(); ++i)
+	{
+		cout << pack[i] << " " << i << endl;
+	}
+	cout << endl << sizeof(MESSAGE_TYPE_VAR) << endl;
+	memcpy(&msgType, pack.data(), sizeof(MESSAGE_TYPE_VAR));
+
+	if (!(pack.size() > sizeof(MESSAGE_TYPE_VAR)))
+	{
+		return true;
+	}
+	auto finalData = pack.size() - sizeof(MESSAGE_TYPE_VAR);
+	cout << finalData << endl;
+	unpackdData.resize(finalData);
+	memcpy(unpackdData.data(), pack.data() + sizeof(MESSAGE_TYPE_VAR), finalData);
 }
