@@ -53,7 +53,22 @@ void User::inPutRecive()
 	}
 	else
 	{
+		Package pRecivedPackage;
+		pRecivedPackage.resize(received);
+		memcpy(pRecivedPackage.data(), VCpackageInput.data(), received);
 		commandInput(VCpackageInput);
+
+		Vector<char> packData;
+		if (isPackageValid(pRecivedPackage, packData))
+		{
+			commandInput(pRecivedPackage);
+			cout << "El servidor mando: ";
+			for (int i = 0; i < pRecivedPackage.size(); i++)
+			{
+				cout << pRecivedPackage[i];
+			}
+			cout << endl;
+		}
 	}
 	cout << "El servidor mando: ";
 

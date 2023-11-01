@@ -52,6 +52,10 @@ void Server::inPutRecive()
 	}
 	else
 	{
+		Package pRecivedPackage;
+		pRecivedPackage.resize(received);
+		memcpy(pRecivedPackage.data(), VCpackageInput.data(), received);
+
 		Vector<char> packData;
 		if (isPackageValid(VCpackageInput, packData))
 		{
