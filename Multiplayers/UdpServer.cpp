@@ -101,11 +101,17 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 		auto connect = cMsgUsuario.packData();
 		Package finalPackage = getPackage(connect.data(), connect.size());
 		outPutSend(finalPackage);
-		cout << cMsgUsuario.m_msgDATA << " " << "Mensaje enviado" << endl;
+		cout << cMsgUsuario.m_msgDATA << " " << "Usser acept" << endl;
 	}
 	if (msgType == MESSAGE_TYPE::kPASS)
 	{
-
+		MsgPass cMsgUsuario;
+		cMsgUsuario.m_msgDATA = "Aceptado";
+		cMsgUsuario.packData();
+		auto connect = cMsgUsuario.packData();
+		Package finalPackage = getPackage(connect.data(), connect.size());
+		outPutSend(finalPackage);
+		cout << cMsgUsuario.m_msgDATA << " " << "Passwor acept" << endl;
 	}
 	if (msgType == MESSAGE_TYPE::kDISCONNECT)
 	{

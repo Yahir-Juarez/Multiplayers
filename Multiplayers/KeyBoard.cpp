@@ -222,21 +222,21 @@ void KeyBoard::sendServer(User& actualUser)
 		auto connect = cMsgUsuario.packData();
 		Package finalPackage = getPackage(connect.data(), connect.size());
 		actualUser.usuario(finalPackage);
-		cout << sInput << " " << "Mensaje enviado" << endl;
+		cout << sInput << " " << "Usuario enviado" << endl;
 	}
 	if (actualUser.enuEstado == estadoApp::InicioPassword)
 	{
-		MsgUsser cMsgUsuario;
+		MsgPass cMsgUsuario;
 		cMsgUsuario.m_msgDATA = sInput;
 		cMsgUsuario.packData();
 		auto connect = cMsgUsuario.packData();
 		Package finalPackage = getPackage(connect.data(), connect.size());
 		actualUser.usuario(finalPackage);
-		cout << sInput << " " << "Mensaje enviado" << endl;
+		cout << sInput << " " << "Password enviado" << endl;
 	}
 	if (actualUser.enuEstado == Aplicacion)
 	{
-		MsgUsser cMsgUsuario;
+		MsgChat cMsgUsuario;
 		cMsgUsuario.m_msgDATA = sInput;
 		cMsgUsuario.packData();
 		auto connect = cMsgUsuario.packData();

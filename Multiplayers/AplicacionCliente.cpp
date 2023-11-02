@@ -84,18 +84,45 @@ void App::update()
 
 void App::render()
 {
-	Color rgb(184, 184, 184);
-	ventana.clear(Color(rgb));
+	Color rgbGris(184, 184, 184);
 	if (usuario.enuEstado == Inicio)
 	{
+		ventana.clear(Color(rgbGris));
 		inicioSesion.render(ventana);
 	}
 	else if (usuario.enuEstado == InicioUser)
 	{
+		ventana.clear(Color(rgbGris));
 		if (activeKeyBoard == true)
 		{
 			keyboardOn.render(ventana);
 			interactiveKeyBord.render(ventana, window_x / (10/3), window_y / (10/4));
+		}
+		else
+		{
+			keyboardOff.render(ventana);
+		}
+	}
+	else if (usuario.enuEstado == InicioPassword)
+	{
+		ventana.clear(Color(rgbGris));
+		if (activeKeyBoard == true)
+		{
+			keyboardOn.render(ventana);
+			interactiveKeyBord.render(ventana, window_x / (10 / 3), window_y / (10 / 4));
+		}
+		else
+		{
+			keyboardOff.render(ventana);
+		}
+	}
+	else if (usuario.enuEstado == Aplicacion)
+	{
+		ventana.clear(Color::White);
+		if (activeKeyBoard == true)
+		{
+			keyboardOn.render(ventana);
+			interactiveKeyBord.render(ventana, window_x / (10 / 3), window_y / (10 / 4));
 		}
 		else
 		{

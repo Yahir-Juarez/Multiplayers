@@ -8,7 +8,6 @@ int Packages::countSetBits(T data)
 	{
 		setBits += (data & (1 << i)) ? 1 : 0;
 	}
-	cout << setBits << endl;
 
 	return setBits;
 }
@@ -43,12 +42,10 @@ Package Packages::getPackage(const void* pData, int sizeofData)
 {
 	Package newPackage;
 	Checksum packageChecksum = getChecksum(pData, sizeofData);
-	cout << packageChecksum;
 	Unit16 dataSize = static_cast<Unit16>(sizeofData);
 
 	newPackage.resize(sizeofData + sizeof(Unit16) + sizeof(packageChecksum));
 
-	cout << "-->" << newPackage.size();
 	memcpy(&newPackage[0], &packageChecksum, sizeof(packageChecksum));
 	memcpy(&newPackage[sizeof(packageChecksum)], &dataSize, sizeof(dataSize));
 	memcpy(&newPackage[sizeof(packageChecksum) + sizeof(dataSize)], pData, dataSize);
@@ -89,13 +86,6 @@ bool Packages::getPackageTypeAndData(const Package& pack, Unit16& msgType, Packa
 	{
 		return false;
 	}
-
-	cout << pack.size() << endl;
-	for (int i = 0; i < pack.size(); ++i)
-	{
-		cout << pack[i] << " " << i << endl;
-	}
-	cout << endl << sizeof(MESSAGE_TYPE_VAR) << endl;
 	memcpy(&msgType, pack.data(), sizeof(MESSAGE_TYPE_VAR));
 
 	if (!(pack.size() > sizeof(MESSAGE_TYPE_VAR)))
@@ -103,7 +93,6 @@ bool Packages::getPackageTypeAndData(const Package& pack, Unit16& msgType, Packa
 		return true;
 	}
 	auto finalData = pack.size() - sizeof(MESSAGE_TYPE_VAR);
-	cout << finalData << endl;
 	unpackdData.resize(finalData);
 	memcpy(unpackdData.data(), pack.data() + sizeof(MESSAGE_TYPE_VAR), finalData);
 }
