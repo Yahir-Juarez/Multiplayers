@@ -68,7 +68,29 @@ class MsgChat : public NetworkMessage
 
 class MsgMouseData : public NetworkMessage
 {
+public:
+	struct MouseData
+	{
+		Unit32 m_posX;
+		Unit32 m_posY;
+		union
+		{
+			Unit32 buttons;
+			struct
+			{
+				Unit32 left : 1;
+				Unit32 right : 1;
+				Unit32 middle : 1;
+				Unit32 xButton1 : 1;
+				Unit32 xButton2 : 1;
+			};
+		}m_buttonStates;
+	}m_msgData;
+	Package packData() override;
 
+	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
+
+	void fillCurrentMouseData();
 };
 
 class MsgLine : public NetworkMessage

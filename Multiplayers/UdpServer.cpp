@@ -1,5 +1,5 @@
 #include "UdpServer.h"
-
+#include "States.h"
 
 ClientData::ClientData()
 {
@@ -59,7 +59,20 @@ void Server::inPutRecive()
 		Package realPackage;
 		if (isPackageValid(VCpackageInput, &realPackage))
 		{
-			commandInput(realPackage);
+			Unit16 msgType = MESSAGE_TYPE::kERROR;
+			Package unpackedData;
+			getPackageTypeAndData(realPackage, msgType, unpackedData);
+
+			MsgMouseData::MouseData realData;
+			if (msgType == MESSAGE_TYPE::kCONNECT)
+			{
+				conexion();
+			}
+			if (msgType == MESSAGE_TYPE::kMOUSESTATE)
+			{
+				MsgMouseData::unPackData(&realData, unpackedData.data(), unpackedData.size());
+				cout << "si\n";
+			}
 			cout << "El cliente mando: ";
 			for (int i = 0; i < realPackage.size(); i++)
 			{

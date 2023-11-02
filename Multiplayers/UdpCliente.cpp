@@ -4,6 +4,7 @@
 #include <string>
 
 #include "AplicacionCliente.h"
+#include "States.h"
 
 using std::cout;
 using std::cin;
@@ -23,15 +24,16 @@ User::User()
 
 bool User::conexion()
 {
-	Package VCpackageOutput;
 	std::optional<sf::IpAddress> ipServer;
 	ipServer = IpAddress::getLocalAddress();
 	const unsigned short serverPort = 50001;
 	if (estado == false)
 	{
-		string sOutput = "Coneccion?";
-		VCpackageOutput = getPackage(sOutput.data(), sizeof(sOutput));
-		if (socket.send(VCpackageOutput.data(), VCpackageOutput.size(), ipServer.value(), serverPort) != Socket::Status::Done)
+		MsgConnect msgConeccion;
+		msgConeccion.packData();
+		auto connect = msgConeccion.packData();
+		Package finalPackage = getPackage(connect.data(), connect.size());
+		if (socket.send(finalPackage.data(), finalPackage.size(), ipServer.value(), serverPort) != Socket::Status::Done)
 		{
 			return false;
 		}
