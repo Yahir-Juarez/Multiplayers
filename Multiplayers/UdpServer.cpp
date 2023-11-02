@@ -76,12 +76,14 @@ void Server::inPutRecive()
 	}
 }
 
-int contarLetras(const char* cadena) {
-	int count = 0;
-	for (int i = 0; cadena[i] != '\0'; i++) {
-		count++;
+bool Server::outPutSend(Package& VCpackageMessage)
+{
+	if (socket.send(VCpackageMessage.data(), VCpackageMessage.size(), ipClient.value(), senderPort) != Socket::Status::Done)
+	{
+		cout << "No se mando el mensaje\n";
+		return false;
 	}
-	return count;
+	return true;
 }
 
 void Server::commandInput(Package& unpackedData, Unit16& msgType)
@@ -93,7 +95,13 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 	}
 	if (msgType == MESSAGE_TYPE::kUSSER)
 	{
-
+		MsgUsser cMsgUsuario;
+		cMsgUsuario.m_msgDATA = "Aceptado";
+		cMsgUsuario.packData();
+		auto connect = cMsgUsuario.packData();
+		Package finalPackage = getPackage(connect.data(), connect.size());
+		outPutSend(finalPackage);
+		cout << cMsgUsuario.m_msgDATA << " " << "Mensaje enviado" << endl;
 	}
 	if (msgType == MESSAGE_TYPE::kPASS)
 	{

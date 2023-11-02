@@ -90,11 +90,11 @@ void User::commandInput(Package& unpackedData, Unit16& msgType)
 	}
 	if (msgType == MESSAGE_TYPE::kUSSER)
 	{
-
+		enuEstado = InicioPassword;
 	}
 	if (msgType == MESSAGE_TYPE::kPASS)
 	{
-
+		enuEstado = Aplicacion;
 	}
 	if (msgType == MESSAGE_TYPE::kDISCONNECT)
 	{

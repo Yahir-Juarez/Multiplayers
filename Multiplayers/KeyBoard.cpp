@@ -214,7 +214,27 @@ void KeyBoard::inputKeyBoard(levelKeyBoard& actualKeyBoard, User& actualUser)
 }
 void KeyBoard::sendServer(User& actualUser)
 {
-	if (actualUser.enuEstado == InicioUser)
+	if (actualUser.enuEstado == estadoApp::InicioUser)
+	{
+		MsgUsser cMsgUsuario;
+		cMsgUsuario.m_msgDATA = sInput;
+		cMsgUsuario.packData();
+		auto connect = cMsgUsuario.packData();
+		Package finalPackage = getPackage(connect.data(), connect.size());
+		actualUser.usuario(finalPackage);
+		cout << sInput << " " << "Mensaje enviado" << endl;
+	}
+	if (actualUser.enuEstado == estadoApp::InicioPassword)
+	{
+		MsgUsser cMsgUsuario;
+		cMsgUsuario.m_msgDATA = sInput;
+		cMsgUsuario.packData();
+		auto connect = cMsgUsuario.packData();
+		Package finalPackage = getPackage(connect.data(), connect.size());
+		actualUser.usuario(finalPackage);
+		cout << sInput << " " << "Mensaje enviado" << endl;
+	}
+	if (actualUser.enuEstado == Aplicacion)
 	{
 		MsgUsser cMsgUsuario;
 		cMsgUsuario.m_msgDATA = sInput;

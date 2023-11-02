@@ -30,6 +30,7 @@ private:
 	void conexion();
 	void inPutRecive();
 	void commandInput(Package& VCpackageInput, Unit16& msgType);
+	bool outPutSend(Package& VCpackageMessage);
 	UdpSocket socket;
 	User usuario;
 	bool estado;
