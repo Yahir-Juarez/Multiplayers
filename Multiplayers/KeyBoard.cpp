@@ -1,5 +1,5 @@
 #include "KeyBoard.h"
-
+#include "States.h"
 using namespace sf;
 
 void KeyBoard::inputKeyBoard(levelKeyBoard& actualKeyBoard, User& actualUser)
@@ -216,13 +216,13 @@ void KeyBoard::sendServer(User& actualUser)
 {
 	if (actualUser.enuEstado == InicioUser)
 	{
-		Package VCpackageOutput;
-		std::string mesasageServer = "User= ";
-		mesasageServer += sInput;
-		VCpackageOutput = getPackage(mesasageServer.data(), sizeof(mesasageServer));
-		actualUser.usuario(VCpackageOutput);
-		cout << mesasageServer << endl;
-		cout << "Mensaje enviado-\n";
+		MsgUsser cMsgUsuario;
+		cMsgUsuario.m_msgDATA = sInput;
+		cMsgUsuario.packData();
+		auto connect = cMsgUsuario.packData();
+		Package finalPackage = getPackage(connect.data(), connect.size());
+		actualUser.usuario(finalPackage);
+		cout << sInput << " " << "Mensaje enviado" << endl;
 	}
 }
 

@@ -29,7 +29,7 @@ private:
 	void bind_port(const unsigned short* puerto);
 	void conexion();
 	void inPutRecive();
-	void commandInput(Package& VCpackageInput);
+	void commandInput(Package& VCpackageInput, Unit16& msgType);
 	UdpSocket socket;
 	User usuario;
 	bool estado;

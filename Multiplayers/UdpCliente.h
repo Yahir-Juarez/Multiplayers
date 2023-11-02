@@ -20,7 +20,7 @@ public:
 	estadoApp enuEstado;
 private:
 	void inPutRecive();
-	void commandInput(Package& VCpackageInput);
+	void commandInput(Package& VCpackageInput, Unit16& msgType);
 	sf::UdpSocket socket;
 	std::optional<sf::IpAddress> ipServer;
 	const unsigned short serverPort = 50001;

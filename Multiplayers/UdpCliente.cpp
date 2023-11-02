@@ -58,18 +58,15 @@ void User::inPutRecive()
 		Package pRecivedPackage;
 		pRecivedPackage.resize(received);
 		memcpy(pRecivedPackage.data(), VCpackageInput.data(), received);
-		commandInput(VCpackageInput);
 
 		Package realPackage;
-		if (isPackageValid(pRecivedPackage, &realPackage))
+		if (isPackageValid(VCpackageInput, &realPackage))
 		{
-			commandInput(pRecivedPackage);
-			cout << "El servidor mando: ";
-			for (int i = 0; i < pRecivedPackage.size(); i++)
-			{
-				cout << pRecivedPackage[i];
-			}
-			cout << endl;
+			Unit16 msgType = MESSAGE_TYPE::kERROR;
+			Package unpackedData;
+			getPackageTypeAndData(realPackage, msgType, unpackedData);
+
+			commandInput(unpackedData, msgType);
 		}
 	}
 	cout << "El servidor mando: ";
@@ -83,35 +80,44 @@ void User::inPutRecive()
 	//////////////////////////////////////////////////////////////////////////////////
 }
 
-int contarLetrass(const char* cadena) {
-	int count = 0;
-	for (int i = 0; cadena[i] != '\0'; i++) {
-		count++;
-	}
-	return count;
-}
-
-void User::commandInput(Package& VCpackageInput)
+void User::commandInput(Package& unpackedData, Unit16& msgType)
 {
-	string newInPut;
-
-	for (int i = 0; i < VCpackageInput.size(); i++)
-	{
-		if (VCpackageInput[i] == '\0' || VCpackageInput[i] == ' ')
-		{
-			i = VCpackageInput.size();
-		}
-		else
-		{
-			newInPut += VCpackageInput[i];
-		}
-	}
-	if (newInPut == "Conectado")
+	MsgMouseData::MouseData realData;
+	if (msgType == MESSAGE_TYPE::kCONNECT)
 	{
 		estado = true;
 		enuEstado = InicioUser;
 	}
-	if (newInPut == "Aceptado")
+	if (msgType == MESSAGE_TYPE::kUSSER)
+	{
+
+	}
+	if (msgType == MESSAGE_TYPE::kPASS)
+	{
+
+	}
+	if (msgType == MESSAGE_TYPE::kDISCONNECT)
+	{
+
+	}
+	if (msgType == MESSAGE_TYPE::kCHAT)
+	{
+
+	}
+	if (msgType == MESSAGE_TYPE::kMOUSESTATE)
+	{
+		MsgMouseData::unPackData(&realData, unpackedData.data(), unpackedData.size());
+		cout << "si\n";
+	}
+	if (msgType == MESSAGE_TYPE::kLINE)
+	{
+
+	}
+	if (msgType == MESSAGE_TYPE::kRECT)
+	{
+
+	}
+	if (msgType == MESSAGE_TYPE::kCIRCLE)
 	{
 
 	}

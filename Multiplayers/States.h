@@ -48,22 +48,50 @@ private:
 
 class MsgUsser : public NetworkMessage
 {
+public:
+	MsgUsser() {
+	}
+	~MsgUsser() {
+	}
+	Package packData();
 
+	string m_msgDATA;
 };
 
 class MsgPass : public NetworkMessage
 {
+public:
+	MsgPass() {
+	}
+	~MsgPass() {
+	}
+	Package packData();
 
+	string m_msgDATA;
 };
 
 class MsgDisconnect : public NetworkMessage
 {
-
+public:
+	MsgDisconnect() {
+	}
+	~MsgDisconnect() {
+	}
+	Package packData();
+private:
+	string m_msgDATA = "Disconnect";
 };
 
 class MsgChat : public NetworkMessage
 {
+public:
+	MsgChat() {
+	}
+	~MsgChat() {
+	}
+	Package packData();
 
+	string m_msgDATA;
 };
 
 class MsgMouseData : public NetworkMessage

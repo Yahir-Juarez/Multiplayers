@@ -17,20 +17,20 @@ Server::Server()
 
 void Server::conexion()
 {
-	const char salida[] = "Conectado";
-	if (socket.send(salida, sizeof(salida), ipClient.value(), senderPort) != Socket::Status::Done)
+	MsgConnect msgConeccion;
+	msgConeccion.packData();
+	auto connect = msgConeccion.packData();
+	Package finalPackage = getPackage(connect.data(), connect.size());
+	if (socket.send(finalPackage.data(), finalPackage.size(), ipClient.value(), senderPort) != Socket::Status::Done)
 	{
 		cout << "No se mando el mensaje\n";
 		return;
 	}
-	else
-	{
-		ClientData temporalData;
-		temporalData.clientPort = senderPort;
-		temporalData.clientIp = ipClient;
-		ClientsData.push_back(temporalData);
-	}
-	cout << "se mando el mensaje\n";
+	ClientData temporalData;
+	temporalData.clientPort = senderPort;
+	temporalData.clientIp = ipClient;
+	ClientsData.push_back(temporalData);
+	cout << "se mando el mensaje y se agrego a la lista\n";
 }
 
 void Server::bind_port(const unsigned short* puerto)
@@ -63,22 +63,15 @@ void Server::inPutRecive()
 			Package unpackedData;
 			getPackageTypeAndData(realPackage, msgType, unpackedData);
 
-			MsgMouseData::MouseData realData;
-			if (msgType == MESSAGE_TYPE::kCONNECT)
-			{
-				conexion();
-			}
-			if (msgType == MESSAGE_TYPE::kMOUSESTATE)
-			{
-				MsgMouseData::unPackData(&realData, unpackedData.data(), unpackedData.size());
-				cout << "si\n";
-			}
+			commandInput(unpackedData, msgType);
+			/*
 			cout << "El cliente mando: ";
 			for (int i = 0; i < realPackage.size(); i++)
 			{
 				cout << realPackage[i];
 			}
 			cout << endl;
+			*/
 		}
 	}
 }
@@ -91,27 +84,43 @@ int contarLetras(const char* cadena) {
 	return count;
 }
 
-void Server::commandInput(Package& VCpackageInput)
+void Server::commandInput(Package& unpackedData, Unit16& msgType)
 {
-	string newInPut;
-	for (int i = 0; i < VCpackageInput.size(); i++)
+	MsgMouseData::MouseData realData;
+	if (msgType == MESSAGE_TYPE::kCONNECT)
 	{
-		if (VCpackageInput[i] == '\0' || VCpackageInput[i] == ' ')
-		{
-			i = VCpackageInput.size();
-		}
-		else
-		{
-			newInPut += VCpackageInput[i];
-		}
-	}
-	cout << "Comando -> " << newInPut << endl;
-	if (newInPut == "Coneccion?")
-	{
-		cout << "entro\n";
 		conexion();
 	}
-	if (newInPut == "Aceptado")
+	if (msgType == MESSAGE_TYPE::kUSSER)
+	{
+
+	}
+	if (msgType == MESSAGE_TYPE::kPASS)
+	{
+
+	}
+	if (msgType == MESSAGE_TYPE::kDISCONNECT)
+	{
+
+	}
+	if (msgType == MESSAGE_TYPE::kCHAT)
+	{
+
+	}
+	if (msgType == MESSAGE_TYPE::kMOUSESTATE)
+	{
+		MsgMouseData::unPackData(&realData, unpackedData.data(), unpackedData.size());
+		cout << "si\n";
+	}
+	if (msgType == MESSAGE_TYPE::kLINE)
+	{
+
+	}
+	if (msgType == MESSAGE_TYPE::kRECT)
+	{
+
+	}
+	if (msgType == MESSAGE_TYPE::kCIRCLE)
 	{
 
 	}
