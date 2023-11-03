@@ -10,6 +10,7 @@ void KeyBoard::inputKeyBoard(levelKeyBoard& actualKeyBoard, User& actualUser)
 	float tiempoTecla = tiempo.asSeconds();
 	if (tiempoTecla > .14)
 	{
+		Event::TextEntered;
 		if (Keyboard::isKeyPressed(Keyboard::Q))
 		{
 			sInput += "Q";

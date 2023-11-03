@@ -48,7 +48,37 @@ void App::entrada()
 		interactiveKeyBord.inputKeyBoard(actualKeyboard, usuario);
 	}
 	buttonPressed(); 
-	
+	if (usuario.enuEstado == Aplicacion)
+	{
+		if (eventos.mouseButton.button == sf::Mouse::Left && bTemporalPositionMouse == false)
+		{
+			posInicial = sf::Vector2f(eventos.mouseButton.x, eventos.mouseButton.y);
+			posFinal = posInicial;
+			bTemporalPositionMouse = true;
+			sf::Color colorT = sf::Color::Red;
+			temporalShapes.fillCurrentShapeData(colorT, eventos);
+			MsgMouseData posicion;
+			posicion.fillCurrentMouseData();
+			cout << "PosInicial	X -> " << posInicial.x << " Y -> " << posInicial.y << endl;
+			cout << "m_msgData	X -> " << posicion.m_msgData.m_posX << " Y -> " << posicion.m_msgData.m_posY << endl;
+			posicion.m_msgData;
+		}
+		else if (eventos.type == sf::Event::MouseButtonReleased && eventos.mouseButton.button == sf::Mouse::Left)
+		{
+			// Deja de arrastrar el punto y crea el rectángulo
+			bTemporalPositionMouse = false;
+			temporalShapes.fillCurrentShapeDataFinal(eventos);
+			cout << "si";
+		}
+		else if (eventos.type == sf::Event::MouseMoved)
+		{
+			// Actualiza la posición final del punto mientras se arrastra
+			if (bTemporalPositionMouse)
+			{
+				posFinal = sf::Vector2f(eventos.mouseMove.x, eventos.mouseMove.y);
+			}
+		}
+	}
 }
 
 void App::buttonPressed()
@@ -127,6 +157,15 @@ void App::render()
 		else
 		{
 			keyboardOff.render(ventana);
+		}
+		if (bTemporalPositionMouse == true)
+		{
+			RectangleShape RectangleTemporal;
+			sf::Vector2f size = posFinal - posInicial;
+			RectangleTemporal.setSize(sf::Vector2f(std::abs(size.x), std::abs(size.y)));
+			RectangleTemporal.setPosition(posInicial);
+			RectangleTemporal.setFillColor(Color::Red);
+			ventana.draw(RectangleTemporal);
 		}
 	}
 

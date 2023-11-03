@@ -54,6 +54,40 @@ Package MsgMouseData::packData()
 	return data;
 }
 
+void ShapesData::fillCurrentShapeData(sf::Color& TypeColor, sf::Event& Evento)
+{
+	if (Evento.mouseButton.button == sf::Mouse::Left)
+	{
+		m_msgData.m_posInitialX = Evento.mouseButton.x;
+		m_msgData.m_posInitialY = Evento.mouseButton.y;
+		m_msgData.m_TypeAndColorStates.Blue = 0;
+		m_msgData.m_TypeAndColorStates.Red = 0;
+		m_msgData.m_TypeAndColorStates.White = 0;
+		m_msgData.m_TypeAndColorStates.Black = 0;
+		if (TypeColor == sf::Color::Red){ m_msgData.m_TypeAndColorStates.Red = 1; }
+		if (TypeColor == sf::Color::Blue) { m_msgData.m_TypeAndColorStates.Blue = 1; }
+		if (TypeColor == sf::Color::White) { m_msgData.m_TypeAndColorStates.White = 1; }
+		if (TypeColor == sf::Color::Black) { m_msgData.m_TypeAndColorStates.Black = 1; }
+	}
+}
+
+void ShapesData::fillCurrentShapeDataFinal(sf::Event& Evento)
+{
+	m_msgData.m_posFinalX = Evento.mouseButton.x;
+	m_msgData.m_posFinalY = Evento.mouseButton.y;
+}
+
+Package ShapesData::packData()
+{
+	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kMOUSESTATE;
+	Package data;
+	data.resize(sizeof(m_msgData) + sizeof(MESSAGE_TYPE_VAR));
+	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
+	memcpy(data.data() + sizeof(MESSAGE_TYPE_VAR), &m_msgData, sizeof(m_msgData));
+
+	return data;
+}
+
 bool MsgMouseData::unPackData(void* pDestData, void* pScrData, size_t numBytes)
 {
 	cout << numBytes << " " << sizeof(MouseData) << "comprobacion\n";

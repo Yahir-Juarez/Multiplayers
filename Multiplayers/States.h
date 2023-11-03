@@ -34,6 +34,34 @@ public:
 	virtual Package packData() = 0;
 };
 
+class ShapesData : public NetworkMessage
+{
+public:
+	struct ShapeData
+	{
+		Unit32 m_posInitialX;
+		Unit32 m_posInitialY;
+		Unit32 m_posFinalX;
+		Unit32 m_posFinalY;
+		union
+		{
+			Unit32 TypeAndColor;
+			struct
+			{
+				Unit32 Red : 1;
+				Unit32 Blue : 1;
+				Unit32 White : 1;
+				Unit32 Black : 1;
+				Unit32 Rect : 1;
+			};
+		}m_TypeAndColorStates;
+	}m_msgData;
+	void fillCurrentShapeData(sf::Color& TypeColor, sf::Event& Evento);
+	void fillCurrentShapeDataFinal(sf::Event& Evento);
+
+	Package packData();
+};
+
 class MsgConnect : public NetworkMessage
 {
 public:
@@ -117,21 +145,29 @@ public:
 	Package packData() override;
 
 	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
-
 	void fillCurrentMouseData();
 };
 
-class MsgLine : public NetworkMessage
+class MsgLine : public ShapesData
 {
+public:
+	Package packData() override;
 
+	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
 };
 
-class MsgRect : public NetworkMessage
+class MsgRect : public ShapesData
 {
+public:
+	Package packData() override;
 
+	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
 };
 
-class MsgCircle : public NetworkMessage
+class MsgCircle : public ShapesData
 {
+public:
+	Package packData() override;
 
+	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
 };

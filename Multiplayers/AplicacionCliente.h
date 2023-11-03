@@ -8,6 +8,7 @@
 #include "KeyBoard.h"
 #include "UdpServer.h"
 #include "Packages.h"
+#include "States.h"
 
 using namespace std;
 using namespace sf;
@@ -29,6 +30,12 @@ private:
 	void buttonPressed();
 
 	bool activeKeyBoard = true;
+
+	ShapesData temporalShapes;
+	Vector2f posInicial;
+	Vector2f posFinal;
+	
+	bool bTemporalPositionMouse = false;
 
 	string entradaString;
 	Button inicioSesion;
