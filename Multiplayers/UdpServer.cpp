@@ -1,5 +1,4 @@
 #include "UdpServer.h"
-#include "States.h"
 
 ClientData::ClientData()
 {
@@ -132,11 +131,27 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 	}
 	if (msgType == MESSAGE_TYPE::kRECT)
 	{
-
+		ShapesData temporalDataShape;
+		ShapesData::unPackData(&temporalDataShape.m_msgData, unpackedData.data(), unpackedData.size());
+		vShapesInServer.push_back(temporalDataShape);
+		SendShapes();
 	}
 	if (msgType == MESSAGE_TYPE::kCIRCLE)
 	{
 
+	}
+}
+
+void Server::SendShapes()
+{
+	for (int i = 0; i < ClientsData.size(); i++)
+	{
+		auto connect = vShapesInServer[vShapesInServer.size() - 1].packData();
+		Package finalPackage = getPackage(connect.data(), connect.size());
+		if (socket.send(finalPackage.data(), finalPackage.size(), ClientsData[i].clientIp.value(), ClientsData[i].clientPort) != Socket::Status::Done)
+		{
+			cout << "No se mando el mensaje\n";
+		}
 	}
 }
 

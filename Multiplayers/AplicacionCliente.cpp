@@ -69,6 +69,9 @@ void App::entrada()
 			bTemporalPositionMouse = false;
 			temporalShapes.fillCurrentShapeDataFinal(eventos);
 			cout << "si";
+			auto connect = temporalShapes.packData();
+			Package finalPackage = getPackage(connect.data(), connect.size());
+			usuario.usuario(finalPackage);
 		}
 		else if (eventos.type == sf::Event::MouseMoved)
 		{
@@ -149,6 +152,7 @@ void App::render()
 	else if (usuario.enuEstado == Aplicacion)
 	{
 		ventana.clear(Color::White);
+		/*
 		if (activeKeyBoard == true)
 		{
 			keyboardOn.render(ventana);
@@ -158,6 +162,7 @@ void App::render()
 		{
 			keyboardOff.render(ventana);
 		}
+		*/
 		if (bTemporalPositionMouse == true)
 		{
 			RectangleShape RectangleTemporal;

@@ -59,6 +59,8 @@ public:
 	void fillCurrentShapeData(sf::Color& TypeColor, sf::Event& Evento);
 	void fillCurrentShapeDataFinal(sf::Event& Evento);
 
+	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
+
 	Package packData();
 };
 

@@ -8,6 +8,7 @@
 
 #include "UdpCliente.h"
 #include "Packages.h"
+#include "States.h"
 
 using namespace sf;
 using namespace std;
@@ -17,6 +18,7 @@ struct ClientData
 	ClientData();
 	std::optional<sf::IpAddress> clientIp;
 	unsigned short clientPort;
+	string usserName;
 	bool conected = false;
 };
 
@@ -30,6 +32,7 @@ private:
 	void conexion();
 	void inPutRecive();
 	void commandInput(Package& VCpackageInput, Unit16& msgType);
+	void SendShapes();
 	bool outPutSend(Package& VCpackageMessage);
 	UdpSocket socket;
 	User usuario;
@@ -37,6 +40,6 @@ private:
 	optional<sf::IpAddress> ipClient;
 	const unsigned short serverPort = 50001;
 	unsigned short senderPort;
-	vector<string> Clientes = { "Yahir", "JuanCa", "Sergio", "Prince"};
 	vector<ClientData> ClientsData;
+	vector<ShapesData> vShapesInServer;
 };

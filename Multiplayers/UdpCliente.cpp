@@ -115,7 +115,8 @@ void User::commandInput(Package& unpackedData, Unit16& msgType)
 	}
 	if (msgType == MESSAGE_TYPE::kRECT)
 	{
-
+		ShapesData::ShapeData temporalDataShape;
+		ShapesData::unPackData(&temporalDataShape, unpackedData.data(), unpackedData.size());
 	}
 	if (msgType == MESSAGE_TYPE::kCIRCLE)
 	{
