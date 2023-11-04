@@ -4,7 +4,6 @@
 #include <string>
 
 #include "AplicacionCliente.h"
-#include "States.h"
 
 using std::cout;
 using std::cin;
@@ -117,10 +116,44 @@ void User::commandInput(Package& unpackedData, Unit16& msgType)
 	{
 		ShapesData::ShapeData temporalDataShape;
 		ShapesData::unPackData(&temporalDataShape, unpackedData.data(), unpackedData.size());
+		createRect(temporalDataShape);
 	}
 	if (msgType == MESSAGE_TYPE::kCIRCLE)
 	{
 
+	}
+}
+
+void User::createRect(ShapesData::ShapeData& temporalDataShape)
+{
+	sf::RectangleShape temporalshape;
+	sf::Vector2f sizeInicial(temporalDataShape.m_posInitialX, temporalDataShape.m_posInitialY);
+	sf::Vector2f sizeFinal(temporalDataShape.m_posFinalX, temporalDataShape.m_posFinalY);
+	temporalshape.setPosition(sizeInicial);
+	sf::Vector2f size = sizeFinal - sizeInicial;
+	temporalshape.setSize(size);
+	//temporalshape.setSize(sf::Vector2f(std::abs(size.x), std::abs(size.y)));
+	temporalshape.setFillColor(TypeColor(temporalDataShape));
+	shapesTypes.push_back(temporalshape);
+}
+
+sf::Color User::TypeColor(ShapesData::ShapeData& temporalDataShape)
+{
+	if (temporalDataShape.m_TypeAndColorStates.Black == 1)
+	{
+		return Color::Black;
+	}
+	else if (temporalDataShape.m_TypeAndColorStates.White == 1)
+	{
+		return Color::White;
+	}
+	else if (temporalDataShape.m_TypeAndColorStates.Blue == 1)
+	{
+		return Color::Blue;
+	}
+	else if (temporalDataShape.m_TypeAndColorStates.Red == 1)
+	{
+		return Color::Red;
 	}
 }
 

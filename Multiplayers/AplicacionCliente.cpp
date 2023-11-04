@@ -163,6 +163,10 @@ void App::render()
 			keyboardOff.render(ventana);
 		}
 		*/
+		for (int i = 0; i < usuario.shapesTypes.size(); i++)
+		{
+			ventana.draw(usuario.shapesTypes[i]);
+		}
 		if (bTemporalPositionMouse == true)
 		{
 			RectangleShape RectangleTemporal;

@@ -26,7 +26,7 @@ class Server : public Packages
 {
 public:
 	Server();
-	void RunUdpServer(const unsigned short puerto);\
+	void RunUdpServer(const unsigned short puerto);
 private:
 	void bind_port(const unsigned short* puerto);
 	void conexion();
