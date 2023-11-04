@@ -50,36 +50,83 @@ void App::entrada()
 	buttonPressed(); 
 	if (usuario.enuEstado == Aplicacion)
 	{
-		if (eventos.mouseButton.button == sf::Mouse::Left && bTemporalPositionMouse == false)
+		typesShapes();
+		createShapes();
+	}
+}
+
+void App::typesShapes()
+{
+	if (Keyboard::isKeyPressed(Keyboard::Num1))
+	{
+		colorShapes = Color::Black;
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::Num2))
+	{
+		colorShapes = Color::Magenta;
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::Num3))
+	{
+		colorShapes = Color::Red;
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::Num4))
+	{
+		colorShapes = Color::Blue;
+	}
+	
+	else if (Keyboard::isKeyPressed(Keyboard::Num6))
+	{
+		stateShape = Rectangle;
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::Num7))
+	{
+		stateShape = Circle;
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::Num8))
+	{
+		stateShape = Line;
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::Num9))
+	{
+		stateShape = FreeStroke;
+	}
+}
+
+float DistanciaEntreDosPuntos(Vector2f& inicial, Vector2f & final)
+{
+	float distancia = ((pow((inicial.x - final.x), 2)) + (pow((inicial.y - final.y), 2)));
+	distancia = sqrt(distancia);
+	return distancia;
+}
+
+void App::createShapes()
+{
+	if (eventos.mouseButton.button == sf::Mouse::Left && bTemporalPositionMouse == false)
+	{
+		posInicial = sf::Vector2f(eventos.mouseButton.x, eventos.mouseButton.y);
+		posFinal = posInicial;
+		bTemporalPositionMouse = true;
+		temporalShapes.fillCurrentShapeData(colorShapes, eventos);
+		MsgMouseData posicion;
+		posicion.fillCurrentMouseData();
+		posicion.m_msgData;
+	}
+	else if (eventos.type == sf::Event::MouseButtonReleased && eventos.mouseButton.button == sf::Mouse::Left)
+	{
+		// Deja de arrastrar el punto y crea el rectángulo
+		bTemporalPositionMouse = false;
+		temporalShapes.fillCurrentShapeDataFinal(eventos);
+		cout << "si";
+		auto connect = temporalShapes.packData();
+		Package finalPackage = getPackage(connect.data(), connect.size());
+		usuario.usuario(finalPackage);
+	}
+	else if (eventos.type == sf::Event::MouseMoved)
+	{
+		// Actualiza la posición final del punto mientras se arrastra
+		if (bTemporalPositionMouse)
 		{
-			posInicial = sf::Vector2f(eventos.mouseButton.x, eventos.mouseButton.y);
-			posFinal = posInicial;
-			bTemporalPositionMouse = true;
-			sf::Color colorT = sf::Color::Red;
-			temporalShapes.fillCurrentShapeData(colorT, eventos);
-			MsgMouseData posicion;
-			posicion.fillCurrentMouseData();
-			cout << "PosInicial	X -> " << posInicial.x << " Y -> " << posInicial.y << endl;
-			cout << "m_msgData	X -> " << posicion.m_msgData.m_posX << " Y -> " << posicion.m_msgData.m_posY << endl;
-			posicion.m_msgData;
-		}
-		else if (eventos.type == sf::Event::MouseButtonReleased && eventos.mouseButton.button == sf::Mouse::Left)
-		{
-			// Deja de arrastrar el punto y crea el rectángulo
-			bTemporalPositionMouse = false;
-			temporalShapes.fillCurrentShapeDataFinal(eventos);
-			cout << "si";
-			auto connect = temporalShapes.packData();
-			Package finalPackage = getPackage(connect.data(), connect.size());
-			usuario.usuario(finalPackage);
-		}
-		else if (eventos.type == sf::Event::MouseMoved)
-		{
-			// Actualiza la posición final del punto mientras se arrastra
-			if (bTemporalPositionMouse)
-			{
-				posFinal = sf::Vector2f(eventos.mouseMove.x, eventos.mouseMove.y);
-			}
+			posFinal = sf::Vector2f(eventos.mouseMove.x, eventos.mouseMove.y);
 		}
 	}
 }
@@ -173,7 +220,7 @@ void App::render()
 			sf::Vector2f size = posFinal - posInicial;
 			RectangleTemporal.setSize(sf::Vector2f(std::abs(size.x), std::abs(size.y)));
 			RectangleTemporal.setPosition(posInicial);
-			RectangleTemporal.setFillColor(Color::Red);
+			RectangleTemporal.setFillColor(colorShapes);
 			ventana.draw(RectangleTemporal);
 		}
 	}

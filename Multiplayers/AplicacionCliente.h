@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 #include <memory>
+#include <cmath>
 
 #include "Buttons.h"
 #include "KeyBoard.h"
@@ -22,12 +23,24 @@ public:
 	App();
 	~App();
 private:
-	
+	enum typesShapes
+	{
+		Rectangle = 0,
+		Circle,
+		Line,
+		FreeStroke
+	}stateShape;
+
 	void mainloop();
 	void entrada();
 	void update();
 	void render();
 	void buttonPressed();
+
+	void typesShapes();
+	void createShapes();
+
+	sf::Color colorShapes;
 
 	bool activeKeyBoard = true;
 

@@ -143,9 +143,9 @@ sf::Color User::TypeColor(ShapesData::ShapeData& temporalDataShape)
 	{
 		return Color::Black;
 	}
-	else if (temporalDataShape.m_TypeAndColorStates.White == 1)
+	else if (temporalDataShape.m_TypeAndColorStates.Magenta == 1)
 	{
-		return Color::White;
+		return Color::Magenta;
 	}
 	else if (temporalDataShape.m_TypeAndColorStates.Blue == 1)
 	{

@@ -50,7 +50,7 @@ public:
 			{
 				Unit32 Red : 1;
 				Unit32 Blue : 1;
-				Unit32 White : 1;
+				Unit32 Magenta : 1;
 				Unit32 Black : 1;
 				Unit32 Rect : 1;
 			};

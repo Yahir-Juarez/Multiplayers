@@ -62,11 +62,11 @@ void ShapesData::fillCurrentShapeData(sf::Color& TypeColor, sf::Event& Evento)
 		m_msgData.m_posInitialY = Evento.mouseButton.y;
 		m_msgData.m_TypeAndColorStates.Blue = 0;
 		m_msgData.m_TypeAndColorStates.Red = 0;
-		m_msgData.m_TypeAndColorStates.White = 0;
+		m_msgData.m_TypeAndColorStates.Magenta = 0;
 		m_msgData.m_TypeAndColorStates.Black = 0;
 		if (TypeColor == sf::Color::Red){ m_msgData.m_TypeAndColorStates.Red = 1; }
 		if (TypeColor == sf::Color::Blue) { m_msgData.m_TypeAndColorStates.Blue = 1; }
-		if (TypeColor == sf::Color::White) { m_msgData.m_TypeAndColorStates.White = 1; }
+		if (TypeColor == sf::Color::Magenta) { m_msgData.m_TypeAndColorStates.Magenta = 1; }
 		if (TypeColor == sf::Color::Black) { m_msgData.m_TypeAndColorStates.Black = 1; }
 	}
 }
