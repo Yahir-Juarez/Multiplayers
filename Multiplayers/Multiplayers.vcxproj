@@ -156,6 +156,7 @@
     <ClInclude Include="KeyBoard.h" />
     <ClInclude Include="NetWork.h" />
     <ClInclude Include="Packages.h" />
+    <ClInclude Include="ShapesForApp.h" />
     <ClInclude Include="States.h" />
     <ClInclude Include="UdpCliente.h" />
     <ClInclude Include="UdpServer.h" />

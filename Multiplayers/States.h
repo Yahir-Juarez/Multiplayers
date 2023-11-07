@@ -37,6 +37,13 @@ public:
 class ShapesData : public NetworkMessage
 {
 public:
+	enum typesShapes
+	{
+		Rectangle = 0,
+		Circle,
+		Line,
+		FreeStroke
+	}typeShape;
 	struct ShapeData
 	{
 		Unit32 m_posInitialX;
@@ -53,6 +60,9 @@ public:
 				Unit32 Magenta : 1;
 				Unit32 Black : 1;
 				Unit32 Rect : 1;
+				Unit32 Circle : 1;
+				Unit32 Line : 1;
+				Unit32 FreeSroke : 1;
 			};
 		}m_TypeAndColorStates;
 	}m_msgData;

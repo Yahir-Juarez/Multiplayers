@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <optional>
 #include <vector>
+#include <math.h>
 
 #include "UdpServer.h"
 #include "Packages.h"
@@ -23,8 +24,10 @@ public:
 	void UdpClient();
 
 	void createRect(ShapesData::ShapeData& temporalDataShape);
+	void createCircle(ShapesData::ShapeData& temporalDataShape);
 	sf::Color TypeColor(ShapesData::ShapeData& temporalDataShape);
 	vector<sf::RectangleShape> shapesTypes;
+	vector<sf::CircleShape> circleObjects;
 	bool estado = false;
 	estadoApp enuEstado;
 	std::optional<sf::IpAddress> ipServer;
@@ -34,3 +37,4 @@ private:
 	sf::UdpSocket socket;
 	const unsigned short serverPort = 50001;
 };
+

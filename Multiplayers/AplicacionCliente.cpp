@@ -50,53 +50,8 @@ void App::entrada()
 	buttonPressed(); 
 	if (usuario.enuEstado == Aplicacion)
 	{
-		typesShapes();
 		createShapes();
 	}
-}
-
-void App::typesShapes()
-{
-	if (Keyboard::isKeyPressed(Keyboard::Num1))
-	{
-		colorShapes = Color::Black;
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Num2))
-	{
-		colorShapes = Color::Magenta;
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Num3))
-	{
-		colorShapes = Color::Red;
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Num4))
-	{
-		colorShapes = Color::Blue;
-	}
-	
-	else if (Keyboard::isKeyPressed(Keyboard::Num6))
-	{
-		stateShape = Rectangle;
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Num7))
-	{
-		stateShape = Circle;
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Num8))
-	{
-		stateShape = Line;
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Num9))
-	{
-		stateShape = FreeStroke;
-	}
-}
-
-float DistanciaEntreDosPuntos(Vector2f& inicial, Vector2f & final)
-{
-	float distancia = ((pow((inicial.x - final.x), 2)) + (pow((inicial.y - final.y), 2)));
-	distancia = sqrt(distancia);
-	return distancia;
 }
 
 void App::createShapes()
@@ -106,7 +61,8 @@ void App::createShapes()
 		posInicial = sf::Vector2f(eventos.mouseButton.x, eventos.mouseButton.y);
 		posFinal = posInicial;
 		bTemporalPositionMouse = true;
-		temporalShapes.fillCurrentShapeData(colorShapes, eventos);
+		sf::Color colorT = sf::Color::Red;
+		temporalShapes.fillCurrentShapeData(colorT, eventos);
 		MsgMouseData posicion;
 		posicion.fillCurrentMouseData();
 		posicion.m_msgData;
@@ -220,7 +176,7 @@ void App::render()
 			sf::Vector2f size = posFinal - posInicial;
 			RectangleTemporal.setSize(sf::Vector2f(std::abs(size.x), std::abs(size.y)));
 			RectangleTemporal.setPosition(posInicial);
-			RectangleTemporal.setFillColor(colorShapes);
+			RectangleTemporal.setFillColor(Color::Red);
 			ventana.draw(RectangleTemporal);
 		}
 	}

@@ -120,8 +120,28 @@ void User::commandInput(Package& unpackedData, Unit16& msgType)
 	}
 	if (msgType == MESSAGE_TYPE::kCIRCLE)
 	{
-
+		ShapesData::ShapeData temporalDataShape;
+		ShapesData::unPackData(&temporalDataShape, unpackedData.data(), unpackedData.size());
+		createCircle(temporalDataShape);
 	}
+}
+
+float DistanciaEntreDosPuntos(Vector2f& inicial, Vector2f & final)
+{
+	float distancia = ((pow((inicial.x - final.x), 2)) + (pow((inicial.y - final.y), 2)));
+	distancia = sqrt(distancia);
+	return distancia;
+}
+
+void User::createCircle(ShapesData::ShapeData& temporalDataShape)
+{
+	CircleShape CircleShape;
+	sf::Vector2f sizeInicial(temporalDataShape.m_posInitialX, temporalDataShape.m_posInitialY);
+	sf::Vector2f sizeFinal(temporalDataShape.m_posFinalX, temporalDataShape.m_posFinalY);
+	CircleShape.setRadius(DistanciaEntreDosPuntos(sizeInicial, sizeFinal));
+	CircleShape.setPosition(sizeInicial);
+	CircleShape.setFillColor(TypeColor(temporalDataShape));
+	circleObjects.push_back(CircleShape);
 }
 
 void User::createRect(ShapesData::ShapeData& temporalDataShape)

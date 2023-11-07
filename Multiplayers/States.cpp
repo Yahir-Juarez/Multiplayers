@@ -64,10 +64,18 @@ void ShapesData::fillCurrentShapeData(sf::Color& TypeColor, sf::Event& Evento)
 		m_msgData.m_TypeAndColorStates.Red = 0;
 		m_msgData.m_TypeAndColorStates.Magenta = 0;
 		m_msgData.m_TypeAndColorStates.Black = 0;
+		m_msgData.m_TypeAndColorStates.Rect = 0;
+		m_msgData.m_TypeAndColorStates.Circle = 0;
+		m_msgData.m_TypeAndColorStates.Line = 0;
+		m_msgData.m_TypeAndColorStates.FreeSroke = 0;
 		if (TypeColor == sf::Color::Red){ m_msgData.m_TypeAndColorStates.Red = 1; }
 		if (TypeColor == sf::Color::Blue) { m_msgData.m_TypeAndColorStates.Blue = 1; }
 		if (TypeColor == sf::Color::Magenta) { m_msgData.m_TypeAndColorStates.Magenta = 1; }
 		if (TypeColor == sf::Color::Black) { m_msgData.m_TypeAndColorStates.Black = 1; }
+		if (typeShape == typesShapes::Rectangle) { m_msgData.m_TypeAndColorStates.Rect = 1; }
+		if (typeShape == typesShapes::Circle) { m_msgData.m_TypeAndColorStates.Circle = 1; }
+		if (typeShape == typesShapes::Line) { m_msgData.m_TypeAndColorStates.Line = 1; }
+		if (typeShape == typesShapes::FreeStroke) { m_msgData.m_TypeAndColorStates.FreeSroke = 1; }
 	}
 }
 
