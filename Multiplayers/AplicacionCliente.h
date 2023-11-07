@@ -29,7 +29,9 @@ private:
 	void render();
 	void buttonPressed();
 
+	void stateShape();
 	void createShapes();
+	Color cActualColor;
 
 	bool activeKeyBoard = true;
 

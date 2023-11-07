@@ -48,8 +48,10 @@ void App::entrada()
 		interactiveKeyBord.inputKeyBoard(actualKeyboard, usuario);
 	}
 	buttonPressed(); 
+
 	if (usuario.enuEstado == Aplicacion)
 	{
+		stateShape();
 		createShapes();
 	}
 }
@@ -61,11 +63,10 @@ void App::createShapes()
 		posInicial = sf::Vector2f(eventos.mouseButton.x, eventos.mouseButton.y);
 		posFinal = posInicial;
 		bTemporalPositionMouse = true;
-		sf::Color colorT = sf::Color::Red;
-		temporalShapes.fillCurrentShapeData(colorT, eventos);
+		temporalShapes.fillCurrentShapeData(cActualColor, eventos);
 		MsgMouseData posicion;
 		posicion.fillCurrentMouseData();
-		posicion.m_msgData;
+		posicion;
 	}
 	else if (eventos.type == sf::Event::MouseButtonReleased && eventos.mouseButton.button == sf::Mouse::Left)
 	{
@@ -116,6 +117,13 @@ void App::buttonPressed()
 void App::update()
 {
 	usuario.UdpClient();
+}
+
+float DistanciaEntreDosPuntos2(Vector2f& inicial, Vector2f & final)
+{
+	float distancia = ((pow((inicial.x - final.x), 2)) + (pow((inicial.y - final.y), 2)));
+	distancia = sqrt(distancia);
+	return distancia;
 }
 
 void App::render()
@@ -170,16 +178,68 @@ void App::render()
 		{
 			ventana.draw(usuario.shapesTypes[i]);
 		}
+		for (int i = 0; i < usuario.circleObjects.size(); i++)
+		{
+			ventana.draw(usuario.circleObjects[i]);
+		}
 		if (bTemporalPositionMouse == true)
 		{
-			RectangleShape RectangleTemporal;
-			sf::Vector2f size = posFinal - posInicial;
-			RectangleTemporal.setSize(sf::Vector2f(std::abs(size.x), std::abs(size.y)));
-			RectangleTemporal.setPosition(posInicial);
-			RectangleTemporal.setFillColor(Color::Red);
-			ventana.draw(RectangleTemporal);
+			if (temporalShapes.typeShape == ShapesData::typesShapes::Rectangle)
+			{
+				RectangleShape RectangleTemporal;
+				sf::Vector2f size = posFinal - posInicial;
+				RectangleTemporal.setSize(size);
+				RectangleTemporal.setPosition(posInicial);
+				RectangleTemporal.setFillColor(cActualColor);
+				ventana.draw(RectangleTemporal);
+			}
+			if (temporalShapes.typeShape == ShapesData::typesShapes::Circle)
+			{
+				CircleShape CircleTemporal;
+				float radio = DistanciaEntreDosPuntos2(posInicial, posFinal);
+				CircleTemporal.setRadius(radio);
+				CircleTemporal.setPosition(posInicial);
+				CircleTemporal.setFillColor(cActualColor);
+				ventana.draw(CircleTemporal);
+			}
 		}
 	}
 
 	ventana.display();
+}
+
+void App::stateShape()
+{
+	if (Keyboard::isKeyPressed(Keyboard::Num1))
+	{
+		cActualColor = Color::Black;
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::Num2))
+	{
+		cActualColor = Color::Red;
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::Num3))
+	{
+		cActualColor = Color::Blue;
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::Num4))
+	{
+		cActualColor = Color::Magenta;
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::Num6))
+	{
+		temporalShapes.typeShape = ShapesData::typesShapes::Rectangle;
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::Num7))
+	{
+		temporalShapes.typeShape = ShapesData::typesShapes::Circle;
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::Num8))
+	{
+		temporalShapes.typeShape = ShapesData::typesShapes::Line;
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::Num9))
+	{
+		temporalShapes.typeShape = ShapesData::typesShapes::FreeStroke;
+	}
 }
