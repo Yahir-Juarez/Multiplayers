@@ -18,6 +18,12 @@ using namespace std;
 enum estadoApp { Inicio, InicioUser, InicioPassword, Aplicacion };
 class User : public Packages{
 public:
+	struct shapes
+	{
+		vector<sf::RectangleShape> shapesTypes;
+		vector<sf::CircleShape> circleObjects;
+	};
+	vector<shapes> vShapes;
 	User();
 	bool conexion();
 	bool usuario(Package& VCpackageMessage);
@@ -26,8 +32,7 @@ public:
 	void createRect(ShapesData::ShapeData& temporalDataShape);
 	void createCircle(ShapesData::ShapeData& temporalDataShape);
 	sf::Color TypeColor(ShapesData::ShapeData& temporalDataShape);
-	vector<sf::RectangleShape> shapesTypes;
-	vector<sf::CircleShape> circleObjects;
+	
 	bool estado = false;
 	estadoApp enuEstado;
 	std::optional<sf::IpAddress> ipServer;

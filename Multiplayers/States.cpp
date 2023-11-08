@@ -87,7 +87,11 @@ void ShapesData::fillCurrentShapeDataFinal(sf::Event& Evento)
 
 Package ShapesData::packData()
 {
-	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kRECT;
+	MESSAGE_TYPE_VAR MSGTYPE;
+	if (typeShape == typesShapes::Rectangle) { MSGTYPE = MESSAGE_TYPE::kRECT; }
+	if (typeShape == typesShapes::Circle) { MSGTYPE = MESSAGE_TYPE::kCIRCLE; }
+	if (typeShape == typesShapes::Line) { MSGTYPE = MESSAGE_TYPE::kLINE; }
+	if (typeShape == typesShapes::FreeStroke) { MSGTYPE = MESSAGE_TYPE::kRECT; }
 	Package data;
 	data.resize(sizeof(m_msgData) + sizeof(MESSAGE_TYPE_VAR));
 	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));

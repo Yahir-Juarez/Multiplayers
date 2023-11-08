@@ -77,6 +77,7 @@ void App::createShapes()
 		auto connect = temporalShapes.packData();
 		Package finalPackage = getPackage(connect.data(), connect.size());
 		usuario.usuario(finalPackage);
+		cout << "si";
 	}
 	else if (eventos.type == sf::Event::MouseMoved)
 	{
@@ -128,6 +129,7 @@ float DistanciaEntreDosPuntos2(Vector2f& inicial, Vector2f & final)
 
 void App::render()
 {
+	
 	Color rgbGris(184, 184, 184);
 	if (usuario.enuEstado == Inicio)
 	{
@@ -174,13 +176,16 @@ void App::render()
 			keyboardOff.render(ventana);
 		}
 		*/
-		for (int i = 0; i < usuario.shapesTypes.size(); i++)
+		for (int i = 0; i < usuario.vShapes.size(); i++)
 		{
-			ventana.draw(usuario.shapesTypes[i]);
-		}
-		for (int i = 0; i < usuario.circleObjects.size(); i++)
-		{
-			ventana.draw(usuario.circleObjects[i]);
+			for (int j = 0; j < usuario.vShapes[i].shapesTypes.size(); j++)
+			{
+				ventana.draw(usuario.vShapes[i].shapesTypes[j]);
+			}
+			for (int j = 0; j < usuario.vShapes[i].circleObjects.size(); j++)
+			{
+				ventana.draw(usuario.vShapes[i].circleObjects[j]);
+			}
 		}
 		if (bTemporalPositionMouse == true)
 		{
@@ -198,7 +203,7 @@ void App::render()
 				CircleShape CircleTemporal;
 				float radio = DistanciaEntreDosPuntos2(posInicial, posFinal);
 				CircleTemporal.setRadius(radio);
-				CircleTemporal.setPosition(posInicial);
+				CircleTemporal.setPosition(Vector2f(posInicial.x - radio, posInicial.y - radio));
 				CircleTemporal.setFillColor(cActualColor);
 				ventana.draw(CircleTemporal);
 			}

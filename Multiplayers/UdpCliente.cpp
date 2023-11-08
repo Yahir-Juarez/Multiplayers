@@ -138,10 +138,13 @@ void User::createCircle(ShapesData::ShapeData& temporalDataShape)
 	CircleShape CircleShape;
 	sf::Vector2f sizeInicial(temporalDataShape.m_posInitialX, temporalDataShape.m_posInitialY);
 	sf::Vector2f sizeFinal(temporalDataShape.m_posFinalX, temporalDataShape.m_posFinalY);
-	CircleShape.setRadius(DistanciaEntreDosPuntos(sizeInicial, sizeFinal));
-	CircleShape.setPosition(sizeInicial);
+	float radio = DistanciaEntreDosPuntos(sizeInicial, sizeFinal);
+	CircleShape.setRadius(radio);
+	CircleShape.setPosition(Vector2f(sizeInicial.x - radio, sizeInicial.y - radio));
 	CircleShape.setFillColor(TypeColor(temporalDataShape));
-	circleObjects.push_back(CircleShape);
+	shapes newShape;
+	newShape.circleObjects.push_back(CircleShape);
+	vShapes.push_back(newShape);
 }
 
 void User::createRect(ShapesData::ShapeData& temporalDataShape)
@@ -154,7 +157,9 @@ void User::createRect(ShapesData::ShapeData& temporalDataShape)
 	temporalshape.setSize(size);
 	//temporalshape.setSize(sf::Vector2f(std::abs(size.x), std::abs(size.y)));
 	temporalshape.setFillColor(TypeColor(temporalDataShape));
-	shapesTypes.push_back(temporalshape);
+	shapes newShape;
+	newShape.shapesTypes.push_back(temporalshape);
+	vShapes.push_back(newShape);
 }
 
 sf::Color User::TypeColor(ShapesData::ShapeData& temporalDataShape)

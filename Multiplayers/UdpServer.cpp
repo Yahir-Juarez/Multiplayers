@@ -132,13 +132,18 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 	if (msgType == MESSAGE_TYPE::kRECT)
 	{
 		ShapesData temporalDataShape;
+		temporalDataShape.typeShape = ShapesData::typesShapes::Rectangle;
 		ShapesData::unPackData(&temporalDataShape.m_msgData, unpackedData.data(), unpackedData.size());
 		vShapesInServer.push_back(temporalDataShape);
 		SendShapes();
 	}
 	if (msgType == MESSAGE_TYPE::kCIRCLE)
 	{
-
+		ShapesData temporalDataShape;
+		temporalDataShape.typeShape = ShapesData::typesShapes::Circle;
+		ShapesData::unPackData(&temporalDataShape.m_msgData, unpackedData.data(), unpackedData.size());
+		vShapesInServer.push_back(temporalDataShape);
+		SendShapes();
 	}
 }
 
