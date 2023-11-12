@@ -34,6 +34,7 @@ private:
 	void commandInput(Package& VCpackageInput, Unit16& msgType);
 	void SendShapes();
 	bool outPutSend(Package& VCpackageMessage);
+	bool comprobateUsser();
 	UdpSocket socket;
 	User usuario;
 	bool estado;
@@ -42,4 +43,6 @@ private:
 	unsigned short senderPort;
 	vector<ClientData> ClientsData;
 	vector<ShapesData> vShapesInServer;
+	const vector<string> vClientes = { "Yahir", "JuanCa", "Sergio", "Prince" };
+	const string password = "123456";
 };

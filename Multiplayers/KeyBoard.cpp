@@ -196,7 +196,7 @@ void KeyBoard::inputKeyBoard(levelKeyBoard& actualKeyBoard, User& actualUser)
 			sInput += " ";
 			reloj.restart();
 		}
-		else if (Keyboard::isKeyPressed(Keyboard::Backspace))
+		else if (Keyboard::isKeyPressed(Keyboard::Backspace) && sInput.size() > 0)
 		{
 			sInput.pop_back();
 			reloj.restart();
@@ -247,20 +247,37 @@ void KeyBoard::sendServer(User& actualUser)
 	}
 }
 
-void KeyBoard::render(sf::RenderWindow& windowDraw, int posicionX, int posicionY)
+void KeyBoard::render(sf::RenderWindow& windowDraw, sf::Vector2f vPosicionText)
 {
-	sf::Text stringRender = atributes(posicionX, posicionY);
+	sf::Text stringRender = atributes(vPosicionText);
 	windowDraw.draw(stringRender);
 }
 
-sf::Text KeyBoard::atributes(int posicionX, int posicionY)
+void KeyBoard::render(sf::RenderWindow& windowDraw, sf::Vector2f vPosicionText, string message)
 {
-	unsigned int characterSize = 25;
+	sf::Text stringRender = atributes(vPosicionText, message);
+	windowDraw.draw(stringRender);
+}
+
+sf::Text KeyBoard::atributes(sf::Vector2f vPosicionText)
+{
+	unsigned int characterSize = 50;
 	if (!letterType.loadFromFile("ASMAN.ttf")) {
 		std::cout << "Error al cargar la fuente" << std::endl;
 	}
-	sf::Vector2f vPosicionText(posicionX, posicionY);
 	sf::Text text(letterType, sInput, characterSize);
+	text.setPosition(vPosicionText);
+	text.setFillColor(sf::Color::Black);
+	return text;
+}
+
+sf::Text KeyBoard::atributes(sf::Vector2f vPosicionText, string message)
+{
+	unsigned int characterSize = 50;
+	if (!letterType.loadFromFile("ASMAN.ttf")) {
+		std::cout << "Error al cargar la fuente" << std::endl;
+	}
+	sf::Text text(letterType, message, characterSize);
 	text.setPosition(vPosicionText);
 	text.setFillColor(sf::Color::Black);
 	return text;

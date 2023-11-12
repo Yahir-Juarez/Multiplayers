@@ -12,9 +12,11 @@ class KeyBoard : public Packages
 {
 public:
 	void inputKeyBoard(levelKeyBoard& actualKeyBoard, User& actualUser);
-	void render(sf::RenderWindow& windowDraw, int posicionX, int posicionY);
+	void render(sf::RenderWindow& windowDraw, sf::Vector2f vPosicionText);
+	void render(sf::RenderWindow& windowDraw, sf::Vector2f vPosicionText, string message);
 private:
-	sf::Text atributes(int posicionX, int posicionY);
+	sf::Text atributes(sf::Vector2f vPosicionText);
+	sf::Text atributes(sf::Vector2f vPosicionText, string message);
 	void sendServer(User& actualUser);
 	std::string sInput;
 	sf::Clock reloj;

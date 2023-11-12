@@ -50,6 +50,7 @@ private:
 	sf::RenderWindow ventana;
 	sf::Event eventos;
 	KeyBoard interactiveKeyBord;
+	KeyBoard KbMessageForClient;
 
 	levelKeyBoard actualKeyboard = Client;
 

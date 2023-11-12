@@ -3,7 +3,7 @@
 App::App()
 {
 	Vector2u medidaVentana(window_x, window_y);
-	ventana.create(VideoMode(medidaVentana), "Aplicacion Cliente");
+	ventana.create(VideoMode(medidaVentana), "Paint");
 
 	Vector2f posicionInicio(window_x / 2, window_y / 2);
 	Vector2f sizeInicio(300, 300);
@@ -51,7 +51,10 @@ void App::entrada()
 
 	if (usuario.enuEstado == Aplicacion)
 	{
-		stateShape();
+		if (bTemporalPositionMouse == false)
+		{
+			stateShape();
+		}
 		createShapes();
 	}
 }
@@ -129,7 +132,8 @@ float DistanciaEntreDosPuntos2(Vector2f& inicial, Vector2f & final)
 
 void App::render()
 {
-	
+	Vector2f vfTextPossUsserPass(300, 300);
+	Vector2f vfTextMessage(500, 300);
 	Color rgbGris(184, 184, 184);
 	if (usuario.enuEstado == Inicio)
 	{
@@ -139,10 +143,16 @@ void App::render()
 	else if (usuario.enuEstado == InicioUser)
 	{
 		ventana.clear(Color(rgbGris));
+		RectangleShape rsUsserBox;
+		rsUsserBox.setPosition(vfTextMessage);
+		rsUsserBox.setSize(Vector2f(500, 50));
+		rsUsserBox.setFillColor(Color::White);
+		KbMessageForClient.render(ventana, vfTextPossUsserPass, "Usser");
+		ventana.draw(rsUsserBox);
 		if (activeKeyBoard == true)
 		{
 			keyboardOn.render(ventana);
-			interactiveKeyBord.render(ventana, window_x / (10/3), window_y / (10/4));
+			interactiveKeyBord.render(ventana, vfTextMessage);
 		}
 		else
 		{
@@ -152,10 +162,16 @@ void App::render()
 	else if (usuario.enuEstado == InicioPassword)
 	{
 		ventana.clear(Color(rgbGris));
+		RectangleShape rsUsserBox;
+		rsUsserBox.setPosition(vfTextMessage);
+		rsUsserBox.setSize(Vector2f(500, 50));
+		rsUsserBox.setFillColor(Color::White);
+		KbMessageForClient.render(ventana, vfTextPossUsserPass, "Password");
+		ventana.draw(rsUsserBox);
 		if (activeKeyBoard == true)
 		{
 			keyboardOn.render(ventana);
-			interactiveKeyBord.render(ventana, window_x / (10 / 3), window_y / (10 / 4));
+			interactiveKeyBord.render(ventana, vfTextMessage);
 		}
 		else
 		{

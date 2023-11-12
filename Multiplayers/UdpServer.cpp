@@ -32,6 +32,10 @@ void Server::conexion()
 	cout << "se mando el mensaje y se agrego a la lista\n";
 }
 
+bool Server::comprobateUsser()
+{
+	return false;
+}
 void Server::bind_port(const unsigned short* puerto)
 {
 	if (socket.bind(*puerto) != Socket::Status::Done)
@@ -89,7 +93,7 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 {
 	MsgMouseData::MouseData realData;
 	if (msgType == MESSAGE_TYPE::kCONNECT)
-	{
+	{ 
 		conexion();
 	}
 	if (msgType == MESSAGE_TYPE::kUSSER)
