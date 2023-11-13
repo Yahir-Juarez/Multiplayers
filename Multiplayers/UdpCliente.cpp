@@ -110,7 +110,9 @@ void User::commandInput(Package& unpackedData, Unit16& msgType)
 	}
 	if (msgType == MESSAGE_TYPE::kLINE)
 	{
-
+		ShapesData::ShapeData temporalDataShape;
+		ShapesData::unPackData(&temporalDataShape, unpackedData.data(), unpackedData.size());
+		createLine(temporalDataShape);
 	}
 	if (msgType == MESSAGE_TYPE::kRECT)
 	{
@@ -141,7 +143,7 @@ void User::createCircle(ShapesData::ShapeData& temporalDataShape)
 	float radio = DistanciaEntreDosPuntos(sizeInicial, sizeFinal);
 	CircleShape.setRadius(radio);
 	CircleShape.setPosition(Vector2f(sizeInicial.x - radio, sizeInicial.y - radio));
-	CircleShape.setFillColor(TypeColor(temporalDataShape));
+	CircleShape.setFillColor(temporalDataShape.m_cTypeColor);
 	shapes newShape;
 	newShape.circleObjects.push_back(CircleShape);
 	vShapes.push_back(newShape);
@@ -156,30 +158,22 @@ void User::createRect(ShapesData::ShapeData& temporalDataShape)
 	sf::Vector2f size = sizeFinal - sizeInicial;
 	temporalshape.setSize(size);
 	//temporalshape.setSize(sf::Vector2f(std::abs(size.x), std::abs(size.y)));
-	temporalshape.setFillColor(TypeColor(temporalDataShape));
+	temporalshape.setFillColor(temporalDataShape.m_cTypeColor);
 	shapes newShape;
 	newShape.shapesTypes.push_back(temporalshape);
 	vShapes.push_back(newShape);
 }
 
-sf::Color User::TypeColor(ShapesData::ShapeData& temporalDataShape)
+void User::createLine(ShapesData::ShapeData& temporalDataShape)
 {
-	if (temporalDataShape.m_TypeAndColorStates.Black == 1)
-	{
-		return Color::Black;
-	}
-	else if (temporalDataShape.m_TypeAndColorStates.Magenta == 1)
-	{
-		return Color::Magenta;
-	}
-	else if (temporalDataShape.m_TypeAndColorStates.Blue == 1)
-	{
-		return Color::Blue;
-	}
-	else if (temporalDataShape.m_TypeAndColorStates.Red == 1)
-	{
-		return Color::Red;
-	}
+	sf::RectangleShape temporalshape;
+	sf::Vertex vLinePt1 = sf::Vector2f(temporalDataShape.m_posInitialX, temporalDataShape.m_posInitialY);
+	vLinePt1.color = temporalDataShape.m_cTypeColor;
+	sf::Vertex vLinePt2 = sf::Vector2f(temporalDataShape.m_posFinalX, temporalDataShape.m_posFinalY);
+	vLinePt2.color = temporalDataShape.m_cTypeColor;
+	shapes newShape;
+	freeLine.push_back(vLinePt1);
+	freeLine.push_back(vLinePt2);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -47,6 +47,7 @@ private:
 	Button keyboardOff;
 	Clock relojTeclado;
 	Clock relojButtons;
+	Clock relojShapes;
 	sf::RenderWindow ventana;
 	sf::Event eventos;
 	KeyBoard interactiveKeyBord;

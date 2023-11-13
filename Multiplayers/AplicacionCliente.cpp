@@ -61,33 +61,51 @@ void App::entrada()
 
 void App::createShapes()
 {
-	if (eventos.mouseButton.button == sf::Mouse::Left && bTemporalPositionMouse == false)
+	Time tiempo;
+	tiempo = relojShapes.getElapsedTime();
+	float tiempoButtons = tiempo.asSeconds();
+	if (eventos.mouseButton.button == sf::Mouse::Left && bTemporalPositionMouse == false && tiempoButtons > .1)
 	{
 		posInicial = sf::Vector2f(eventos.mouseButton.x, eventos.mouseButton.y);
 		posFinal = posInicial;
 		bTemporalPositionMouse = true;
 		temporalShapes.fillCurrentShapeData(cActualColor, eventos);
-		MsgMouseData posicion;
-		posicion.fillCurrentMouseData();
-		posicion;
 	}
-	else if (eventos.type == sf::Event::MouseButtonReleased && eventos.mouseButton.button == sf::Mouse::Left)
-	{
-		// Deja de arrastrar el punto y crea el rectángulo
-		bTemporalPositionMouse = false;
-		temporalShapes.fillCurrentShapeDataFinal(eventos);
-		cout << "si";
-		auto connect = temporalShapes.packData();
-		Package finalPackage = getPackage(connect.data(), connect.size());
-		usuario.usuario(finalPackage);
-		cout << "si";
-	}
-	else if (eventos.type == sf::Event::MouseMoved)
+	else if (eventos.type == sf::Event::MouseMoved && !(temporalShapes.typeShape == ShapesData::typesShapes::Line))
 	{
 		// Actualiza la posición final del punto mientras se arrastra
 		if (bTemporalPositionMouse)
 		{
 			posFinal = sf::Vector2f(eventos.mouseMove.x, eventos.mouseMove.y);
+		}
+	}
+	else if (eventos.type == sf::Event::MouseButtonReleased && eventos.mouseButton.button == sf::Mouse::Left)
+	{
+		// Deja de arrastrar el punto y crea la figura
+		bTemporalPositionMouse = false;
+		relojShapes.restart();
+		if ((temporalShapes.typeShape == ShapesData::typesShapes::Line))
+		{
+			return;
+		}
+		temporalShapes.fillCurrentShapeDataFinal(eventos);
+		auto connect = temporalShapes.packData();
+		Package finalPackage = getPackage(connect.data(), connect.size());
+		usuario.usuario(finalPackage);
+	}
+	else if (temporalShapes.typeShape == ShapesData::typesShapes::Line && eventos.type == sf::Event::MouseMoved)
+	{
+		if (bTemporalPositionMouse)
+		{
+			//temporalShapes.fillCurrentShapeDataFinal(eventos);
+			posFinal = sf::Vector2f(eventos.mouseMove.x, eventos.mouseMove.y);
+			temporalShapes.m_msgData.m_posFinalX = posFinal.x;
+			temporalShapes.m_msgData.m_posFinalY = posFinal.y;
+			auto connect = temporalShapes.packData();
+			Package finalPackage = getPackage(connect.data(), connect.size());
+			usuario.usuario(finalPackage);
+			temporalShapes.m_msgData.m_posInitialX = temporalShapes.m_msgData.m_posFinalX;
+			temporalShapes.m_msgData.m_posInitialY = temporalShapes.m_msgData.m_posFinalY;
 		}
 	}
 }
@@ -134,6 +152,7 @@ void App::render()
 {
 	Vector2f vfTextPossUsserPass(300, 300);
 	Vector2f vfTextMessage(500, 300);
+	
 	Color rgbGris(184, 184, 184);
 	if (usuario.enuEstado == Inicio)
 	{
@@ -224,6 +243,7 @@ void App::render()
 				ventana.draw(CircleTemporal);
 			}
 		}
+		ventana.draw(usuario.freeLine.data(), usuario.freeLine.size(), sf::PrimitiveType::Lines);
 	}
 
 	ventana.display();

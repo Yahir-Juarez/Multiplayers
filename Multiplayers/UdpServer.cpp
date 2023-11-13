@@ -131,7 +131,11 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 	}
 	if (msgType == MESSAGE_TYPE::kLINE)
 	{
-
+		ShapesData temporalDataShape;
+		temporalDataShape.typeShape = ShapesData::typesShapes::Line;
+		ShapesData::unPackData(&temporalDataShape.m_msgData, unpackedData.data(), unpackedData.size());
+		vShapesInServer.push_back(temporalDataShape);
+		SendShapes();
 	}
 	if (msgType == MESSAGE_TYPE::kRECT)
 	{

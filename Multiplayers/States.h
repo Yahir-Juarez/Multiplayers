@@ -44,27 +44,22 @@ public:
 		Line,
 		FreeStroke
 	}typeShape;
+	struct
+	{
+		Unit32 Rect : 1;
+		Unit32 Circle : 1;
+		Unit32 Line : 1;
+		Unit32 FreeSroke : 1;
+	}m_TypeAndColorStates;
+
 	struct ShapeData
 	{
 		Unit32 m_posInitialX;
 		Unit32 m_posInitialY;
 		Unit32 m_posFinalX;
 		Unit32 m_posFinalY;
-		union
-		{
-			Unit32 TypeAndColor;
-			struct
-			{
-				Unit32 Red : 1;
-				Unit32 Blue : 1;
-				Unit32 Magenta : 1;
-				Unit32 Black : 1;
-				Unit32 Rect : 1;
-				Unit32 Circle : 1;
-				Unit32 Line : 1;
-				Unit32 FreeSroke : 1;
-			};
-		}m_TypeAndColorStates;
+		sf::Color m_cTypeColor;
+		Unit32 TypeShape;	
 	}m_msgData;
 	void fillCurrentShapeData(sf::Color& TypeColor, sf::Event& Evento);
 	void fillCurrentShapeDataFinal(sf::Event& Evento);

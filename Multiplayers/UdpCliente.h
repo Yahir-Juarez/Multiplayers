@@ -23,6 +23,7 @@ public:
 		vector<sf::RectangleShape> shapesTypes;
 		vector<sf::CircleShape> circleObjects;
 	};
+	vector<sf::Vertex> freeLine;
 	vector<shapes> vShapes;
 	User();
 	bool conexion();
@@ -31,7 +32,7 @@ public:
 
 	void createRect(ShapesData::ShapeData& temporalDataShape);
 	void createCircle(ShapesData::ShapeData& temporalDataShape);
-	sf::Color TypeColor(ShapesData::ShapeData& temporalDataShape);
+	void createLine(ShapesData::ShapeData& temporalDataShape);
 	
 	bool estado = false;
 	estadoApp enuEstado;
