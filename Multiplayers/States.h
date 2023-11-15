@@ -37,31 +37,16 @@ public:
 class ShapesData : public NetworkMessage
 {
 public:
-	enum typesShapes
-	{
-		Rectangle = 0,
-		Circle,
-		Line,
-		FreeStroke
-	}typeShape;
-	struct
-	{
-		Unit32 Rect : 1;
-		Unit32 Circle : 1;
-		Unit32 Line : 1;
-		Unit32 FreeSroke : 1;
-	}m_TypeAndColorStates;
-
 	struct ShapeData
 	{
+		MESSAGE_TYPE_VAR MSGTYPE;
 		Unit32 m_posInitialX;
 		Unit32 m_posInitialY;
 		Unit32 m_posFinalX;
 		Unit32 m_posFinalY;
 		sf::Color m_cTypeColor;
-		Unit32 TypeShape;	
 	}m_msgData;
-	void fillCurrentShapeData(sf::Color& TypeColor, sf::Event& Evento);
+	void fillCurrentShapeData(sf::Color& TypeColor, sf::Event& Evento, MESSAGE_TYPE::K typeMessage);
 	void fillCurrentShapeDataFinal(sf::Event& Evento);
 
 	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
@@ -89,6 +74,7 @@ public:
 	~MsgUsser() {
 	}
 	Package packData();
+	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
 
 	string m_msgDATA;
 };

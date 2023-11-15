@@ -19,6 +19,7 @@ struct ClientData
 	std::optional<sf::IpAddress> clientIp;
 	unsigned short clientPort;
 	string usserName;
+	string password;
 	bool conected = false;
 };
 
@@ -29,7 +30,20 @@ public:
 	void RunUdpServer(const unsigned short puerto);
 private:
 	void bind_port(const unsigned short* puerto);
+
+	struct clientsInServer
+	{
+
+	}ussersAndPasswords;
+
+	//////////////		Verificacion de usuario		////////////////////
+
 	void conexion();
+	bool checkUsser(Package& VCpackageMessage);
+	bool checkPassword(Package& VCpackageMessage);
+
+	////////////////////////////////////////////////////////////////////
+
 	void inPutRecive();
 	void commandInput(Package& VCpackageInput, Unit16& msgType);
 	void SendShapes();
@@ -43,6 +57,6 @@ private:
 	unsigned short senderPort;
 	vector<ClientData> ClientsData;
 	vector<ShapesData> vShapesInServer;
-	const vector<string> vClientes = { "Yahir", "JuanCa", "Sergio", "Prince" };
+	const vector<string> vClientes = { "YAHIR", "JuanCa", "Sergio", "Prince" };
 	const string password = "123456";
 };

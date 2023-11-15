@@ -14,6 +14,8 @@ Server::Server()
 	}
 }
 
+////////////////////////////////////	Verificacion de usuario		//////////////////////////////////////
+
 void Server::conexion()
 {
 	MsgConnect msgConeccion;
@@ -31,6 +33,40 @@ void Server::conexion()
 	ClientsData.push_back(temporalData);
 	cout << "se mando el mensaje y se agrego a la lista\n";
 }
+
+string unpackString(Package& unpackedData)
+{
+	string data;
+	for (int i = 0; i < unpackedData.size(); i++)
+	{
+		if (unpackedData[i] == '\0')
+		{
+			data += unpackedData[i];
+			return data;
+		}
+		data += unpackedData[i];
+	}
+}
+
+bool Server::checkUsser(Package& VCpackageMessage)
+{
+	string usser = unpackString(VCpackageMessage);
+	for (int i = 0; i < vClientes.size(); i++)
+	{
+		if (vClientes[i] == usser)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Server::checkPassword(Package& VCpackageMessage)
+{
+	return false;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool Server::comprobateUsser()
 {
@@ -53,31 +89,22 @@ void Server::inPutRecive()
 	{
 		return;
 	}
-	else
+	Package pRecivedPackage;
+	pRecivedPackage.resize(received);
+	memcpy(pRecivedPackage.data(), VCpackageInput.data(), received);
+
+	Package realPackage;
+	if (!(isPackageValid(VCpackageInput, &realPackage)))
 	{
-		Package pRecivedPackage;
-		pRecivedPackage.resize(received);
-		memcpy(pRecivedPackage.data(), VCpackageInput.data(), received);
-
-		Package realPackage;
-		if (isPackageValid(VCpackageInput, &realPackage))
-		{
-			Unit16 msgType = MESSAGE_TYPE::kERROR;
-			Package unpackedData;
-			getPackageTypeAndData(realPackage, msgType, unpackedData);
-
-			commandInput(unpackedData, msgType);
-			/*
-			cout << "El cliente mando: ";
-			for (int i = 0; i < realPackage.size(); i++)
-			{
-				cout << realPackage[i];
-			}
-			cout << endl;
-			*/
-		}
+		return;
 	}
+	Unit16 msgType = MESSAGE_TYPE::kERROR;
+	Package unpackedData;
+	getPackageTypeAndData(realPackage, msgType, unpackedData);
+
+	commandInput(unpackedData, msgType);
 }
+
 
 bool Server::outPutSend(Package& VCpackageMessage)
 {
@@ -99,6 +126,9 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 	if (msgType == MESSAGE_TYPE::kUSSER)
 	{
 		MsgUsser cMsgUsuario;
+		//MsgUsser::unPackData(&cMsgUsuario.m_msgDATA, unpackedData.data(), unpackedData.size());
+		//cout << cMsgUsuario.m_msgDATA << endl;
+
 		cMsgUsuario.m_msgDATA = "Aceptado";
 		cMsgUsuario.packData();
 		auto connect = cMsgUsuario.packData();
@@ -132,7 +162,6 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 	if (msgType == MESSAGE_TYPE::kLINE)
 	{
 		ShapesData temporalDataShape;
-		temporalDataShape.typeShape = ShapesData::typesShapes::Line;
 		ShapesData::unPackData(&temporalDataShape.m_msgData, unpackedData.data(), unpackedData.size());
 		vShapesInServer.push_back(temporalDataShape);
 		SendShapes();
@@ -140,7 +169,6 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 	if (msgType == MESSAGE_TYPE::kRECT)
 	{
 		ShapesData temporalDataShape;
-		temporalDataShape.typeShape = ShapesData::typesShapes::Rectangle;
 		ShapesData::unPackData(&temporalDataShape.m_msgData, unpackedData.data(), unpackedData.size());
 		vShapesInServer.push_back(temporalDataShape);
 		SendShapes();
@@ -148,7 +176,6 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 	if (msgType == MESSAGE_TYPE::kCIRCLE)
 	{
 		ShapesData temporalDataShape;
-		temporalDataShape.typeShape = ShapesData::typesShapes::Circle;
 		ShapesData::unPackData(&temporalDataShape.m_msgData, unpackedData.data(), unpackedData.size());
 		vShapesInServer.push_back(temporalDataShape);
 		SendShapes();

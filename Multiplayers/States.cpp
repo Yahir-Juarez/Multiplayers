@@ -54,21 +54,17 @@ Package MsgMouseData::packData()
 	return data;
 }
 
-void ShapesData::fillCurrentShapeData(sf::Color& TypeColor, sf::Event& Evento)
+//////////////////////////////////////////////////////////// Funcion Shapes //////////////////////////////////////////////////////////////////////////////////
+
+void ShapesData::fillCurrentShapeData(sf::Color& TypeColor, sf::Event& Evento, MESSAGE_TYPE::K typeMessage)
 {
 	if (Evento.mouseButton.button == sf::Mouse::Left)
 	{
+
 		m_msgData.m_posInitialX = Evento.mouseButton.x;
 		m_msgData.m_posInitialY = Evento.mouseButton.y;
-		m_TypeAndColorStates.Rect = 0;
-		m_TypeAndColorStates.Circle = 0;
-		m_TypeAndColorStates.Line = 0;
-		m_TypeAndColorStates.FreeSroke = 0;
 		m_msgData.m_cTypeColor = TypeColor;
-		if (typeShape == typesShapes::Rectangle) {m_TypeAndColorStates.Rect = 1; }
-		if (typeShape == typesShapes::Circle) { m_TypeAndColorStates.Circle = 1; }
-		if (typeShape == typesShapes::Line) {m_TypeAndColorStates.Line = 1; }
-		if (typeShape == typesShapes::FreeStroke) { m_TypeAndColorStates.FreeSroke = 1; }
+		m_msgData.MSGTYPE = typeMessage;
 	}
 }
 
@@ -80,14 +76,9 @@ void ShapesData::fillCurrentShapeDataFinal(sf::Event& Evento)
 
 Package ShapesData::packData()
 {
-	MESSAGE_TYPE_VAR MSGTYPE;
-	if (typeShape == typesShapes::Rectangle) { MSGTYPE = MESSAGE_TYPE::kRECT; }
-	if (typeShape == typesShapes::Circle) { MSGTYPE = MESSAGE_TYPE::kCIRCLE; }
-	if (typeShape == typesShapes::Line) { MSGTYPE = MESSAGE_TYPE::kLINE; }
-	if (typeShape == typesShapes::FreeStroke) { MSGTYPE = MESSAGE_TYPE::kRECT; }
 	Package data;
 	data.resize(sizeof(m_msgData) + sizeof(MESSAGE_TYPE_VAR));
-	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
+	memcpy(data.data(), &m_msgData.MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
 	memcpy(data.data() + sizeof(MESSAGE_TYPE_VAR), &m_msgData, sizeof(m_msgData));
 
 	return data;
@@ -97,6 +88,17 @@ bool ShapesData::unPackData(void* pDestData, void* pScrData, size_t numBytes)
 {
 	cout << numBytes << " " << sizeof(ShapeData) << "comprobacion\n";
 	if (numBytes != sizeof(ShapeData))
+	{
+		return false;
+	}
+	memcpy(pDestData, pScrData, numBytes);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool MsgUsser::unPackData(void* pDestData, void* pScrData, size_t numBytes)
+{
+	if (numBytes != sizeof(m_msgDATA))
 	{
 		return false;
 	}

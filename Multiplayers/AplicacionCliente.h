@@ -40,6 +40,7 @@ private:
 	Vector2f posFinal;
 	
 	bool bTemporalPositionMouse = false;
+	MESSAGE_TYPE::K eTypeMessageActual;
 
 	string entradaString;
 	Button inicioSesion;

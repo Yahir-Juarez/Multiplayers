@@ -26,7 +26,13 @@ public:
 	vector<sf::Vertex> freeLine;
 	vector<shapes> vShapes;
 	User();
+
+	////////////////////////////	Verificacion de usuario		////////////////////////////////
+
 	bool conexion();
+
+	////////////////////////////////////////////////////////////////////////////////////////////
+
 	bool usuario(Package& VCpackageMessage);
 	void UdpClient();
 
@@ -34,6 +40,8 @@ public:
 	void createCircle(ShapesData::ShapeData& temporalDataShape);
 	void createLine(ShapesData::ShapeData& temporalDataShape);
 	
+
+
 	bool estado = false;
 	estadoApp enuEstado;
 	std::optional<sf::IpAddress> ipServer;

@@ -29,7 +29,7 @@ void App::mainloop()
 		entrada();
 		update();
 		render();
-	}
+ 	}
 }
 
 void App::entrada()
@@ -69,9 +69,9 @@ void App::createShapes()
 		posInicial = sf::Vector2f(eventos.mouseButton.x, eventos.mouseButton.y);
 		posFinal = posInicial;
 		bTemporalPositionMouse = true;
-		temporalShapes.fillCurrentShapeData(cActualColor, eventos);
+		temporalShapes.fillCurrentShapeData(cActualColor, eventos, eTypeMessageActual);
 	}
-	else if (eventos.type == sf::Event::MouseMoved && !(temporalShapes.typeShape == ShapesData::typesShapes::Line))
+	else if (eventos.type == sf::Event::MouseMoved && !(eTypeMessageActual == MESSAGE_TYPE::K::kLINE))
 	{
 		// Actualiza la posición final del punto mientras se arrastra
 		if (bTemporalPositionMouse)
@@ -84,7 +84,7 @@ void App::createShapes()
 		// Deja de arrastrar el punto y crea la figura
 		bTemporalPositionMouse = false;
 		relojShapes.restart();
-		if ((temporalShapes.typeShape == ShapesData::typesShapes::Line))
+		if ((eTypeMessageActual == MESSAGE_TYPE::K::kLINE))
 		{
 			return;
 		}
@@ -93,7 +93,7 @@ void App::createShapes()
 		Package finalPackage = getPackage(connect.data(), connect.size());
 		usuario.usuario(finalPackage);
 	}
-	else if (temporalShapes.typeShape == ShapesData::typesShapes::Line && eventos.type == sf::Event::MouseMoved)
+	else if (eTypeMessageActual == MESSAGE_TYPE::K::kLINE && eventos.type == sf::Event::MouseMoved)
 	{
 		if (bTemporalPositionMouse)
 		{
@@ -224,7 +224,7 @@ void App::render()
 		}
 		if (bTemporalPositionMouse == true)
 		{
-			if (temporalShapes.typeShape == ShapesData::typesShapes::Rectangle)
+			if (eTypeMessageActual == MESSAGE_TYPE::K::kRECT)
 			{
 				RectangleShape RectangleTemporal;
 				sf::Vector2f size = posFinal - posInicial;
@@ -233,7 +233,7 @@ void App::render()
 				RectangleTemporal.setFillColor(cActualColor);
 				ventana.draw(RectangleTemporal);
 			}
-			if (temporalShapes.typeShape == ShapesData::typesShapes::Circle)
+			if (eTypeMessageActual == MESSAGE_TYPE::K::kCIRCLE)
 			{
 				CircleShape CircleTemporal;
 				float radio = DistanciaEntreDosPuntos2(posInicial, posFinal);
@@ -269,18 +269,18 @@ void App::stateShape()
 	}
 	else if (Keyboard::isKeyPressed(Keyboard::Num6))
 	{
-		temporalShapes.typeShape = ShapesData::typesShapes::Rectangle;
+		eTypeMessageActual = MESSAGE_TYPE::K::kRECT;
 	}
 	else if (Keyboard::isKeyPressed(Keyboard::Num7))
 	{
-		temporalShapes.typeShape = ShapesData::typesShapes::Circle;
+		eTypeMessageActual = MESSAGE_TYPE::K::kCIRCLE;
 	}
 	else if (Keyboard::isKeyPressed(Keyboard::Num8))
 	{
-		temporalShapes.typeShape = ShapesData::typesShapes::Line;
+		eTypeMessageActual = MESSAGE_TYPE::K::kLINE;
 	}
 	else if (Keyboard::isKeyPressed(Keyboard::Num9))
 	{
-		temporalShapes.typeShape = ShapesData::typesShapes::FreeStroke;
+		eTypeMessageActual = MESSAGE_TYPE::K::kLINE;
 	}
 }
