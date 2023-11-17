@@ -34,26 +34,25 @@ void Server::conexion()
 	cout << "se mando el mensaje y se agrego a la lista\n";
 }
 
-string unpackString(Package& unpackedData)
-{
-	string data;
-	for (int i = 0; i < unpackedData.size(); i++)
-	{
-		if (unpackedData[i] == '\0')
-		{
-			data += unpackedData[i];
-			return data;
-		}
-		data += unpackedData[i];
-	}
-}
+//string unpackString(Package& unpackedData)
+//{
+//	string data;
+//	for (int i = 0; i < unpackedData.size(); i++)
+//	{
+//		if (unpackedData[i] == '\0')
+//		{
+//			data += unpackedData[i];
+//			return data;
+//		}
+//		data += unpackedData[i];
+//	}
+//}
 
-bool Server::checkUsser(Package& VCpackageMessage)
+bool Server::checkUsser()
 {
-	string usser = unpackString(VCpackageMessage);
-	for (int i = 0; i < vClientes.size(); i++)
+	for (int i = 0; i < vListClients.size(); i++)
 	{
-		if (vClientes[i] == usser)
+		if (vListClients[i].sNameClient == newSignup.m_msgData.sUsser)
 		{
 			return true;
 		}
@@ -140,6 +139,16 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 	{
 		cout << "entro al registro \n\a";
 		MsgSignup::unPackData(&newSignup.m_msgData, unpackedData.data(), unpackedData.size());
+		if (checkUsser())
+		{
+			cout << "Cliente ya registrado" << endl;
+			return;
+		}
+		DataClientRegister newClient;
+		newClient.sNameClient = newSignup.m_msgData.sUsser;
+		newClient.sPasswordClient = newSignup.m_msgData.sPassword;
+		newClient.IDclient = (vListClients.size() + 1);
+		vListClients.push_back(newClient);
 		MsgPass cMsgUsuario;
 		cMsgUsuario.m_msgDATA = "Aceptado";
 		cMsgUsuario.packData();
@@ -210,6 +219,13 @@ void Server::RunUdpServer(const unsigned short puerto)
 	while (servidor_activo == true)
 	{
 		inPutRecive();
+		if (Keyboard::isKeyPressed(Keyboard::L))
+		{
+			for (int i = 0; i < vListClients.size(); i++)
+			{
+				cout << "Cliente	|" << vListClients[i].sNameClient << "|			 Password	|" << vListClients[i].sPasswordClient << "|			 ID	|" << vListClients[i].IDclient << endl;
+			}
+		}
 		/*
 		Time tiempo = reloj.getElapsedTime();
 		float segundos = tiempo.asSeconds();

@@ -35,7 +35,7 @@ Package MsgPass::packData()
 
 Package MsgChat::packData()
 {
-	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kPASS;
+	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kCHAT;
 	std::vector<char> data;
 	data.resize(m_msgDATA.size() + sizeof(MESSAGE_TYPE_VAR));
 	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));

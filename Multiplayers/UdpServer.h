@@ -31,15 +31,17 @@ public:
 private:
 	void bind_port(const unsigned short* puerto);
 
-	struct clientsInServer
+	struct DataClientRegister
 	{
-
-	}ussersAndPasswords;
+		string sNameClient;
+		string sPasswordClient;
+		unsigned int IDclient;
+	};
 
 	//////////////		Verificacion de usuario		////////////////////
 
 	void conexion();
-	bool checkUsser(Package& VCpackageMessage);
+	bool checkUsser();
 	bool checkPassword(Package& VCpackageMessage);
 
 	MsgSignup newSignup;
@@ -57,8 +59,7 @@ private:
 	optional<sf::IpAddress> ipClient;
 	const unsigned short serverPort = 50001;
 	unsigned short senderPort;
+	vector<DataClientRegister> vListClients;
 	vector<ClientData> ClientsData;
 	vector<ShapesData> vShapesInServer;
-	const vector<string> vClientes = { "YAHIR", "JuanCa", "Sergio", "Prince" };
-	const string password = "123456";
 };
