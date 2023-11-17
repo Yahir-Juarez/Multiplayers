@@ -94,7 +94,7 @@ void Server::inPutRecive()
 	memcpy(pRecivedPackage.data(), VCpackageInput.data(), received);
 
 	Package realPackage;
-	if (!(isPackageValid(VCpackageInput, &realPackage)))
+	if (!(isPackageValid(pRecivedPackage, &realPackage)))
 	{
 		return;
 	}
@@ -138,6 +138,8 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 	}
 	if (msgType == MESSAGE_TYPE::kPASS)
 	{
+		cout << "entro al registro \n\a";
+		MsgSignup::unPackData(&newSignup.m_msgData, unpackedData.data(), unpackedData.size());
 		MsgPass cMsgUsuario;
 		cMsgUsuario.m_msgDATA = "Aceptado";
 		cMsgUsuario.packData();

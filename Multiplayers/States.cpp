@@ -65,6 +65,10 @@ void ShapesData::fillCurrentShapeData(sf::Color& TypeColor, sf::Event& Evento, M
 		m_msgData.m_posInitialY = Evento.mouseButton.y;
 		m_msgData.m_cTypeColor = TypeColor;
 		m_msgData.MSGTYPE = typeMessage;
+		/*if (typeMessage == MESSAGE_TYPE::kRECT)
+		{
+			m_msgData.prueba = "sip rectangulo";
+		}*/
 	}
 }
 
@@ -95,6 +99,32 @@ bool ShapesData::unPackData(void* pDestData, void* pScrData, size_t numBytes)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////	SIGNUP	//////////////////////////////////////////////////////////////////
+
+Package MsgSignup::packData()
+{
+	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kPASS;
+	Package data;
+	data.resize(sizeof(m_msgData) + sizeof(MESSAGE_TYPE_VAR));
+	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
+	memcpy(data.data() + sizeof(MESSAGE_TYPE_VAR), &m_msgData, sizeof(m_msgData));
+
+	return data;
+}
+
+bool MsgSignup::unPackData(void* pDestData, void* pScrData, size_t numBytes)
+{
+	cout << numBytes << " " << sizeof(MessageData) << "comprobacion\n";
+	if (numBytes != sizeof(MessageData))
+	{
+		return false;
+	}
+	memcpy(pDestData, pScrData, numBytes);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool MsgUsser::unPackData(void* pDestData, void* pScrData, size_t numBytes)
 {

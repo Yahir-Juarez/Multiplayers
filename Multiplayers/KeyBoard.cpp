@@ -217,23 +217,30 @@ void KeyBoard::sendServer(User& actualUser)
 {
 	if (actualUser.enuEstado == estadoApp::InicioUser)
 	{
-		MsgUsser cMsgUsuario;
+		/*MsgUsser cMsgUsuario;
 		cMsgUsuario.m_msgDATA = sInput;
 		cMsgUsuario.packData();
 		auto connect = cMsgUsuario.packData();
 		Package finalPackage = getPackage(connect.data(), connect.size());
 		actualUser.usuario(finalPackage);
-		cout << sInput << " " << "Usuario enviado" << endl;
+		cout << sInput << " " << "Usuario enviado" << endl;*/
+		oSignup.m_msgData.sUsser = sInput;
+		actualUser.enuEstado = estadoApp::InicioPassword;
 	}
-	if (actualUser.enuEstado == estadoApp::InicioPassword)
+	else if (actualUser.enuEstado == estadoApp::InicioPassword)
 	{
-		MsgPass cMsgUsuario;
+		/*MsgPass cMsgUsuario;
 		cMsgUsuario.m_msgDATA = sInput;
 		cMsgUsuario.packData();
 		auto connect = cMsgUsuario.packData();
 		Package finalPackage = getPackage(connect.data(), connect.size());
 		actualUser.usuario(finalPackage);
-		cout << sInput << " " << "Password enviado" << endl;
+		cout << sInput << " " << "Password enviado" << endl;*/
+		oSignup.m_msgData.sPassword = sInput;
+		auto connect = oSignup.packData();
+		Package finalPackage = getPackage(connect.data(), connect.size());
+		actualUser.usuario(finalPackage);
+		cout << "Se mando el usuario -> " << oSignup.m_msgData.sUsser << "\nPassword -> " << oSignup.m_msgData.sPassword << '\n';
 	}
 	if (actualUser.enuEstado == Aplicacion)
 	{

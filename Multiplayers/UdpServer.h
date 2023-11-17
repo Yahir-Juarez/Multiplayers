@@ -42,6 +42,8 @@ private:
 	bool checkUsser(Package& VCpackageMessage);
 	bool checkPassword(Package& VCpackageMessage);
 
+	MsgSignup newSignup;
+
 	////////////////////////////////////////////////////////////////////
 
 	void inPutRecive();

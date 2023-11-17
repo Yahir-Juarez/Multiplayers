@@ -45,6 +45,7 @@ public:
 		Unit32 m_posFinalX;
 		Unit32 m_posFinalY;
 		sf::Color m_cTypeColor;
+		//string prueba;
 	}m_msgData;
 	void fillCurrentShapeData(sf::Color& TypeColor, sf::Event& Evento, MESSAGE_TYPE::K typeMessage);
 	void fillCurrentShapeDataFinal(sf::Event& Evento);
@@ -77,6 +78,24 @@ public:
 	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
 
 	string m_msgDATA;
+};
+
+class MsgSignup : public NetworkMessage
+{
+public:
+	MsgSignup() {
+	}
+	~MsgSignup() {
+	}
+
+	struct MessageData
+	{
+		string sUsser;
+		string sPassword;
+	}m_msgData;
+
+	Package packData();
+	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
 };
 
 class MsgPass : public NetworkMessage
