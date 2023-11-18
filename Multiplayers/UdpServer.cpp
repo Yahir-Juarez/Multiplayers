@@ -1,10 +1,5 @@
 #include "UdpServer.h"
 
-ClientData::ClientData()
-{
-
-}
-
 Server::Server()
 {
 	socket.setBlocking(false);
@@ -30,7 +25,9 @@ void Server::conexion()
 	ClientData temporalData;
 	temporalData.clientPort = senderPort;
 	temporalData.clientIp = ipClient;
-	ClientsData.push_back(temporalData);
+	temporalData.usserName = vListClients[vListClients.size() - 1].sNameClient;
+	temporalData.IDclient = vListClients[vListClients.size() - 1].IDclient;
+	vActiveClients.push_back(temporalData);
 	cout << "se mando el mensaje y se agrego a la lista\n";
 }
 
@@ -122,26 +119,13 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 	{ 
 		conexion();
 	}
-	if (msgType == MESSAGE_TYPE::kUSSER)
+	if (msgType == MESSAGE_TYPE::kLOGIN)
 	{
-		MsgUsser cMsgUsuario;
-		//MsgUsser::unPackData(&cMsgUsuario.m_msgDATA, unpackedData.data(), unpackedData.size());
-		//cout << cMsgUsuario.m_msgDATA << endl;
-
-		cMsgUsuario.m_msgDATA = "Aceptado";
-		cMsgUsuario.packData();
-		auto connect = cMsgUsuario.packData();
-		Package finalPackage = getPackage(connect.data(), connect.size());
-		outPutSend(finalPackage);
-		cout << cMsgUsuario.m_msgDATA << " " << "Usser acept" << endl;
-	}
-	if (msgType == MESSAGE_TYPE::kPASS)
-	{
-		cout << "entro al registro \n\a";
 		MsgSignup::unPackData(&newSignup.m_msgData, unpackedData.data(), unpackedData.size());
-		if (checkUsser())
+		if (!(checkUsser()))
 		{
-			cout << "Cliente ya registrado" << endl;
+			cout << "No se encontro el cliente" << endl;
+			//Agregar un error para cliente ya registrado, mandar kERROR
 			return;
 		}
 		DataClientRegister newClient;
@@ -149,13 +133,45 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 		newClient.sPasswordClient = newSignup.m_msgData.sPassword;
 		newClient.IDclient = (vListClients.size() + 1);
 		vListClients.push_back(newClient);
-		MsgPass cMsgUsuario;
+		conexion();
+		//MsgUsser cMsgUsuario;
+		////MsgUsser::unPackData(&cMsgUsuario.m_msgDATA, unpackedData.data(), unpackedData.size());
+		////cout << cMsgUsuario.m_msgDATA << endl;
+
+		//cMsgUsuario.m_msgDATA = "Aceptado";
+		//cMsgUsuario.packData();
+		//auto connect = cMsgUsuario.packData();
+		//Package finalPackage = getPackage(connect.data(), connect.size());
+		//outPutSend(finalPackage);
+		//cout << cMsgUsuario.m_msgDATA << " " << "Usser acept" << endl;
+	}
+	if (msgType == MESSAGE_TYPE::kSIGNUP)
+	{
+		cout << "entro al registro \n\a";
+		MsgSignup::unPackData(&newSignup.m_msgData, unpackedData.data(), unpackedData.size());
+		if (checkUsser())
+		{
+			cout << "Cliente ya registrado" << endl;
+			//Agregar un error para cliente ya registrado, mandar kERROR
+			return;
+		}
+		DataClientRegister newClient;
+		newClient.sNameClient = newSignup.m_msgData.sUsser;
+		newClient.sPasswordClient = newSignup.m_msgData.sPassword;
+		newClient.IDclient = (vListClients.size() + 1);
+		vListClients.push_back(newClient);
+
+		MsgSignup oConfirmLogin;
+		auto connect = oConfirmLogin.packData();
+		Package finalPackage = getPackage(connect.data(), connect.size());
+		outPutSend(finalPackage);
+		/*MsgPass cMsgUsuario;
 		cMsgUsuario.m_msgDATA = "Aceptado";
 		cMsgUsuario.packData();
 		auto connect = cMsgUsuario.packData();
 		Package finalPackage = getPackage(connect.data(), connect.size());
 		outPutSend(finalPackage);
-		cout << cMsgUsuario.m_msgDATA << " " << "Passwor acept" << endl;
+		cout << cMsgUsuario.m_msgDATA << " " << "Passwor acept" << endl;*/
 	}
 	if (msgType == MESSAGE_TYPE::kDISCONNECT)
 	{
@@ -195,11 +211,11 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 
 void Server::SendShapes()
 {
-	for (int i = 0; i < ClientsData.size(); i++)
+	for (int i = 0; i < vActiveClients.size(); i++)
 	{
 		auto connect = vShapesInServer[vShapesInServer.size() - 1].packData();
 		Package finalPackage = getPackage(connect.data(), connect.size());
-		if (socket.send(finalPackage.data(), finalPackage.size(), ClientsData[i].clientIp.value(), ClientsData[i].clientPort) != Socket::Status::Done)
+		if (socket.send(finalPackage.data(), finalPackage.size(), vActiveClients[i].clientIp.value(), vActiveClients[i].clientPort) != Socket::Status::Done)
 		{
 			cout << "No se mando el mensaje\n";
 		}

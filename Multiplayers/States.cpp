@@ -13,7 +13,7 @@ Package MsgConnect::packData()
 
 Package MsgUsser::packData()
 {
-	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kUSSER;
+	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kLOGIN;
 	std::vector<char> data;
 	data.resize(m_msgDATA.size() + sizeof(MESSAGE_TYPE_VAR));
 	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
@@ -24,7 +24,7 @@ Package MsgUsser::packData()
 
 Package MsgPass::packData()
 {
-	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kPASS;
+	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kLOGIN;
 	std::vector<char> data;
 	data.resize(m_msgDATA.size() + sizeof(MESSAGE_TYPE_VAR));
 	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
@@ -105,7 +105,7 @@ bool ShapesData::unPackData(void* pDestData, void* pScrData, size_t numBytes)
 
 Package MsgSignup::packData()
 {
-	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kPASS;
+	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kSIGNUP;
 	Package data;
 	data.resize(sizeof(m_msgData) + sizeof(MESSAGE_TYPE_VAR));
 	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
@@ -115,6 +115,31 @@ Package MsgSignup::packData()
 }
 
 bool MsgSignup::unPackData(void* pDestData, void* pScrData, size_t numBytes)
+{
+	cout << numBytes << " " << sizeof(MessageData) << "comprobacion\n";
+	if (numBytes != sizeof(MessageData))
+	{
+		return false;
+	}
+	memcpy(pDestData, pScrData, numBytes);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////	LOGIN	//////////////////////////////////////////////////////////////////
+
+Package MsgLogin::packData()
+{
+	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kLOGIN;
+	Package data;
+	data.resize(sizeof(m_msgData) + sizeof(MESSAGE_TYPE_VAR));
+	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
+	memcpy(data.data() + sizeof(MESSAGE_TYPE_VAR), &m_msgData, sizeof(m_msgData));
+
+	return data;
+}
+
+bool MsgLogin::unPackData(void* pDestData, void* pScrData, size_t numBytes)
 {
 	cout << numBytes << " " << sizeof(MessageData) << "comprobacion\n";
 	if (numBytes != sizeof(MessageData))

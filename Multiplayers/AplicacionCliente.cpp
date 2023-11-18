@@ -5,10 +5,11 @@ App::App()
 	Vector2u medidaVentana(window_x, window_y);
 	ventana.create(VideoMode(medidaVentana), "Paint");
 
-	Vector2f posicionInicio(window_x / 2, window_y / 2);
+	Vector2f posicionInicio((window_x * 1)/ 3, window_y / 2);
 	Vector2f sizeInicio(300, 300);
 	inicioSesion.createButton("Textures/InicioSesion.png", sizeInicio, posicionInicio);
-
+	posicionInicio.x = ((window_x * 2) / 3);
+	oLogin.createButton("Textures/Signup.png", sizeInicio, posicionInicio);
 	Vector2f posicionTeclado(window_x - 75, window_y - 50);
 	Vector2f sizeTeclado(100, 50);
 	keyboardOn.createButton("Textures/TecladoEncendido.png", sizeTeclado, posicionTeclado);
@@ -118,10 +119,22 @@ void App::buttonPressed()
 
 	if (tiempoButtons > .5)
 	{
-		if (inicioSesion.buttonEvent(eventos))
+		if (usuario.enuEstado == estadoApp::Inicio)
 		{
-			usuario.conexion();
-			relojButtons.restart();
+			if (inicioSesion.buttonEvent(eventos))
+			{
+				usuario.bNewUsser = false;
+				usuario.enuEstado = estadoApp::InicioUser;
+				//usuario.conexion();
+				relojButtons.restart();
+			}
+			if (oLogin.buttonEvent(eventos))
+			{
+				usuario.bNewUsser = true;
+				usuario.enuEstado = estadoApp::InicioUser;
+				//usuario.conexion();
+				relojButtons.restart();
+			}
 		}
 		if (keyboardOn.buttonEvent(eventos) && activeKeyBoard == true)
 		{
@@ -158,6 +171,7 @@ void App::render()
 	{
 		ventana.clear(Color(rgbGris));
 		inicioSesion.render(ventana);
+		oLogin.render(ventana);
 	}
 	else if (usuario.enuEstado == InicioUser)
 	{

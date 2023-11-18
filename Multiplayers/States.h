@@ -14,8 +14,8 @@ namespace MESSAGE_TYPE
 	{
 		kERROR = 0,
 		kCONNECT,
-		kUSSER,
-		kPASS,
+		kLOGIN,
+		kSIGNUP,
 		kDISCONNECT,
 		kCHAT,
 		kMOUSESTATE,
@@ -78,6 +78,24 @@ public:
 	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
 
 	string m_msgDATA;
+};
+
+class MsgLogin : public NetworkMessage
+{
+public:
+	MsgLogin() {
+	}
+	~MsgLogin() {
+	}
+
+	struct MessageData
+	{
+		string sUsser;
+		string sPassword;
+	}m_msgData;
+
+	Package packData();
+	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
 };
 
 class MsgSignup : public NetworkMessage

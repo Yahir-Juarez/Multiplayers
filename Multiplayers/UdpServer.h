@@ -15,12 +15,10 @@ using namespace std;
 
 struct ClientData
 {
-	ClientData();
 	std::optional<sf::IpAddress> clientIp;
 	unsigned short clientPort;
 	string usserName;
-	string password;
-	bool conected = false;
+	unsigned int IDclient;
 };
 
 class Server : public Packages
@@ -60,6 +58,6 @@ private:
 	const unsigned short serverPort = 50001;
 	unsigned short senderPort;
 	vector<DataClientRegister> vListClients;
-	vector<ClientData> ClientsData;
+	vector<ClientData> vActiveClients;
 	vector<ShapesData> vShapesInServer;
 };

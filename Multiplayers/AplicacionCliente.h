@@ -44,6 +44,7 @@ private:
 
 	string entradaString;
 	Button inicioSesion;
+	Button oLogin;
 	Button keyboardOn;
 	Button keyboardOff;
 	Clock relojTeclado;

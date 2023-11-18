@@ -85,15 +85,15 @@ void User::commandInput(Package& unpackedData, Unit16& msgType)
 	if (msgType == MESSAGE_TYPE::kCONNECT)
 	{
 		estado = true;
-		enuEstado = InicioUser;
+		enuEstado = Aplicacion;
 	}
-	if (msgType == MESSAGE_TYPE::kUSSER)
+	/*if (msgType == MESSAGE_TYPE::kLOGIN)
 	{
 		enuEstado = InicioPassword;
-	}
-	if (msgType == MESSAGE_TYPE::kPASS)
+	}*/
+	if (msgType == MESSAGE_TYPE::kSIGNUP)
 	{
-		enuEstado = Aplicacion;
+		enuEstado = Inicio;
 	}
 	if (msgType == MESSAGE_TYPE::kDISCONNECT)
 	{
