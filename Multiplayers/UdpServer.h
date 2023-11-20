@@ -40,7 +40,9 @@ private:
 
 	void conexion();
 	bool checkUsser();
-	bool checkPassword(Package& VCpackageMessage);
+	bool checkPassword();
+
+	void updateSendData();
 
 	MsgSignup newSignup;
 

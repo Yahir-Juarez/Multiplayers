@@ -57,7 +57,7 @@ bool Server::checkUsser()
 	return false;
 }
 
-bool Server::checkPassword(Package& VCpackageMessage)
+bool Server::checkPassword()
 {
 	return false;
 }
@@ -66,8 +66,19 @@ bool Server::checkPassword(Package& VCpackageMessage)
 
 bool Server::comprobateUsser()
 {
+	for (int i = 0; i < vListClients.size(); i++)
+	{
+		if (vListClients[i].sNameClient == newSignup.m_msgData.sUsser)
+		{
+			if (vListClients[i].sPasswordClient == newSignup.m_msgData.sPassword)
+			{
+				return true;
+			}
+		}
+	}
 	return false;
 }
+
 void Server::bind_port(const unsigned short* puerto)
 {
 	if (socket.bind(*puerto) != Socket::Status::Done)
@@ -122,7 +133,7 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 	if (msgType == MESSAGE_TYPE::kLOGIN)
 	{
 		MsgSignup::unPackData(&newSignup.m_msgData, unpackedData.data(), unpackedData.size());
-		if (!(checkUsser()))
+		if (!(comprobateUsser()))
 		{
 			cout << "No se encontro el cliente" << endl;
 			//Agregar un error para cliente ya registrado, mandar kERROR
@@ -134,6 +145,7 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 		newClient.IDclient = (vListClients.size() + 1);
 		vListClients.push_back(newClient);
 		conexion();
+		updateSendData();
 		//MsgUsser cMsgUsuario;
 		////MsgUsser::unPackData(&cMsgUsuario.m_msgDATA, unpackedData.data(), unpackedData.size());
 		////cout << cMsgUsuario.m_msgDATA << endl;
@@ -220,6 +232,35 @@ void Server::SendShapes()
 			cout << "No se mando el mensaje\n";
 		}
 	}
+}
+
+void Server::updateSendData()
+{
+	for (int i = 0; i < vShapesInServer.size(); i++)
+	{
+		auto connect = vShapesInServer[i].packData();
+		Package finalPackage = getPackage(connect.data(), connect.size());
+		if (socket.send(finalPackage.data(), finalPackage.size(), vActiveClients[vActiveClients.size() - 1].clientIp.value(), vActiveClients[vActiveClients.size() - 1].clientPort) != Socket::Status::Done)
+		{
+			cout << "No se mando el mensaje\n";
+		}
+	}
+	/*for (int i = 0; i < vShapesInServer.size(); i++)
+	{
+		switch (vShapesInServer[i].m_msgData.MSGTYPE)
+		{
+		case (MESSAGE_TYPE::kCIRCLE):
+		{
+			ShapesData temporalDataShape;
+			ShapesData::unPackData(&temporalDataShape.m_msgData, unpackedData.data(), unpackedData.size());
+			vShapesInServer.push_back(temporalDataShape);
+			SendShapes();
+			break;
+		}
+		default:
+			break;
+		}
+	}*/
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
