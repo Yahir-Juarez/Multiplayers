@@ -10,6 +10,10 @@ public:
 	~Button();
 	void createButton(std::string namefile, sf::Vector2f& size, sf::Vector2f& posicion);
 
+	void createButton(sf::Color colorShape, sf::Vector2f& size , sf::Vector2f& posicion);
+
+	void createButton(std::string namefile, sf::Color colorFond, sf::Vector2f& size, sf::Vector2f& posicion);
+
 	void setPositionButton(sf::Vector2f& posicion);
 
 	void setSizeButton(sf::Vector2f& size);

@@ -17,6 +17,25 @@ void Button::createButton(std::string namefile, sf::Vector2f& size, sf::Vector2f
 	setTextureButton(namefile);
 }
 
+void Button::createButton(std::string namefile, sf::Color colorShape, sf::Vector2f& size, sf::Vector2f& posicion)
+{
+	setSizeButton(size);
+	setPositionButton(posicion);
+	setTextureButton(namefile);
+	interactiveButton.setFillColor(sf::Color::Black);
+	interactiveButton.setOutlineThickness(1);
+	interactiveButton.setOutlineColor(sf::Color::Magenta);
+}
+
+void Button::createButton(sf::Color colorShape, sf::Vector2f& size, sf::Vector2f& posicion)
+{
+	setSizeButton(size);
+	setPositionButton(posicion);
+	interactiveButton.setFillColor(colorShape);
+	interactiveButton.setOutlineThickness(1);
+	interactiveButton.setOutlineColor(sf::Color::Black);
+}
+
 void Button::setSizeButton(sf::Vector2f& size)
 {
 	interactiveButton.setSize(size);

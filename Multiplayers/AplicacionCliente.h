@@ -42,11 +42,37 @@ private:
 	bool bTemporalPositionMouse = false;
 	MESSAGE_TYPE::K eTypeMessageActual;
 
+	
 	string entradaString;
+
+	///////////////////////////////Buttons	App////////////////////////////////
+
 	Button inicioSesion;
 	Button oLogin;
 	Button keyboardOn;
 	Button keyboardOff;
+
+	Button oRectangle;
+	Button oCircle;
+	Button oLine;
+	Button oFLine;
+
+	//Colors//
+	
+	Button oColorBlack;
+	Button oColorBlue;
+	Button oColorCyan;
+	Button oColorGreen;
+	Button oColorMagenta;
+	//Button oColorCyan;
+	Button oColorRed;
+	Button oColorYellow;
+
+	//////////
+
+	void renderButtonsApp();
+
+	/////////////////////////////////////////////////////////////////////////////
 	Clock relojTeclado;
 	Clock relojButtons;
 	Clock relojShapes;

@@ -15,6 +15,40 @@ App::App()
 	keyboardOn.createButton("Textures/TecladoEncendido.png", sizeTeclado, posicionTeclado);
 	keyboardOff.createButton("Textures/TecladoApagado.png", sizeTeclado, posicionTeclado);
 
+	Vector2f posicionColor((window_x * 1) / 40, (window_y * 1) / 40);
+	Vector2f sizeColor(20, 20);
+	oColorBlack.createButton(Color::Black, sizeColor, posicionColor);
+	posicionColor.x = ((window_x * 2) / 40);
+	posicionColor.y = ((window_y * 1) / 40);
+	oColorBlue.createButton(Color::Blue, sizeColor, posicionColor);
+	posicionColor.x = ((window_x * 1) / 40);
+	posicionColor.y = ((window_y * 3) / 40);
+	oColorCyan.createButton(Color::Cyan, sizeColor, posicionColor);
+	posicionColor.x = ((window_x * 2) / 40);
+	posicionColor.y = ((window_y * 3) / 40);
+	oColorGreen.createButton(Color::Green, sizeColor, posicionColor);
+	posicionColor.x = ((window_x * 1) / 40);
+	posicionColor.y = ((window_y * 5) / 40);
+	oColorMagenta.createButton(Color::Magenta, sizeColor, posicionColor);
+	posicionColor.x = ((window_x * 2) / 40);
+	posicionColor.y = ((window_y * 5) / 40);
+	oColorRed.createButton(Color::Red, sizeColor, posicionColor);
+	posicionColor.x = ((window_x * 1.5) / 40);
+	posicionColor.y = ((window_y * 7) / 40);
+	oColorYellow.createButton(Color::Yellow, sizeColor, posicionColor);
+	posicionColor.x = ((window_x * 2) / 40);
+	posicionColor.y = ((window_y * 10) / 40);
+	Vector2f sizeShapestype(60, 60);
+	oRectangle.createButton("Textures/cuadrado.png", sizeShapestype, posicionColor);
+	posicionColor.x = ((window_x * 2) / 40);
+	posicionColor.y = ((window_y * 14) / 40);
+	oCircle.createButton("Textures/circle.png", sizeShapestype, posicionColor);
+	posicionColor.x = ((window_x * 2) / 40);
+	posicionColor.y = ((window_y * 18) / 40);
+	oLine.createButton("Textures/FLine.png", sizeShapestype, posicionColor);
+	posicionColor.x = ((window_x * 2) / 40);
+	posicionColor.y = ((window_y * 22) / 40);
+	oFLine.createButton("Textures/line.png", sizeShapestype, posicionColor);
 	mainloop();
 }
 
@@ -136,6 +170,44 @@ void App::buttonPressed()
 				relojButtons.restart();
 			}
 		}
+		else if (usuario.enuEstado == estadoApp::Aplicacion)
+		{
+			if (oColorBlack.buttonEvent(eventos))
+			{
+				cActualColor = Color::Black;
+				relojButtons.restart();
+			}
+			else if (oColorBlue.buttonEvent(eventos))
+			{
+				cActualColor = Color::Blue;
+				relojButtons.restart();
+			}
+			else if (oColorCyan.buttonEvent(eventos))
+			{
+				cActualColor = Color::Cyan;
+				relojButtons.restart();
+			}
+			else if (oColorGreen.buttonEvent(eventos))
+			{
+				cActualColor = Color::Green;
+				relojButtons.restart();
+			}
+			else if (oColorMagenta.buttonEvent(eventos))
+			{
+				cActualColor = Color::Magenta;
+				relojButtons.restart();
+			}
+			else if (oColorRed.buttonEvent(eventos))
+			{
+				cActualColor = Color::Red;
+				relojButtons.restart();
+			}
+			else if (oColorYellow.buttonEvent(eventos))
+			{
+				cActualColor = Color::Yellow;
+				relojButtons.restart();
+			}
+		}
 		if (keyboardOn.buttonEvent(eventos) && activeKeyBoard == true)
 		{
 			activeKeyBoard = false;
@@ -214,17 +286,7 @@ void App::render()
 	else if (usuario.enuEstado == Aplicacion)
 	{
 		ventana.clear(Color::White);
-		/*
-		if (activeKeyBoard == true)
-		{
-			keyboardOn.render(ventana);
-			interactiveKeyBord.render(ventana, window_x / (10 / 3), window_y / (10 / 4));
-		}
-		else
-		{
-			keyboardOff.render(ventana);
-		}
-		*/
+		
 		for (int i = 0; i < usuario.vShapes.size(); i++)
 		{
 			for (int j = 0; j < usuario.vShapes[i].shapesTypes.size(); j++)
@@ -257,10 +319,37 @@ void App::render()
 				ventana.draw(CircleTemporal);
 			}
 		}
+
+		if (activeKeyBoard == true)
+		{
+			keyboardOn.render(ventana);
+			interactiveKeyBord.render(ventana, Vector2f(window_x / (10 / 3), window_y / (10 / 4)));
+		}
+		else
+		{
+			keyboardOff.render(ventana);
+		}
+
 		ventana.draw(usuario.freeLine.data(), usuario.freeLine.size(), sf::PrimitiveType::Lines);
+		renderButtonsApp();
 	}
 
 	ventana.display();
+}
+
+void App::renderButtonsApp()
+{
+	oRectangle.render(ventana);
+	oCircle.render(ventana);
+	oFLine.render(ventana);
+	oLine.render(ventana);
+	oColorBlack.render(ventana);
+	oColorBlue.render(ventana);
+	oColorCyan.render(ventana);
+	oColorGreen.render(ventana);
+	oColorMagenta.render(ventana);
+	oColorRed.render(ventana);
+	oColorYellow.render(ventana);
 }
 
 void App::stateShape()
