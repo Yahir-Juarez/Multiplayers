@@ -84,6 +84,9 @@ void User::commandInput(Package& unpackedData, Unit16& msgType)
 	MsgMouseData::MouseData realData;
 	if (msgType == MESSAGE_TYPE::kCONNECT)
 	{
+		MsgConnect::MessageData dataConnect;
+		MsgConnect::unPackData(&dataConnect, unpackedData.data(), unpackedData.size());
+		uiIdClient = dataConnect.uiIdClient;
 		estado = true;
 		enuEstado = Aplicacion;
 	}
@@ -137,30 +140,30 @@ float DistanciaEntreDosPuntos(Vector2f& inicial, Vector2f & final)
 
 void User::createCircle(ShapesData::ShapeData& temporalDataShape)
 {
-	CircleShape CircleShape;
+	CircleShape* oTemporalCircleShape = new CircleShape();
 	sf::Vector2f sizeInicial(temporalDataShape.m_posInitialX, temporalDataShape.m_posInitialY);
 	sf::Vector2f sizeFinal(temporalDataShape.m_posFinalX, temporalDataShape.m_posFinalY);
 	float radio = DistanciaEntreDosPuntos(sizeInicial, sizeFinal);
-	CircleShape.setRadius(radio);
-	CircleShape.setPosition(Vector2f(sizeInicial.x - radio, sizeInicial.y - radio));
-	CircleShape.setFillColor(temporalDataShape.m_cTypeColor);
+	oTemporalCircleShape->setRadius(radio);
+	oTemporalCircleShape->setPosition(Vector2f(sizeInicial.x - radio, sizeInicial.y - radio));
+	oTemporalCircleShape->setFillColor(temporalDataShape.m_cTypeColor);
 	shapes newShape;
-	newShape.circleObjects.push_back(CircleShape);
+	newShape.circleObjects.push_back(oTemporalCircleShape);
 	vShapes.push_back(newShape);
 }
 
 void User::createRect(ShapesData::ShapeData& temporalDataShape)
 {
-	sf::RectangleShape temporalshape;
+	sf::RectangleShape* oTemporalRectangle = new RectangleShape;
 	sf::Vector2f sizeInicial(temporalDataShape.m_posInitialX, temporalDataShape.m_posInitialY);
 	sf::Vector2f sizeFinal(temporalDataShape.m_posFinalX, temporalDataShape.m_posFinalY);
-	temporalshape.setPosition(sizeInicial);
+	oTemporalRectangle->setPosition(sizeInicial);
 	sf::Vector2f size = sizeFinal - sizeInicial;
-	temporalshape.setSize(size);
+	oTemporalRectangle->setSize(size);
 	//temporalshape.setSize(sf::Vector2f(std::abs(size.x), std::abs(size.y)));
-	temporalshape.setFillColor(temporalDataShape.m_cTypeColor);
+	oTemporalRectangle->setFillColor(temporalDataShape.m_cTypeColor);
 	shapes newShape;
-	newShape.shapesTypes.push_back(temporalshape);
+	newShape.shapesTypes.push_back(oTemporalRectangle);
 	vShapes.push_back(newShape);
 }
 
@@ -219,4 +222,19 @@ void User::UdpClient()
 		inPutRecive();
 	}
 	*/
+}
+
+User::~User()
+{
+	for (int i = 0; i < vShapes.size(); i++)
+	{
+		for (int j = 0; j < vShapes[i].circleObjects.size(); j++)
+		{
+			delete vShapes[i].circleObjects[j];
+		}
+		for (int j = 0; j < vShapes[i].shapesTypes.size(); j++)
+		{
+			delete vShapes[i].shapesTypes[j];
+		}
+	}
 }

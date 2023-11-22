@@ -62,9 +62,15 @@ public:
 	}
 	~MsgConnect() {
 	}
+	struct MessageData
+	{
+		string sMsgConecct = "CONNECT";
+		unsigned int uiIdClient;
+	}m_msgData;
 	Package packData();
+	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
 private:
-	string m_msgDATA = "CONNECT";
+	
 };
 
 class MsgUsser : public NetworkMessage

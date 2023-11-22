@@ -14,6 +14,7 @@ Server::Server()
 void Server::conexion()
 {
 	MsgConnect msgConeccion;
+	msgConeccion.m_msgData.uiIdClient = uiNewId + 1;
 	msgConeccion.packData();
 	auto connect = msgConeccion.packData();
 	Package finalPackage = getPackage(connect.data(), connect.size());
@@ -22,11 +23,12 @@ void Server::conexion()
 		cout << "No se mando el mensaje\n";
 		return;
 	}
+	uiNewId += 1;
 	ClientData temporalData;
 	temporalData.clientPort = senderPort;
 	temporalData.clientIp = ipClient;
-	temporalData.usserName = vListClients[vListClients.size() - 1].sNameClient;
-	temporalData.IDclient = vListClients[vListClients.size() - 1].IDclient;
+	temporalData.usserName = newSignup.m_msgData.sPassword;
+	temporalData.IDclient = uiNewId;
 	vActiveClients.push_back(temporalData);
 	cout << "se mando el mensaje y se agrego a la lista\n";
 }
@@ -139,11 +141,7 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 			//Agregar un error para cliente ya registrado, mandar kERROR
 			return;
 		}
-		DataClientRegister newClient;
-		newClient.sNameClient = newSignup.m_msgData.sUsser;
-		newClient.sPasswordClient = newSignup.m_msgData.sPassword;
-		newClient.IDclient = (vListClients.size() + 1);
-		vListClients.push_back(newClient);
+	
 		conexion();
 		updateSendData();
 		//MsgUsser cMsgUsuario;
@@ -170,7 +168,6 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 		DataClientRegister newClient;
 		newClient.sNameClient = newSignup.m_msgData.sUsser;
 		newClient.sPasswordClient = newSignup.m_msgData.sPassword;
-		newClient.IDclient = (vListClients.size() + 1);
 		vListClients.push_back(newClient);
 
 		MsgSignup oConfirmLogin;
@@ -280,7 +277,7 @@ void Server::RunUdpServer(const unsigned short puerto)
 		{
 			for (int i = 0; i < vListClients.size(); i++)
 			{
-				cout << "Cliente	|" << vListClients[i].sNameClient << "|			 Password	|" << vListClients[i].sPasswordClient << "|			 ID	|" << vListClients[i].IDclient << endl;
+				cout << "Cliente	|" << vListClients[i].sNameClient << "|			 Password	|" << vListClients[i].sPasswordClient <<  endl;
 			}
 		}
 		/*

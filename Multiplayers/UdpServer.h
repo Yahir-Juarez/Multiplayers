@@ -25,6 +25,7 @@ class Server : public Packages
 {
 public:
 	Server();
+	//~Server();
 	void RunUdpServer(const unsigned short puerto);
 private:
 	void bind_port(const unsigned short* puerto);
@@ -33,7 +34,6 @@ private:
 	{
 		string sNameClient;
 		string sPasswordClient;
-		unsigned int IDclient;
 	};
 
 	//////////////		Verificacion de usuario		////////////////////
@@ -59,6 +59,7 @@ private:
 	optional<sf::IpAddress> ipClient;
 	const unsigned short serverPort = 50001;
 	unsigned short senderPort;
+	unsigned int uiNewId = 0;
 	vector<DataClientRegister> vListClients;
 	vector<ClientData> vActiveClients;
 	vector<ShapesData> vShapesInServer;

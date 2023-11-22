@@ -20,12 +20,16 @@ class User : public Packages{
 public:
 	struct shapes
 	{
-		vector<sf::RectangleShape> shapesTypes;
-		vector<sf::CircleShape> circleObjects;
+		vector<sf::RectangleShape*> shapesTypes;
+		vector<sf::CircleShape*> circleObjects;
 	};
 	vector<sf::Vertex> freeLine;
 	vector<shapes> vShapes;
+
+	unsigned int uiIdClient;
+
 	User();
+	~User();
 
 	////////////////////////////	Verificacion de usuario		////////////////////////////////
 

@@ -86,10 +86,6 @@ void App::entrada()
 
 	if (usuario.enuEstado == Aplicacion)
 	{
-		if (bTemporalPositionMouse == false)
-		{
-			stateShape();
-		}
 		createShapes();
 	}
 }
@@ -207,6 +203,26 @@ void App::buttonPressed()
 				cActualColor = Color::Yellow;
 				relojButtons.restart();
 			}
+			else if (oRectangle.buttonEvent(eventos))
+			{
+				eTypeMessageActual = MESSAGE_TYPE::K::kRECT;
+				relojButtons.restart();
+			}
+			else if (oCircle.buttonEvent(eventos))
+			{
+				eTypeMessageActual = MESSAGE_TYPE::K::kCIRCLE;
+				relojButtons.restart();
+			}
+			else if (oLine.buttonEvent(eventos))
+			{
+				eTypeMessageActual = MESSAGE_TYPE::K::kLINE;
+				relojButtons.restart();
+			}
+			else if (oFLine.buttonEvent(eventos))
+			{
+				eTypeMessageActual = MESSAGE_TYPE::K::kLINE;
+				relojButtons.restart();
+			}
 		}
 		if (keyboardOn.buttonEvent(eventos) && activeKeyBoard == true)
 		{
@@ -291,11 +307,11 @@ void App::render()
 		{
 			for (int j = 0; j < usuario.vShapes[i].shapesTypes.size(); j++)
 			{
-				ventana.draw(usuario.vShapes[i].shapesTypes[j]);
+				ventana.draw(*usuario.vShapes[i].shapesTypes[j]);
 			}
 			for (int j = 0; j < usuario.vShapes[i].circleObjects.size(); j++)
 			{
-				ventana.draw(usuario.vShapes[i].circleObjects[j]);
+				ventana.draw(*usuario.vShapes[i].circleObjects[j]);
 			}
 		}
 		if (bTemporalPositionMouse == true)
@@ -350,40 +366,4 @@ void App::renderButtonsApp()
 	oColorMagenta.render(ventana);
 	oColorRed.render(ventana);
 	oColorYellow.render(ventana);
-}
-
-void App::stateShape()
-{
-	if (Keyboard::isKeyPressed(Keyboard::Num1))
-	{
-		cActualColor = Color::Black;
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Num2))
-	{
-		cActualColor = Color::Red;
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Num3))
-	{
-		cActualColor = Color::Blue;
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Num4))
-	{
-		cActualColor = Color::Magenta;
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Num6))
-	{
-		eTypeMessageActual = MESSAGE_TYPE::K::kRECT;
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Num7))
-	{
-		eTypeMessageActual = MESSAGE_TYPE::K::kCIRCLE;
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Num8))
-	{
-		eTypeMessageActual = MESSAGE_TYPE::K::kLINE;
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Num9))
-	{
-		eTypeMessageActual = MESSAGE_TYPE::K::kLINE;
-	}
 }
