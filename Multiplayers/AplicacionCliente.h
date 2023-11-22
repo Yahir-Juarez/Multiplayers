@@ -30,6 +30,7 @@ private:
 	void buttonPressed();
 
 	void createShapes();
+	void commandsApp();
 	Color cActualColor;
 
 	bool activeKeyBoard = true;
@@ -83,5 +84,8 @@ private:
 	levelKeyBoard actualKeyboard = Client;
 
 	bool letterActivo = false;
+	bool bPressButton = false;
+	bool bMoveMouse = false;
+	bool bCtrlZActive = false;
 	User usuario;
 };

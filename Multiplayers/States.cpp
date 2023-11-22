@@ -53,9 +53,21 @@ Package MsgChat::packData()
 
 	return data;
 }
+
 Package MsgMouseData::packData()
 {
 	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kMOUSESTATE;
+	Package data;
+	data.resize(sizeof(m_msgData) + sizeof(MESSAGE_TYPE_VAR));
+	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
+	memcpy(data.data() + sizeof(MESSAGE_TYPE_VAR), &m_msgData, sizeof(m_msgData));
+
+	return data;
+}
+
+Package MsgDelete::packData()
+{
+	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kDELETE_SHAPE;
 	Package data;
 	data.resize(sizeof(m_msgData) + sizeof(MESSAGE_TYPE_VAR));
 	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
@@ -150,6 +162,16 @@ Package MsgLogin::packData()
 }
 
 bool MsgLogin::unPackData(void* pDestData, void* pScrData, size_t numBytes)
+{
+	cout << numBytes << " " << sizeof(MessageData) << "comprobacion\n";
+	if (numBytes != sizeof(MessageData))
+	{
+		return false;
+	}
+	memcpy(pDestData, pScrData, numBytes);
+}
+
+bool MsgDelete::unPackData(void* pDestData, void* pScrData, size_t numBytes)
 {
 	cout << numBytes << " " << sizeof(MessageData) << "comprobacion\n";
 	if (numBytes != sizeof(MessageData))

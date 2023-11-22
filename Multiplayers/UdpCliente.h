@@ -20,6 +20,7 @@ class User : public Packages{
 public:
 	struct shapes
 	{
+		unsigned int idShape;
 		vector<sf::RectangleShape*> shapesTypes;
 		vector<sf::CircleShape*> circleObjects;
 	};

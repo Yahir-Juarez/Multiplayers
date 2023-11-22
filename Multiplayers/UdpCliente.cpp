@@ -129,6 +129,27 @@ void User::commandInput(Package& unpackedData, Unit16& msgType)
 		ShapesData::unPackData(&temporalDataShape, unpackedData.data(), unpackedData.size());
 		createCircle(temporalDataShape);
 	}
+	if (msgType == MESSAGE_TYPE::kDELETE_SHAPE)
+	{
+		MsgDelete commandDelete;
+		MsgDelete::unPackData(&commandDelete.m_msgData, unpackedData.data(), unpackedData.size());
+		cout << "Llego un delete\nId usser -> " << commandDelete.m_msgData.IdClient << "\nIdShape -> " << commandDelete.m_msgData.IdShape << endl;
+		for (int i = vShapes.size() - 1; i >= 0; i--)
+		{
+			if (vShapes[i].idShape == commandDelete.m_msgData.IdShape)
+			{
+				for (int j = 0; j < vShapes[i].circleObjects.size(); j++)
+				{
+					delete vShapes[i].circleObjects[j];
+				}
+				for (int j = 0; j < vShapes[i].shapesTypes.size(); j++)
+				{
+					delete vShapes[i].shapesTypes[j];
+				}
+				vShapes.erase(vShapes.begin() + i);
+			}
+		}
+	}
 }
 
 float DistanciaEntreDosPuntos(Vector2f& inicial, Vector2f & final)
@@ -149,6 +170,7 @@ void User::createCircle(ShapesData::ShapeData& temporalDataShape)
 	oTemporalCircleShape->setFillColor(temporalDataShape.m_cTypeColor);
 	shapes newShape;
 	newShape.circleObjects.push_back(oTemporalCircleShape);
+	newShape.idShape = temporalDataShape.IdShape;
 	vShapes.push_back(newShape);
 }
 
@@ -164,6 +186,7 @@ void User::createRect(ShapesData::ShapeData& temporalDataShape)
 	oTemporalRectangle->setFillColor(temporalDataShape.m_cTypeColor);
 	shapes newShape;
 	newShape.shapesTypes.push_back(oTemporalRectangle);
+	newShape.idShape = temporalDataShape.IdShape;
 	vShapes.push_back(newShape);
 }
 

@@ -125,6 +125,18 @@ bool Server::outPutSend(Package& VCpackageMessage)
 	return true;
 }
 
+bool Server::outPutSendGlobal(Package& VCpackageMessage)
+{
+	for (int i = 0; i < vActiveClients.size(); i++)
+	{
+		if (socket.send(VCpackageMessage.data(), VCpackageMessage.size(), vActiveClients[i].clientIp.value(), vActiveClients[i].clientPort) != Socket::Status::Done)
+		{
+			cout << "No se mando el mensaje\n";
+		}
+	}
+	return true;
+}
+
 void Server::commandInput(Package& unpackedData, Unit16& msgType)
 {
 	MsgMouseData::MouseData realData;
@@ -197,6 +209,7 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 	}
 	if (msgType == MESSAGE_TYPE::kLINE)
 	{
+		uiNewIdShape += 1;
 		ShapesData temporalDataShape;
 		ShapesData::unPackData(&temporalDataShape.m_msgData, unpackedData.data(), unpackedData.size());
 		vShapesInServer.push_back(temporalDataShape);
@@ -204,17 +217,38 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 	}
 	if (msgType == MESSAGE_TYPE::kRECT)
 	{
+		uiNewIdShape += 1;
 		ShapesData temporalDataShape;
 		ShapesData::unPackData(&temporalDataShape.m_msgData, unpackedData.data(), unpackedData.size());
+		temporalDataShape.m_msgData.IdShape = uiNewIdShape;
 		vShapesInServer.push_back(temporalDataShape);
 		SendShapes();
 	}
 	if (msgType == MESSAGE_TYPE::kCIRCLE)
 	{
+		uiNewIdShape += 1;
 		ShapesData temporalDataShape;
 		ShapesData::unPackData(&temporalDataShape.m_msgData, unpackedData.data(), unpackedData.size());
+		temporalDataShape.m_msgData.IdShape = uiNewIdShape;
 		vShapesInServer.push_back(temporalDataShape);
 		SendShapes();
+	}
+	if (msgType == MESSAGE_TYPE::kDELETE_SHAPE)
+	{
+		MsgDelete commandDelete;
+		MsgDelete::unPackData(&commandDelete.m_msgData, unpackedData.data(), unpackedData.size());
+		for (int i = vShapesInServer.size() - 1; i >= 0; i--)
+		{
+			if (vShapesInServer[i].m_msgData.IdClient == commandDelete.m_msgData.IdClient)
+			{
+				commandDelete.m_msgData.IdShape = vShapesInServer[i].m_msgData.IdShape;
+				vShapesInServer.erase(vShapesInServer.begin() + i);
+				break;
+			}
+		}
+		auto connect = commandDelete.packData();
+		Package finalPackage = getPackage(connect.data(), connect.size());
+		outPutSendGlobal(finalPackage);
 	}
 }
 

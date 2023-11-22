@@ -87,6 +87,7 @@ void App::entrada()
 	if (usuario.enuEstado == Aplicacion)
 	{
 		createShapes();
+		commandsApp();
 	}
 }
 
@@ -95,7 +96,7 @@ void App::createShapes()
 	Time tiempo;
 	tiempo = relojShapes.getElapsedTime();
 	float tiempoButtons = tiempo.asSeconds();
-	if (eventos.mouseButton.button == sf::Mouse::Left && bTemporalPositionMouse == false && tiempoButtons > .1)
+	if (eventos.mouseButton.button == sf::Mouse::Left && bTemporalPositionMouse == false && tiempoButtons > .1 && bPressButton == false)
 	{
 		posInicial = sf::Vector2f(eventos.mouseButton.x, eventos.mouseButton.y);
 		posFinal = posInicial;
@@ -108,21 +109,31 @@ void App::createShapes()
 		if (bTemporalPositionMouse)
 		{
 			posFinal = sf::Vector2f(eventos.mouseMove.x, eventos.mouseMove.y);
+			bMoveMouse = true;
 		}
 	}
-	else if (eventos.type == sf::Event::MouseButtonReleased && eventos.mouseButton.button == sf::Mouse::Left)
+	else if (eventos.type == sf::Event::MouseButtonReleased && eventos.mouseButton.button == sf::Mouse::Left && bPressButton == false && bTemporalPositionMouse == true && bMoveMouse == true)
 	{
 		// Deja de arrastrar el punto y crea la figura
 		bTemporalPositionMouse = false;
+		bMoveMouse = false;
 		relojShapes.restart();
 		if ((eTypeMessageActual == MESSAGE_TYPE::K::kLINE))
 		{
 			return;
 		}
 		temporalShapes.fillCurrentShapeDataFinal(eventos);
+		temporalShapes.m_msgData.IdClient = usuario.uiIdClient;
 		auto connect = temporalShapes.packData();
 		Package finalPackage = getPackage(connect.data(), connect.size());
 		usuario.usuario(finalPackage);
+		cout << "Se mando un shapeeeeeeeee!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+	}
+	else if (eventos.type == sf::Event::MouseButtonReleased && eventos.mouseButton.button == sf::Mouse::Left && bMoveMouse == false)
+	{
+		bTemporalPositionMouse = false;
+		bMoveMouse = false;
+		relojShapes.restart();
 	}
 	else if (eTypeMessageActual == MESSAGE_TYPE::K::kLINE && eventos.type == sf::Event::MouseMoved)
 	{
@@ -172,56 +183,71 @@ void App::buttonPressed()
 			{
 				cActualColor = Color::Black;
 				relojButtons.restart();
+				bPressButton = true;
 			}
 			else if (oColorBlue.buttonEvent(eventos))
 			{
 				cActualColor = Color::Blue;
 				relojButtons.restart();
+				bPressButton = true;
 			}
 			else if (oColorCyan.buttonEvent(eventos))
 			{
 				cActualColor = Color::Cyan;
 				relojButtons.restart();
+				bPressButton = true;
 			}
 			else if (oColorGreen.buttonEvent(eventos))
 			{
 				cActualColor = Color::Green;
 				relojButtons.restart();
+				bPressButton = true;
 			}
 			else if (oColorMagenta.buttonEvent(eventos))
 			{
 				cActualColor = Color::Magenta;
 				relojButtons.restart();
+				bPressButton = true;
 			}
 			else if (oColorRed.buttonEvent(eventos))
 			{
 				cActualColor = Color::Red;
 				relojButtons.restart();
+				bPressButton = true;
 			}
 			else if (oColorYellow.buttonEvent(eventos))
 			{
 				cActualColor = Color::Yellow;
 				relojButtons.restart();
+				bPressButton = true;
 			}
 			else if (oRectangle.buttonEvent(eventos))
 			{
 				eTypeMessageActual = MESSAGE_TYPE::K::kRECT;
 				relojButtons.restart();
+				bPressButton = true;
 			}
 			else if (oCircle.buttonEvent(eventos))
 			{
 				eTypeMessageActual = MESSAGE_TYPE::K::kCIRCLE;
 				relojButtons.restart();
+				bPressButton = true;
 			}
 			else if (oLine.buttonEvent(eventos))
 			{
 				eTypeMessageActual = MESSAGE_TYPE::K::kLINE;
 				relojButtons.restart();
+				bPressButton = true;
 			}
 			else if (oFLine.buttonEvent(eventos))
 			{
 				eTypeMessageActual = MESSAGE_TYPE::K::kLINE;
 				relojButtons.restart();
+				bPressButton = true;
+			}
+			else
+			{
+				bPressButton = false;
 			}
 		}
 		if (keyboardOn.buttonEvent(eventos) && activeKeyBoard == true)
@@ -336,7 +362,7 @@ void App::render()
 			}
 		}
 
-		if (activeKeyBoard == true)
+		/*if (activeKeyBoard == true)
 		{
 			keyboardOn.render(ventana);
 			interactiveKeyBord.render(ventana, Vector2f(window_x / (10 / 3), window_y / (10 / 4)));
@@ -344,7 +370,7 @@ void App::render()
 		else
 		{
 			keyboardOff.render(ventana);
-		}
+		}*/
 
 		ventana.draw(usuario.freeLine.data(), usuario.freeLine.size(), sf::PrimitiveType::Lines);
 		renderButtonsApp();
@@ -366,4 +392,33 @@ void App::renderButtonsApp()
 	oColorMagenta.render(ventana);
 	oColorRed.render(ventana);
 	oColorYellow.render(ventana);
+}
+
+void App::commandsApp()
+{
+	if (Keyboard::isKeyPressed(Keyboard::LControl) && Keyboard::isKeyPressed(Keyboard::Z) && bCtrlZActive == false)
+	{
+		bCtrlZActive = true;
+		MsgDelete commandDelete;
+		commandDelete.m_msgData.IdClient = usuario.uiIdClient;
+		auto connect = commandDelete.packData();
+		Package finalPackage = getPackage(connect.data(), connect.size());
+		usuario.usuario(finalPackage);
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::RControl) && Keyboard::isKeyPressed(Keyboard::Z))
+	{
+		MsgDelete commandDelete;
+		commandDelete.m_msgData.IdClient = usuario.uiIdClient;
+		auto connect = commandDelete.packData();
+		Package finalPackage = getPackage(connect.data(), connect.size());
+		usuario.usuario(finalPackage);
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::LControl) && Keyboard::isKeyPressed(Keyboard::Z))
+	{
+
+	}
+	else
+	{
+		bCtrlZActive = false;
+	}
 }

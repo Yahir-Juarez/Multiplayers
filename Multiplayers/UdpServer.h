@@ -52,6 +52,7 @@ private:
 	void commandInput(Package& VCpackageInput, Unit16& msgType);
 	void SendShapes();
 	bool outPutSend(Package& VCpackageMessage);
+	bool outPutSendGlobal(Package& VCpackageMessage);
 	bool comprobateUsser();
 	UdpSocket socket;
 	User usuario;
@@ -60,6 +61,7 @@ private:
 	const unsigned short serverPort = 50001;
 	unsigned short senderPort;
 	unsigned int uiNewId = 0;
+	unsigned int uiNewIdShape = 0;
 	vector<DataClientRegister> vListClients;
 	vector<ClientData> vActiveClients;
 	vector<ShapesData> vShapesInServer;

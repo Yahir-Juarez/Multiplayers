@@ -22,7 +22,8 @@ namespace MESSAGE_TYPE
 		kLINE,
 		kRECT,
 		kCIRCLE,
-		kNUM_MESSAGE_TYPE
+		kNUM_MESSAGE_TYPE,
+		kDELETE_SHAPE
 	};
 }
 
@@ -39,13 +40,14 @@ class ShapesData : public NetworkMessage
 public:
 	struct ShapeData
 	{
+		unsigned int IdShape;
+		unsigned int IdClient;
 		MESSAGE_TYPE_VAR MSGTYPE;
 		Unit32 m_posInitialX;
 		Unit32 m_posInitialY;
 		Unit32 m_posFinalX;
 		Unit32 m_posFinalY;
 		sf::Color m_cTypeColor;
-		//string prueba;
 	}m_msgData;
 	void fillCurrentShapeData(sf::Color& TypeColor, sf::Event& Evento, MESSAGE_TYPE::K typeMessage);
 	void fillCurrentShapeDataFinal(sf::Event& Evento);
@@ -64,7 +66,7 @@ public:
 	}
 	struct MessageData
 	{
-		string sMsgConecct = "CONNECT";
+		//string sMsgConecct = "CONNECT";
 		unsigned int uiIdClient;
 	}m_msgData;
 	Package packData();
@@ -84,6 +86,22 @@ public:
 	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
 
 	string m_msgDATA;
+};
+
+class MsgDelete : public NetworkMessage
+{
+public:
+	MsgDelete() {
+	}
+	~MsgDelete() {
+	}
+	struct MessageData
+	{
+		unsigned int IdClient;
+		unsigned int IdShape;
+	}m_msgData;
+	Package packData();
+	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
 };
 
 class MsgLogin : public NetworkMessage
