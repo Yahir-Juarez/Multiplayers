@@ -198,8 +198,10 @@ void User::createLine(ShapesData::ShapeData& temporalDataShape)
 	sf::Vertex vLinePt2 = sf::Vector2f(temporalDataShape.m_posFinalX, temporalDataShape.m_posFinalY);
 	vLinePt2.color = temporalDataShape.m_cTypeColor;
 	shapes newShape;
-	freeLine.push_back(vLinePt1);
-	freeLine.push_back(vLinePt2);
+	newShape.idShape = temporalDataShape.IdShape;
+	newShape.freeLine.push_back(vLinePt1);
+	newShape.freeLine.push_back(vLinePt2);
+	vShapes.push_back(newShape);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -212,6 +212,7 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 		uiNewIdShape += 1;
 		ShapesData temporalDataShape;
 		ShapesData::unPackData(&temporalDataShape.m_msgData, unpackedData.data(), unpackedData.size());
+		temporalDataShape.m_msgData.IdShape = uiNewIdShape;
 		vShapesInServer.push_back(temporalDataShape);
 		SendShapes();
 	}

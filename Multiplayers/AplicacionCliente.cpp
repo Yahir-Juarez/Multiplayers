@@ -339,6 +339,7 @@ void App::render()
 			{
 				ventana.draw(*usuario.vShapes[i].circleObjects[j]);
 			}
+			ventana.draw(usuario.vShapes[i].freeLine.data(), usuario.vShapes[i].freeLine.size(), sf::PrimitiveType::Lines);
 		}
 		if (bTemporalPositionMouse == true)
 		{
@@ -372,7 +373,6 @@ void App::render()
 			keyboardOff.render(ventana);
 		}*/
 
-		ventana.draw(usuario.freeLine.data(), usuario.freeLine.size(), sf::PrimitiveType::Lines);
 		renderButtonsApp();
 	}
 

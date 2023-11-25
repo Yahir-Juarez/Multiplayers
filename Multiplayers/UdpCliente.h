@@ -23,8 +23,8 @@ public:
 		unsigned int idShape;
 		vector<sf::RectangleShape*> shapesTypes;
 		vector<sf::CircleShape*> circleObjects;
+		vector<sf::Vertex> freeLine;
 	};
-	vector<sf::Vertex> freeLine;
 	vector<shapes> vShapes;
 
 	unsigned int uiIdClient;
