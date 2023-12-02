@@ -49,6 +49,7 @@ public:
 		Unit32 m_posFinalY;
 		sf::Color m_cTypeColor;
 	}m_msgData;
+
 	void fillCurrentShapeData(sf::Color& TypeColor, sf::Event& Evento, MESSAGE_TYPE::K typeMessage);
 	void fillCurrentShapeDataFinal(sf::Event& Evento);
 

@@ -19,6 +19,7 @@ User::User()
 {
 	socket.setBlocking(false);
 	ipServer = IpAddress::getLocalAddress();
+	cin >> prueba;
 }
 
 bool User::conexion()
@@ -32,7 +33,7 @@ bool User::conexion()
 		msgConeccion.packData();
 		auto connect = msgConeccion.packData();
 		Package finalPackage = getPackage(connect.data(), connect.size());
-		if (socket.send(finalPackage.data(), finalPackage.size(), ipServer.value(), serverPort) != Socket::Status::Done)
+		if (socket.send(finalPackage.data(), finalPackage.size(), prueba.value(), serverPort) != Socket::Status::Done)
 		{
 			return false;
 		}

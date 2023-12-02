@@ -31,7 +31,7 @@ int Packages::countSetBits(const void* pData, int sizeofData)
 
 Checksum Packages::getChecksum(const void* pData, int sizeofData)
 {
-	static Unit32 firm = 0xFFFF0000;
+	static Unit32 firm = 0xAAAA0000;
 	int numBitsData = countSetBits(pData, sizeofData);
 	int dataSize = countSetBits(sizeofData);
 

@@ -65,4 +65,6 @@ private:
 	vector<DataClientRegister> vListClients;
 	vector<ClientData> vActiveClients;
 	vector<ShapesData> vShapesInServer;
+
+	bool list_active = false;
 };

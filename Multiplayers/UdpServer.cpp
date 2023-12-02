@@ -310,10 +310,22 @@ void Server::RunUdpServer(const unsigned short puerto)
 		inPutRecive();
 		if (Keyboard::isKeyPressed(Keyboard::L))
 		{
-			for (int i = 0; i < vListClients.size(); i++)
+			if (list_active == false)
 			{
-				cout << "Cliente	|" << vListClients[i].sNameClient << "|			 Password	|" << vListClients[i].sPasswordClient <<  endl;
+				for (int i = 0; i < vListClients.size(); i++)
+				{
+					cout << "Cliente	|" << vListClients[i].sNameClient << "|			 Password	|" << vListClients[i].sPasswordClient << endl;
+				}
+				for (int i = 0; i < vShapesInServer.size(); i++)
+				{
+					cout << "Id Shape: " << vShapesInServer[i].m_msgData.IdShape << " Tipo de figura: " << vShapesInServer[i].m_msgData.MSGTYPE << endl;
+				}
+				list_active = true;
 			}
+		}
+		else
+		{
+			list_active = false;
 		}
 		/*
 		Time tiempo = reloj.getElapsedTime();

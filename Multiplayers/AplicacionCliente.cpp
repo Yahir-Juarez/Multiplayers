@@ -143,6 +143,7 @@ void App::createShapes()
 			posFinal = sf::Vector2f(eventos.mouseMove.x, eventos.mouseMove.y);
 			temporalShapes.m_msgData.m_posFinalX = posFinal.x;
 			temporalShapes.m_msgData.m_posFinalY = posFinal.y;
+			temporalShapes.m_msgData.IdClient = usuario.uiIdClient;
 			auto connect = temporalShapes.packData();
 			Package finalPackage = getPackage(connect.data(), connect.size());
 			usuario.usuario(finalPackage);
@@ -265,6 +266,7 @@ void App::buttonPressed()
 
 void App::update()
 {
+	cout << usuario.uiIdClient << endl;
 	usuario.UdpClient();
 }
 
