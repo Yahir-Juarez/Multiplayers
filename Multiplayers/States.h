@@ -123,21 +123,6 @@ public:
 	string m_msgData;
 
 	Package packData();
-	//static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
-};
-
-class MsgSignup : public NetworkMessage
-{
-public:
-	MsgSignup() {
-	}
-	~MsgSignup() {
-	}
-
-	string m_msgData;
-
-	Package packData();
-	//static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
 };
 
 class MsgPass : public NetworkMessage
@@ -200,28 +185,4 @@ public:
 
 	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
 	void fillCurrentMouseData();
-};
-
-class MsgLine : public ShapesData
-{
-public:
-	Package packData() override;
-
-	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
-};
-
-class MsgRect : public ShapesData
-{
-public:
-	Package packData() override;
-
-	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
-};
-
-class MsgCircle : public ShapesData
-{
-public:
-	Package packData() override;
-
-	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
 };

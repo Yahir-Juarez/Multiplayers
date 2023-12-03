@@ -17,8 +17,8 @@ public:
 private:
 	sf::Text atributes(sf::Vector2f vPosicionText);
 	sf::Text atributes(sf::Vector2f vPosicionText, string message);
-	MsgSignup oSignup;
-	MsgConnect oLogin;
+	//MsgSignup oSignup;
+	MsgConnect oLoginRegister;
 	void sendServer(User& actualUser);
 	std::string sInput;
 	sf::Clock reloj;

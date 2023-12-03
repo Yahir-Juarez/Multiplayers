@@ -25,7 +25,7 @@ class Server : public Packages
 {
 public:
 	Server();
-	//~Server();
+	~Server(){}
 	void RunUdpServer(const unsigned short puerto);
 private:
 	void bind_port(const unsigned short* puerto);
@@ -44,7 +44,7 @@ private:
 
 	void updateSendData();
 
-	MsgSignup newSignup;
+	//MsgSignup newSignup;
 
 	////////////////////////////////////////////////////////////////////
 

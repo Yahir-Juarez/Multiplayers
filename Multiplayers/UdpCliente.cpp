@@ -207,10 +207,6 @@ void User::createLine(ShapesData::ShapeData& temporalDataShape)
 
 bool User::usuario(Package& VCpackageMessage)
 {
-	/*std::optional<sf::IpAddress> ipServer;
-	ipServer = IpAddress::getLocalAddress();
-	const unsigned short serverPort = 50001;*/
-
 	if (socket.send(VCpackageMessage.data(), VCpackageMessage.size(), prueba.value(), serverPort) != Socket::Status::Done)
 	{
 		return false;
@@ -220,32 +216,6 @@ bool User::usuario(Package& VCpackageMessage)
 void User::UdpClient()
 {
 	inPutRecive();
-	/*
-	if (estado == true)
-	{
-		/*
-		string x;
-		cin >> x;
-		Packet paquete;
-		paquete << x;
-		const char salida[] = "Soy el cliente";
-		Clock reloj;
-		if (socket.send(paquete, direccion.value(), puerto) != Socket::Status::Done)
-			return;
-		cout << "El cliente mando: " << x << "\n";
-		
-		paquete.clear();
-
-		unsigned short senderPort;
-		if (socket.receive(paquete, direccion, senderPort) == Socket::Status::Done)
-			return;
-		paquete >> x >> estado;
-		Time tiempo = reloj.getElapsedTime();
-		float segundos = tiempo.asSeconds();
-		cout << "El servidor mando: " << x << " \nEl ping fue de " << segundos << " Segundos\n";
-		inPutRecive();
-	}
-	*/
 }
 
 User::~User()

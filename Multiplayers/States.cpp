@@ -131,16 +131,16 @@ bool ShapesData::unPackData(void* pDestData, void* pScrData, size_t numBytes)
 
 ////////////////////////////////////////////////////	SIGNUP	//////////////////////////////////////////////////////////////////
 
-Package MsgSignup::packData()
-{
-	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kCONNECT;
-	Package data;
-	data.resize(m_msgData.size() + sizeof(MESSAGE_TYPE_VAR));
-	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
-	memcpy(data.data() + sizeof(MESSAGE_TYPE_VAR), m_msgData.data(), m_msgData.size());
-
-	return data;
-}
+//Package MsgSignup::packData()
+//{
+//	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kCONNECT;
+//	Package data;
+//	data.resize(m_msgData.size() + sizeof(MESSAGE_TYPE_VAR));
+//	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
+//	memcpy(data.data() + sizeof(MESSAGE_TYPE_VAR), m_msgData.data(), m_msgData.size());
+//
+//	return data;
+//}
 
 //bool MsgSignup::unPackData(void* pDestData, void* pScrData, size_t numBytes)
 //{
@@ -160,9 +160,9 @@ Package MsgConnect::packData()
 {
 	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kCONNECT;
 	Package data;
-	data.resize(sizeof(m_msgData) + sizeof(MESSAGE_TYPE_VAR));
+	data.resize(m_msgData.size() + sizeof(MESSAGE_TYPE_VAR));
 	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
-	memcpy(data.data() + sizeof(MESSAGE_TYPE_VAR), &m_msgData, sizeof(m_msgData));
+	memcpy(data.data() + sizeof(MESSAGE_TYPE_VAR), m_msgData.data(), m_msgData.size());
 
 	return data;
 }

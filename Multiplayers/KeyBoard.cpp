@@ -233,17 +233,17 @@ void KeyBoard::sendServer(User& actualUser)
 		{
 			m_password = sInput;
 			string totalMsg = m_option + " " + m_usser + " " + m_password;
-			oSignup.m_msgData = totalMsg;
-			auto connect = oSignup.packData();
+			oLoginRegister.m_msgData = totalMsg;
+			auto connect = oLoginRegister.packData();
 			Package finalPackage = getPackage(connect.data(), connect.size());
 			actualUser.usuario(finalPackage);
-			cout << "Se registro el usuario -> " << oSignup.m_msgData << "\nPassword -> " << oSignup.m_msgData << '\n';
+			cout << "Se registro el usuario -> " << oLoginRegister.m_msgData << "\nPassword -> " << oLoginRegister.m_msgData << '\n';
 			return;
 		}
 		m_password = sInput;
 		string totalMsg = m_option + " " + m_usser + " " + m_password;
-		oSignup.m_msgData = totalMsg;
-		auto connect = oSignup.packData();
+		oLoginRegister.m_msgData = totalMsg;
+		auto connect = oLoginRegister.packData();
 		Package finalPackage = getPackage(connect.data(), connect.size());
 		actualUser.usuario(finalPackage);
 		//cout << "Inicio el usuario -> " << oLogin.m_msgData.sUsser << "\nPassword -> " << oLogin.m_msgData.sPassword << '\n';

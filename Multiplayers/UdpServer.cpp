@@ -16,7 +16,6 @@ Server::Server()
 void Server::conexion(string usser)
 {
 	MsgConnect msgConeccion;
-	//msgConeccion.m_msgData.uiIdClient = uiNewId + 1;
 	msgConeccion.m_msgData = "CONECCION";
 	auto connect = msgConeccion.packData();
 	Package finalPackage = getPackage(connect.data(), connect.size());
@@ -153,25 +152,18 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 		stringstream ss(msg);
 
 		ss >> desicionUser >> usser >> password;
-		cout << "entro al registro \n\a";
-		//MsgSignup::unPackData(&newSignup.m_msgData, unpackedData.data(), unpackedData.size());
+
 		if (desicionUser == "s")
 		{
 			if (checkUsser(usser))
 			{
 				cout << "Cliente ya registrado" << endl;
-				//Agregar un error para cliente ya registrado, mandar kERROR
 				return;
 			}
 			DataClientRegister newClient;
 			newClient.sNameClient = usser;
 			newClient.sPasswordClient = password;
 			vListClients.push_back(newClient);
-
-			/*MsgSignup oConfirmLogin;
-			auto connect = oConfirmLogin.packData();
-			Package finalPackage = getPackage(connect.data(), connect.size());
-			outPutSend(finalPackage);*/
 		}
 		else
 		{
