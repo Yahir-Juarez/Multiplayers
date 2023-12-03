@@ -38,8 +38,8 @@ private:
 
 	//////////////		Verificacion de usuario		////////////////////
 
-	void conexion();
-	bool checkUsser();
+	void conexion(string usser);
+	bool checkUsser(string usser);
 	bool checkPassword();
 
 	void updateSendData();
@@ -53,7 +53,7 @@ private:
 	void SendShapes();
 	bool outPutSend(Package& VCpackageMessage);
 	bool outPutSendGlobal(Package& VCpackageMessage);
-	bool comprobateUsser();
+	bool comprobateUsser(string usser, string password);
 	UdpSocket socket;
 	User usuario;
 	bool estado;
@@ -64,7 +64,19 @@ private:
 	unsigned int uiNewIdShape = 0;
 	vector<DataClientRegister> vListClients;
 	vector<ClientData> vActiveClients;
-	vector<ShapesData> vShapesInServer;
+
+	unsigned int assignID();
+
+	struct ShapesInServer
+	{
+		unsigned int uiIdUser;
+		ShapesData msgShape;
+	};
+	vector<ShapesInServer> vShapesInServer;
 
 	bool list_active = false;
 };
+
+
+//IP 192.168.100.34
+//PUERTO 50001

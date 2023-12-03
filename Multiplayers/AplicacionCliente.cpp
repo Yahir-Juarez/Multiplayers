@@ -103,7 +103,7 @@ void App::createShapes()
 		bTemporalPositionMouse = true;
 		temporalShapes.fillCurrentShapeData(cActualColor, eventos, eTypeMessageActual);
 	}
-	else if (eventos.type == sf::Event::MouseMoved && !(eTypeMessageActual == MESSAGE_TYPE::K::kLINE))
+	else if (eventos.type == sf::Event::MouseMoved && !(eTypeMessageActual == TYPE_SHAPE::shapes::FREEDRAW))
 	{
 		// Actualiza la posición final del punto mientras se arrastra
 		if (bTemporalPositionMouse)
@@ -118,7 +118,7 @@ void App::createShapes()
 		bTemporalPositionMouse = false;
 		bMoveMouse = false;
 		relojShapes.restart();
-		if ((eTypeMessageActual == MESSAGE_TYPE::K::kLINE))
+		if ((eTypeMessageActual == TYPE_SHAPE::shapes::FREEDRAW))
 		{
 			return;
 		}
@@ -127,7 +127,6 @@ void App::createShapes()
 		auto connect = temporalShapes.packData();
 		Package finalPackage = getPackage(connect.data(), connect.size());
 		usuario.usuario(finalPackage);
-		cout << "Se mando un shapeeeeeeeee!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
 	}
 	else if (eventos.type == sf::Event::MouseButtonReleased && eventos.mouseButton.button == sf::Mouse::Left && bMoveMouse == false)
 	{
@@ -135,7 +134,7 @@ void App::createShapes()
 		bMoveMouse = false;
 		relojShapes.restart();
 	}
-	else if (eTypeMessageActual == MESSAGE_TYPE::K::kLINE && eventos.type == sf::Event::MouseMoved)
+	else if (eTypeMessageActual == TYPE_SHAPE::shapes::FREEDRAW && eventos.type == sf::Event::MouseMoved)
 	{
 		if (bTemporalPositionMouse)
 		{
@@ -224,25 +223,25 @@ void App::buttonPressed()
 			}
 			else if (oRectangle.buttonEvent(eventos))
 			{
-				eTypeMessageActual = MESSAGE_TYPE::K::kRECT;
+				eTypeMessageActual = TYPE_SHAPE::shapes::RECTANGLE;
 				relojButtons.restart();
 				bPressButton = true;
 			}
 			else if (oCircle.buttonEvent(eventos))
 			{
-				eTypeMessageActual = MESSAGE_TYPE::K::kCIRCLE;
+				eTypeMessageActual = TYPE_SHAPE::shapes::CIRCLE;
 				relojButtons.restart();
 				bPressButton = true;
 			}
 			else if (oLine.buttonEvent(eventos))
 			{
-				eTypeMessageActual = MESSAGE_TYPE::K::kLINE;
+				eTypeMessageActual = TYPE_SHAPE::shapes::FREEDRAW;
 				relojButtons.restart();
 				bPressButton = true;
 			}
 			else if (oFLine.buttonEvent(eventos))
 			{
-				eTypeMessageActual = MESSAGE_TYPE::K::kLINE;
+				eTypeMessageActual = TYPE_SHAPE::shapes::LINE;
 				relojButtons.restart();
 				bPressButton = true;
 			}
@@ -266,7 +265,6 @@ void App::buttonPressed()
 
 void App::update()
 {
-	cout << usuario.uiIdClient << endl;
 	usuario.UdpClient();
 }
 
@@ -345,7 +343,7 @@ void App::render()
 		}
 		if (bTemporalPositionMouse == true)
 		{
-			if (eTypeMessageActual == MESSAGE_TYPE::K::kRECT)
+			if (eTypeMessageActual == TYPE_SHAPE::shapes::RECTANGLE)
 			{
 				RectangleShape RectangleTemporal;
 				sf::Vector2f size = posFinal - posInicial;
@@ -354,7 +352,7 @@ void App::render()
 				RectangleTemporal.setFillColor(cActualColor);
 				ventana.draw(RectangleTemporal);
 			}
-			if (eTypeMessageActual == MESSAGE_TYPE::K::kCIRCLE)
+			if (eTypeMessageActual == TYPE_SHAPE::shapes::CIRCLE)
 			{
 				CircleShape CircleTemporal;
 				float radio = DistanciaEntreDosPuntos2(posInicial, posFinal);
@@ -362,6 +360,18 @@ void App::render()
 				CircleTemporal.setPosition(Vector2f(posInicial.x - radio, posInicial.y - radio));
 				CircleTemporal.setFillColor(cActualColor);
 				ventana.draw(CircleTemporal);
+			}
+			if (eTypeMessageActual == TYPE_SHAPE::shapes::LINE)
+			{
+				sf::Vertex vLinePt1 = posInicial;
+				vLinePt1.color = cActualColor;
+				sf::Vertex vLinePt2 = posFinal;
+				vLinePt2.color = cActualColor;
+				vector<sf::Vertex> Line;
+				Line.push_back(vLinePt1);
+				Line.push_back(vLinePt2);
+
+				ventana.draw(Line.data(), 2, sf::PrimitiveType::Lines);
 			}
 		}
 
@@ -402,7 +412,6 @@ void App::commandsApp()
 	{
 		bCtrlZActive = true;
 		MsgDelete commandDelete;
-		commandDelete.m_msgData.IdClient = usuario.uiIdClient;
 		auto connect = commandDelete.packData();
 		Package finalPackage = getPackage(connect.data(), connect.size());
 		usuario.usuario(finalPackage);
@@ -410,7 +419,6 @@ void App::commandsApp()
 	else if (Keyboard::isKeyPressed(Keyboard::RControl) && Keyboard::isKeyPressed(Keyboard::Z))
 	{
 		MsgDelete commandDelete;
-		commandDelete.m_msgData.IdClient = usuario.uiIdClient;
 		auto connect = commandDelete.packData();
 		Package finalPackage = getPackage(connect.data(), connect.size());
 		usuario.usuario(finalPackage);

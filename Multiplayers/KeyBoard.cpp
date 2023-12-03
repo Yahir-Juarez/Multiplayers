@@ -217,44 +217,36 @@ void KeyBoard::sendServer(User& actualUser)
 {
 	if (actualUser.enuEstado == estadoApp::InicioUser)
 	{
-		/*MsgUsser cMsgUsuario;
-		cMsgUsuario.m_msgDATA = sInput;
-		cMsgUsuario.packData();
-		auto connect = cMsgUsuario.packData();
-		Package finalPackage = getPackage(connect.data(), connect.size());
-		actualUser.usuario(finalPackage);
-		cout << sInput << " " << "Usuario enviado" << endl;*/
 		actualUser.enuEstado = estadoApp::InicioPassword;
 		if (actualUser.bNewUsser)
 		{
-			oSignup.m_msgData.sUsser = sInput;
+			m_option = "s";
+			m_usser = sInput;
 			return;
 		}
-		oLogin.m_msgData.sUsser = sInput;
+		m_option = "l";
+		m_usser = sInput;
 	}
 	else if (actualUser.enuEstado == estadoApp::InicioPassword)
 	{
-		/*MsgPass cMsgUsuario;
-		cMsgUsuario.m_msgDATA = sInput;
-		cMsgUsuario.packData();
-		auto connect = cMsgUsuario.packData();
-		Package finalPackage = getPackage(connect.data(), connect.size());
-		actualUser.usuario(finalPackage);
-		cout << sInput << " " << "Password enviado" << endl;*/
 		if (actualUser.bNewUsser)
 		{
-			oSignup.m_msgData.sPassword = sInput;
+			m_password = sInput;
+			string totalMsg = m_option + " " + m_usser + " " + m_password;
+			oSignup.m_msgData = totalMsg;
 			auto connect = oSignup.packData();
 			Package finalPackage = getPackage(connect.data(), connect.size());
 			actualUser.usuario(finalPackage);
-			cout << "Se registro el usuario -> " << oSignup.m_msgData.sUsser << "\nPassword -> " << oSignup.m_msgData.sPassword << '\n';
+			cout << "Se registro el usuario -> " << oSignup.m_msgData << "\nPassword -> " << oSignup.m_msgData << '\n';
 			return;
 		}
-		oLogin.m_msgData.sPassword = sInput;
-		auto connect = oLogin.packData();
+		m_password = sInput;
+		string totalMsg = m_option + " " + m_usser + " " + m_password;
+		oSignup.m_msgData = totalMsg;
+		auto connect = oSignup.packData();
 		Package finalPackage = getPackage(connect.data(), connect.size());
 		actualUser.usuario(finalPackage);
-		cout << "Inicio el usuario -> " << oLogin.m_msgData.sUsser << "\nPassword -> " << oLogin.m_msgData.sPassword << '\n';
+		//cout << "Inicio el usuario -> " << oLogin.m_msgData.sUsser << "\nPassword -> " << oLogin.m_msgData.sPassword << '\n';
 		return;
 	}
 	if (actualUser.enuEstado == Aplicacion)

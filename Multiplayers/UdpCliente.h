@@ -57,6 +57,6 @@ private:
 	void inPutRecive();
 	void commandInput(Package& VCpackageInput, Unit16& msgType);
 	sf::UdpSocket socket;
-	const unsigned short serverPort = 50001;
+	unsigned short serverPort;
 };
 

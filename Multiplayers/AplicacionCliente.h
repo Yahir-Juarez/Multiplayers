@@ -13,8 +13,8 @@
 using namespace std;
 using namespace sf;
 
-constexpr int window_y = 800;
-constexpr int window_x = 1200;
+constexpr int window_y = 720;
+constexpr int window_x = 1280;
 
 class App : public Packages
 {
@@ -40,7 +40,7 @@ private:
 	Vector2f posFinal;
 	
 	bool bTemporalPositionMouse = false;
-	MESSAGE_TYPE::K eTypeMessageActual;
+	TYPE_SHAPE::shapes eTypeMessageActual;
 
 	
 	string entradaString;

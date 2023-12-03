@@ -18,10 +18,14 @@ private:
 	sf::Text atributes(sf::Vector2f vPosicionText);
 	sf::Text atributes(sf::Vector2f vPosicionText, string message);
 	MsgSignup oSignup;
-	MsgLogin oLogin;
+	MsgConnect oLogin;
 	void sendServer(User& actualUser);
 	std::string sInput;
 	sf::Clock reloj;
 	sf::Font letterType;
+
+	string m_option;
+	string m_usser;
+	string m_password;
 };
 

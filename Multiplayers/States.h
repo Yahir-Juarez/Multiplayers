@@ -13,17 +13,24 @@ namespace MESSAGE_TYPE
 	enum K
 	{
 		kERROR = 0,
+		kPING,
 		kCONNECT,
-		kLOGIN,
-		kSIGNUP,
 		kDISCONNECT,
 		kCHAT,
-		kMOUSESTATE,
-		kLINE,
-		kRECT,
-		kCIRCLE,
+		kSHAPE,
+		kDELETE_SHAPE,
 		kNUM_MESSAGE_TYPE,
-		kDELETE_SHAPE
+		kMOUSESTATE
+	};
+}
+namespace TYPE_SHAPE
+{
+	enum shapes
+	{
+		LINE = 0,
+		RECTANGLE,
+		CIRCLE,
+		FREEDRAW
 	};
 }
 
@@ -38,19 +45,20 @@ public:
 class ShapesData : public NetworkMessage
 {
 public:
+	MESSAGE_TYPE_VAR MSGTYPE;
 	struct ShapeData
 	{
+		TYPE_SHAPE::shapes typeShape;
+		float m_posInitialX;
+		float m_posInitialY;
+		float m_posFinalX;
+		float m_posFinalY;
+		sf::Color m_cTypeColor;
 		unsigned int IdShape;
 		unsigned int IdClient;
-		MESSAGE_TYPE_VAR MSGTYPE;
-		Unit32 m_posInitialX;
-		Unit32 m_posInitialY;
-		Unit32 m_posFinalX;
-		Unit32 m_posFinalY;
-		sf::Color m_cTypeColor;
 	}m_msgData;
 
-	void fillCurrentShapeData(sf::Color& TypeColor, sf::Event& Evento, MESSAGE_TYPE::K typeMessage);
+	void fillCurrentShapeData(sf::Color& TypeColor, sf::Event& Evento, TYPE_SHAPE::shapes typeMessage);
 	void fillCurrentShapeDataFinal(sf::Event& Evento);
 
 	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
@@ -58,23 +66,23 @@ public:
 	Package packData();
 };
 
-class MsgConnect : public NetworkMessage
-{
-public:
-	MsgConnect() {
-	}
-	~MsgConnect() {
-	}
-	struct MessageData
-	{
-		//string sMsgConecct = "CONNECT";
-		unsigned int uiIdClient;
-	}m_msgData;
-	Package packData();
-	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
-private:
-	
-};
+//class MsgConnected : public NetworkMessage
+//{
+//public:
+//	MsgConnected() {
+//	}
+//	~MsgConnected() {
+//	}
+//	struct MessageData
+//	{
+//		//string sMsgConecct = "CONNECT";
+//		//unsigned int uiIdClient;
+//	}m_msgData;
+//	Package packData();
+//	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
+//private:
+//	
+//};
 
 class MsgUsser : public NetworkMessage
 {
@@ -98,29 +106,24 @@ public:
 	}
 	struct MessageData
 	{
-		unsigned int IdClient;
 		unsigned int IdShape;
 	}m_msgData;
 	Package packData();
 	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
 };
 
-class MsgLogin : public NetworkMessage
+class MsgConnect : public NetworkMessage
 {
 public:
-	MsgLogin() {
+	MsgConnect() {
 	}
-	~MsgLogin() {
+	~MsgConnect() {
 	}
 
-	struct MessageData
-	{
-		string sUsser;
-		string sPassword;
-	}m_msgData;
+	string m_msgData;
 
 	Package packData();
-	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
+	//static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
 };
 
 class MsgSignup : public NetworkMessage
@@ -131,14 +134,10 @@ public:
 	~MsgSignup() {
 	}
 
-	struct MessageData
-	{
-		string sUsser;
-		string sPassword;
-	}m_msgData;
+	string m_msgData;
 
 	Package packData();
-	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
+	//static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
 };
 
 class MsgPass : public NetworkMessage

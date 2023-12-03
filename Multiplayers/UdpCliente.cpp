@@ -18,15 +18,14 @@ using sf::Time;
 User::User()
 {
 	socket.setBlocking(false);
-	ipServer = IpAddress::getLocalAddress();
+	cout << "Ingresa la IP";
 	cin >> prueba;
+	cout << "Ingresa el puerto" << endl;
+	cin >> serverPort;
 }
 
 bool User::conexion()
 {
-	std::optional<sf::IpAddress> ipServer;
-	ipServer = IpAddress::getLocalAddress();
-	const unsigned short serverPort = 50001;
 	if (estado == false)
 	{
 		MsgConnect msgConeccion;
@@ -85,9 +84,9 @@ void User::commandInput(Package& unpackedData, Unit16& msgType)
 	MsgMouseData::MouseData realData;
 	if (msgType == MESSAGE_TYPE::kCONNECT)
 	{
-		MsgConnect::MessageData dataConnect;
-		MsgConnect::unPackData(&dataConnect, unpackedData.data(), unpackedData.size());
-		uiIdClient = dataConnect.uiIdClient;
+		MsgConnect dataConnect;
+		//MsgConnect::unPackData(&dataConnect, unpackedData.data(), unpackedData.size());
+		//uiIdClient = dataConnect.uiIdClient;
 		estado = true;
 		enuEstado = Aplicacion;
 	}
@@ -95,10 +94,6 @@ void User::commandInput(Package& unpackedData, Unit16& msgType)
 	{
 		enuEstado = InicioPassword;
 	}*/
-	if (msgType == MESSAGE_TYPE::kSIGNUP)
-	{
-		enuEstado = Inicio;
-	}
 	if (msgType == MESSAGE_TYPE::kDISCONNECT)
 	{
 
@@ -112,29 +107,32 @@ void User::commandInput(Package& unpackedData, Unit16& msgType)
 		MsgMouseData::unPackData(&realData, unpackedData.data(), unpackedData.size());
 		cout << "si\n";
 	}
-	if (msgType == MESSAGE_TYPE::kLINE)
+	if (msgType == MESSAGE_TYPE::kSHAPE)
 	{
 		ShapesData::ShapeData temporalDataShape;
 		ShapesData::unPackData(&temporalDataShape, unpackedData.data(), unpackedData.size());
-		createLine(temporalDataShape);
-	}
-	if (msgType == MESSAGE_TYPE::kRECT)
-	{
-		ShapesData::ShapeData temporalDataShape;
-		ShapesData::unPackData(&temporalDataShape, unpackedData.data(), unpackedData.size());
-		createRect(temporalDataShape);
-	}
-	if (msgType == MESSAGE_TYPE::kCIRCLE)
-	{
-		ShapesData::ShapeData temporalDataShape;
-		ShapesData::unPackData(&temporalDataShape, unpackedData.data(), unpackedData.size());
-		createCircle(temporalDataShape);
+		if (temporalDataShape.typeShape == TYPE_SHAPE::shapes::FREEDRAW)
+		{
+			createLine(temporalDataShape);
+		}
+		if (temporalDataShape.typeShape == TYPE_SHAPE::shapes::LINE)
+		{
+			createLine(temporalDataShape);
+		}
+		if (temporalDataShape.typeShape == TYPE_SHAPE::shapes::RECTANGLE)
+		{
+			createRect(temporalDataShape);
+		}
+		if (temporalDataShape.typeShape == TYPE_SHAPE::shapes::CIRCLE)
+		{
+			createCircle(temporalDataShape);
+		}
 	}
 	if (msgType == MESSAGE_TYPE::kDELETE_SHAPE)
 	{
 		MsgDelete commandDelete;
 		MsgDelete::unPackData(&commandDelete.m_msgData, unpackedData.data(), unpackedData.size());
-		cout << "Llego un delete\nId usser -> " << commandDelete.m_msgData.IdClient << "\nIdShape -> " << commandDelete.m_msgData.IdShape << endl;
+		//cout << "Llego un delete\nId usser -> " << "\nIdShape -> " << commandDelete.m_msgData.IdShape << endl;
 		for (int i = vShapes.size() - 1; i >= 0; i--)
 		{
 			if (vShapes[i].idShape == commandDelete.m_msgData.IdShape)
@@ -209,11 +207,11 @@ void User::createLine(ShapesData::ShapeData& temporalDataShape)
 
 bool User::usuario(Package& VCpackageMessage)
 {
-	std::optional<sf::IpAddress> ipServer;
+	/*std::optional<sf::IpAddress> ipServer;
 	ipServer = IpAddress::getLocalAddress();
-	const unsigned short serverPort = 50001;
+	const unsigned short serverPort = 50001;*/
 
-	if (socket.send(VCpackageMessage.data(), VCpackageMessage.size(), ipServer.value(), serverPort) != Socket::Status::Done)
+	if (socket.send(VCpackageMessage.data(), VCpackageMessage.size(), prueba.value(), serverPort) != Socket::Status::Done)
 	{
 		return false;
 	}

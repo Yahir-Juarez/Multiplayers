@@ -1,47 +1,52 @@
 #include "States.h"
 
-Package MsgConnect::packData()
-{
-	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kCONNECT;
-	std::vector<char> data;
-	data.resize(sizeof(m_msgData) + sizeof(MESSAGE_TYPE_VAR));
-	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
-	memcpy(data.data() + sizeof(MESSAGE_TYPE_VAR), &m_msgData, sizeof(m_msgData));
 
-	return data;
-}
+//////////////////////////////////////////////////////////	CONNECTED ///////////////////////////////////////////////////////
 
-bool MsgConnect::unPackData(void* pDestData, void* pScrData, size_t numBytes)
-{
-	cout << numBytes << " " << sizeof(MessageData) << "comprobacion\n";
-	if (numBytes != sizeof(MessageData))
-	{
-		return false;
-	}
-	memcpy(pDestData, pScrData, numBytes);
-}
+//Package MsgConnected::packData()
+//{
+//	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kCONNECTED;
+//	std::vector<char> data;
+//	data.resize(sizeof(m_msgData) + sizeof(MESSAGE_TYPE_VAR));
+//	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
+//	memcpy(data.data() + sizeof(MESSAGE_TYPE_VAR), &m_msgData, sizeof(m_msgData));
+//
+//	return data;
+//}
+//
+//bool MsgConnected::unPackData(void* pDestData, void* pScrData, size_t numBytes)
+//{
+//	cout << numBytes << " " << sizeof(MessageData) << "comprobacion\n";
+//	if (numBytes != sizeof(MessageData))
+//	{
+//		return false;
+//	}
+//	memcpy(pDestData, pScrData, numBytes);
+//}
 
-Package MsgUsser::packData()
-{
-	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kLOGIN;
-	std::vector<char> data;
-	data.resize(m_msgDATA.size() + sizeof(MESSAGE_TYPE_VAR));
-	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
-	memcpy(data.data() + sizeof(MESSAGE_TYPE_VAR), m_msgDATA.data(), m_msgDATA.size());
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	return data;
-}
-
-Package MsgPass::packData()
-{
-	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kLOGIN;
-	std::vector<char> data;
-	data.resize(m_msgDATA.size() + sizeof(MESSAGE_TYPE_VAR));
-	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
-	memcpy(data.data() + sizeof(MESSAGE_TYPE_VAR), m_msgDATA.data(), m_msgDATA.size());
-
-	return data;
-}
+//Package MsgUsser::packData()
+//{
+//	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kCONNECT;
+//	std::vector<char> data;
+//	data.resize(m_msgDATA.size() + sizeof(MESSAGE_TYPE_VAR));
+//	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
+//	memcpy(data.data() + sizeof(MESSAGE_TYPE_VAR), m_msgDATA.data(), m_msgDATA.size());
+//
+//	return data;
+//}
+//
+//Package MsgPass::packData()
+//{
+//	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kLOGIN;
+//	std::vector<char> data;
+//	data.resize(m_msgDATA.size() + sizeof(MESSAGE_TYPE_VAR));
+//	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
+//	memcpy(data.data() + sizeof(MESSAGE_TYPE_VAR), m_msgDATA.data(), m_msgDATA.size());
+//
+//	return data;
+//}
 
 Package MsgChat::packData()
 {
@@ -78,7 +83,7 @@ Package MsgDelete::packData()
 
 //////////////////////////////////////////////////////////// Funcion Shapes //////////////////////////////////////////////////////////////////////////////////
 
-void ShapesData::fillCurrentShapeData(sf::Color& TypeColor, sf::Event& Evento, MESSAGE_TYPE::K typeMessage)
+void ShapesData::fillCurrentShapeData(sf::Color& TypeColor, sf::Event& Evento, TYPE_SHAPE::shapes typeMessage)
 {
 	if (Evento.mouseButton.button == sf::Mouse::Left)
 	{
@@ -86,7 +91,8 @@ void ShapesData::fillCurrentShapeData(sf::Color& TypeColor, sf::Event& Evento, M
 		m_msgData.m_posInitialX = Evento.mouseButton.x;
 		m_msgData.m_posInitialY = Evento.mouseButton.y;
 		m_msgData.m_cTypeColor = TypeColor;
-		m_msgData.MSGTYPE = typeMessage;
+		MSGTYPE = MESSAGE_TYPE::kSHAPE;
+		m_msgData.typeShape = typeMessage;
 		/*if (typeMessage == MESSAGE_TYPE::kRECT)
 		{
 			m_msgData.prueba = "sip rectangulo";
@@ -104,7 +110,7 @@ Package ShapesData::packData()
 {
 	Package data;
 	data.resize(sizeof(m_msgData) + sizeof(MESSAGE_TYPE_VAR));
-	memcpy(data.data(), &m_msgData.MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
+	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
 	memcpy(data.data() + sizeof(MESSAGE_TYPE_VAR), &m_msgData, sizeof(m_msgData));
 
 	return data;
@@ -127,32 +133,32 @@ bool ShapesData::unPackData(void* pDestData, void* pScrData, size_t numBytes)
 
 Package MsgSignup::packData()
 {
-	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kSIGNUP;
+	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kCONNECT;
 	Package data;
-	data.resize(sizeof(m_msgData) + sizeof(MESSAGE_TYPE_VAR));
+	data.resize(m_msgData.size() + sizeof(MESSAGE_TYPE_VAR));
 	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
-	memcpy(data.data() + sizeof(MESSAGE_TYPE_VAR), &m_msgData, sizeof(m_msgData));
+	memcpy(data.data() + sizeof(MESSAGE_TYPE_VAR), m_msgData.data(), m_msgData.size());
 
 	return data;
 }
 
-bool MsgSignup::unPackData(void* pDestData, void* pScrData, size_t numBytes)
-{
-	cout << numBytes << " " << sizeof(MessageData) << "comprobacion\n";
-	if (numBytes != sizeof(MessageData))
-	{
-		return false;
-	}
-	memcpy(pDestData, pScrData, numBytes);
-}
+//bool MsgSignup::unPackData(void* pDestData, void* pScrData, size_t numBytes)
+//{
+//	cout << numBytes << " " << m_msgData.size() << "comprobacion\n";
+//	if (numBytes != m_msgData.size())
+//	{
+//		return false;
+//	}
+//	memcpy(pDestData, pScrData, numBytes);
+//}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////	LOGIN	//////////////////////////////////////////////////////////////////
 
-Package MsgLogin::packData()
+Package MsgConnect::packData()
 {
-	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kLOGIN;
+	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kCONNECT;
 	Package data;
 	data.resize(sizeof(m_msgData) + sizeof(MESSAGE_TYPE_VAR));
 	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
@@ -161,15 +167,15 @@ Package MsgLogin::packData()
 	return data;
 }
 
-bool MsgLogin::unPackData(void* pDestData, void* pScrData, size_t numBytes)
-{
-	cout << numBytes << " " << sizeof(MessageData) << "comprobacion\n";
-	if (numBytes != sizeof(MessageData))
-	{
-		return false;
-	}
-	memcpy(pDestData, pScrData, numBytes);
-}
+//bool MsgConnect::unPackData(void* pDestData, void* pScrData, size_t numBytes)
+//{
+//	cout << numBytes << " " << sizeof(MessageData) << "comprobacion\n";
+//	if (numBytes != sizeof(MessageData))
+//	{
+//		return false;
+//	}
+//	memcpy(pDestData, pScrData, numBytes);
+//}
 
 bool MsgDelete::unPackData(void* pDestData, void* pScrData, size_t numBytes)
 {
