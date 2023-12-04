@@ -81,33 +81,33 @@ void User::inPutRecive()
 
 void User::commandInput(Package& unpackedData, Unit16& msgType)
 {
-	MsgMouseData::MouseData realData;
-	if (msgType == MESSAGE_TYPE::kCONNECT)
+	//MsgMouseData::MouseData realData;
+	
+	if (msgType == MESSAGE_TYPE::kERROR)
+	{
+		estado = false;
+		enuEstado = Inicio;
+		msgActual.insert(msgActual.begin(), unpackedData.begin(), unpackedData.end());
+	}
+	else if (msgType == MESSAGE_TYPE::kCONNECT)
 	{
 		MsgConnect dataConnect;
-		//MsgConnect::unPackData(&dataConnect, unpackedData.data(), unpackedData.size());
-		//uiIdClient = dataConnect.uiIdClient;
 		estado = true;
 		enuEstado = Aplicacion;
 	}
-	/*if (msgType == MESSAGE_TYPE::kLOGIN)
+	else if (msgType == MESSAGE_TYPE::kDISCONNECT)
 	{
-		enuEstado = InicioPassword;
-	}*/
-	if (msgType == MESSAGE_TYPE::kDISCONNECT)
-	{
-
+		estado = false;
+		enuEstado = Inicio;
+		msgActual.insert(msgActual.begin(), unpackedData.begin(), unpackedData.end());
 	}
-	if (msgType == MESSAGE_TYPE::kCHAT)
+	else if (msgType == MESSAGE_TYPE::kCHAT)
 	{
-
+		msgActual.clear();
+		msgActual.insert(msgActual.begin(), unpackedData.begin(), unpackedData.end());
+		cout << msgActual << endl;
 	}
-	if (msgType == MESSAGE_TYPE::kMOUSESTATE)
-	{
-		MsgMouseData::unPackData(&realData, unpackedData.data(), unpackedData.size());
-		cout << "si\n";
-	}
-	if (msgType == MESSAGE_TYPE::kSHAPE)
+	else if (msgType == MESSAGE_TYPE::kSHAPE)
 	{
 		ShapesData::ShapeData temporalDataShape;
 		ShapesData::unPackData(&temporalDataShape, unpackedData.data(), unpackedData.size());
@@ -128,11 +128,10 @@ void User::commandInput(Package& unpackedData, Unit16& msgType)
 			createCircle(temporalDataShape);
 		}
 	}
-	if (msgType == MESSAGE_TYPE::kDELETE_SHAPE)
+	else if (msgType == MESSAGE_TYPE::kDELETE_SHAPE)
 	{
 		MsgDelete commandDelete;
 		MsgDelete::unPackData(&commandDelete.m_msgData, unpackedData.data(), unpackedData.size());
-		//cout << "Llego un delete\nId usser -> " << "\nIdShape -> " << commandDelete.m_msgData.IdShape << endl;
 		for (int i = vShapes.size() - 1; i >= 0; i--)
 		{
 			if (vShapes[i].idShape == commandDelete.m_msgData.IdShape)

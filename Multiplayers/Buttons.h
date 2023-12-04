@@ -8,6 +8,13 @@ class Button
 public:
 	Button();
 	~Button();
+
+	/// <summary>
+	/// hola 2
+	/// </summary>
+	/// <param name="namefile"></param>
+	/// <param name="size"></param>
+	/// <param name="posicion"></param>
 	void createButton(std::string namefile, sf::Vector2f& size, sf::Vector2f& posicion);
 
 	void createButton(sf::Color colorShape, sf::Vector2f& size , sf::Vector2f& posicion);

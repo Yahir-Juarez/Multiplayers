@@ -53,6 +53,8 @@ public:
 	estadoApp enuEstado;
 	std::optional<sf::IpAddress> ipServer;
 	std::optional<sf::IpAddress> prueba;
+
+	string msgActual;
 private:
 	void inPutRecive();
 	void commandInput(Package& VCpackageInput, Unit16& msgType);

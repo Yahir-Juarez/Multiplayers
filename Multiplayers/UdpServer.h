@@ -21,6 +21,18 @@ struct ClientData
 	unsigned int IDclient;
 };
 
+struct ShapesInServer
+{
+	unsigned int uiIdUser;
+	ShapesData msgShape;
+};
+
+struct DataClientRegister
+{
+	string sNameClient;
+	string sPasswordClient;
+};
+
 class Server : public Packages
 {
 public:
@@ -30,22 +42,13 @@ public:
 private:
 	void bind_port(const unsigned short* puerto);
 
-	struct DataClientRegister
-	{
-		string sNameClient;
-		string sPasswordClient;
-	};
-
 	//////////////		Verificacion de usuario		////////////////////
 
 	void conexion(string usser);
 	bool checkUsser(string usser);
 	bool checkPassword();
-
 	void updateSendData();
-
-	//MsgSignup newSignup;
-
+	void checkUsserInServer(string usser);
 	////////////////////////////////////////////////////////////////////
 
 	void inPutRecive();
@@ -54,24 +57,19 @@ private:
 	bool outPutSend(Package& VCpackageMessage);
 	bool outPutSendGlobal(Package& VCpackageMessage);
 	bool comprobateUsser(string usser, string password);
+	unsigned int getID();
+
+	unsigned int uiNewId = 0;
+	unsigned int uiNewIdShape = 0;
+
 	UdpSocket socket;
-	User usuario;
 	bool estado;
 	optional<sf::IpAddress> ipClient;
 	const unsigned short serverPort = 50001;
 	unsigned short senderPort;
-	unsigned int uiNewId = 0;
-	unsigned int uiNewIdShape = 0;
+
 	vector<DataClientRegister> vListClients;
 	vector<ClientData> vActiveClients;
-
-	unsigned int assignID();
-
-	struct ShapesInServer
-	{
-		unsigned int uiIdUser;
-		ShapesData msgShape;
-	};
 	vector<ShapesInServer> vShapesInServer;
 
 	bool list_active = false;

@@ -11,7 +11,13 @@ enum levelKeyBoard{Client, Password, Chat };
 class KeyBoard : public Packages
 {
 public:
-	void inputKeyBoard(levelKeyBoard& actualKeyBoard, User& actualUser);
+	/// <summary>
+	/// hola
+	/// </summary>
+	/// <param name="actualKeyBoard"></param>
+	/// <param name="actualUser"></param>
+	/// <param name="event"></param>
+	void inputKeyBoard(levelKeyBoard& actualKeyBoard, User& actualUser, Event& event);
 	void render(sf::RenderWindow& windowDraw, sf::Vector2f vPosicionText);
 	void render(sf::RenderWindow& windowDraw, sf::Vector2f vPosicionText, string message);
 private:

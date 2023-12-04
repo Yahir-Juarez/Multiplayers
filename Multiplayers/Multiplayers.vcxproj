@@ -161,6 +161,22 @@
     <ClInclude Include="UdpCliente.h" />
     <ClInclude Include="UdpServer.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Textures\as.png" />
+    <Image Include="Textures\circle.png" />
+    <Image Include="Textures\cuadrado.png" />
+    <Image Include="Textures\FLine.png" />
+    <Image Include="Textures\InicioSesion.png" />
+    <Image Include="Textures\line.jpg" />
+    <Image Include="Textures\Line.png" />
+    <Image Include="Textures\Rectangle.png" />
+    <Image Include="Textures\Signup.png" />
+    <Image Include="Textures\TecladoApagado.png" />
+    <Image Include="Textures\TecladoEncendido.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="ASMAN.TTF" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

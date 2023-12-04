@@ -75,4 +75,42 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Textures\Signup.png">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="Textures\TecladoApagado.png">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="Textures\Rectangle.png">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="Textures\TecladoEncendido.png">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="Textures\Line.png">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="Textures\line.jpg">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="Textures\InicioSesion.png">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="Textures\FLine.png">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="Textures\cuadrado.png">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="Textures\circle.png">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="Textures\as.png">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="ASMAN.TTF" />
+  </ItemGroup>
 </Project>

@@ -48,7 +48,7 @@ App::App()
 	oLine.createButton("Textures/FLine.png", sizeShapestype, posicionColor);
 	posicionColor.x = ((window_x * 2) / 40);
 	posicionColor.y = ((window_y * 22) / 40);
-	oFLine.createButton("Textures/line.png", sizeShapestype, posicionColor);
+	oFLine.createButton("Textures/Line.png", sizeShapestype, posicionColor);
 	mainloop();
 }
 
@@ -80,7 +80,7 @@ void App::entrada()
 	}
 	if (activeKeyBoard == true)
 	{
-		interactiveKeyBord.inputKeyBoard(actualKeyboard, usuario);
+		interactiveKeyBord.inputKeyBoard(actualKeyboard, usuario, eventos);
 	}
 	buttonPressed(); 
 
@@ -281,6 +281,7 @@ void App::render()
 	Vector2f vfTextMessage(500, 300);
 	
 	Color rgbGris(184, 184, 184);
+	Color rgbGrisAntracita(41, 49, 51);
 	if (usuario.enuEstado == Inicio)
 	{
 		ventana.clear(Color(rgbGris));
@@ -327,68 +328,77 @@ void App::render()
 	}
 	else if (usuario.enuEstado == Aplicacion)
 	{
-		ventana.clear(Color::White);
+		ventana.clear(Color(rgbGrisAntracita));
 		
-		for (int i = 0; i < usuario.vShapes.size(); i++)
-		{
-			for (int j = 0; j < usuario.vShapes[i].shapesTypes.size(); j++)
-			{
-				ventana.draw(*usuario.vShapes[i].shapesTypes[j]);
-			}
-			for (int j = 0; j < usuario.vShapes[i].circleObjects.size(); j++)
-			{
-				ventana.draw(*usuario.vShapes[i].circleObjects[j]);
-			}
-			ventana.draw(usuario.vShapes[i].freeLine.data(), usuario.vShapes[i].freeLine.size(), sf::PrimitiveType::Lines);
-		}
-		if (bTemporalPositionMouse == true)
-		{
-			if (eTypeMessageActual == TYPE_SHAPE::shapes::RECTANGLE)
-			{
-				RectangleShape RectangleTemporal;
-				sf::Vector2f size = posFinal - posInicial;
-				RectangleTemporal.setSize(size);
-				RectangleTemporal.setPosition(posInicial);
-				RectangleTemporal.setFillColor(cActualColor);
-				ventana.draw(RectangleTemporal);
-			}
-			if (eTypeMessageActual == TYPE_SHAPE::shapes::CIRCLE)
-			{
-				CircleShape CircleTemporal;
-				float radio = DistanciaEntreDosPuntos2(posInicial, posFinal);
-				CircleTemporal.setRadius(radio);
-				CircleTemporal.setPosition(Vector2f(posInicial.x - radio, posInicial.y - radio));
-				CircleTemporal.setFillColor(cActualColor);
-				ventana.draw(CircleTemporal);
-			}
-			if (eTypeMessageActual == TYPE_SHAPE::shapes::LINE)
-			{
-				sf::Vertex vLinePt1 = posInicial;
-				vLinePt1.color = cActualColor;
-				sf::Vertex vLinePt2 = posFinal;
-				vLinePt2.color = cActualColor;
-				vector<sf::Vertex> Line;
-				Line.push_back(vLinePt1);
-				Line.push_back(vLinePt2);
+		drawShapes();
+		drawTemporalShapes();
 
-				ventana.draw(Line.data(), 2, sf::PrimitiveType::Lines);
-			}
-		}
-
-		/*if (activeKeyBoard == true)
+		if (activeKeyBoard == true)
 		{
 			keyboardOn.render(ventana);
-			interactiveKeyBord.render(ventana, Vector2f(window_x / (10 / 3), window_y / (10 / 4)));
+			interactiveKeyBord.render(ventana, Vector2f((window_x * 1) / 40, (window_y * 36) / 40));
 		}
 		else
 		{
 			keyboardOff.render(ventana);
-		}*/
-
+		}
 		renderButtonsApp();
 	}
+	interactiveKeyBord.render(ventana, Vector2f((window_x * 1) / 40, (window_y * 32) / 40), usuario.msgActual);
 
 	ventana.display();
+}
+
+void App::drawShapes()
+{
+	for (int i = 0; i < usuario.vShapes.size(); i++)
+	{
+		for (int j = 0; j < usuario.vShapes[i].shapesTypes.size(); j++)
+		{
+			ventana.draw(*usuario.vShapes[i].shapesTypes[j]);
+		}
+		for (int j = 0; j < usuario.vShapes[i].circleObjects.size(); j++)
+		{
+			ventana.draw(*usuario.vShapes[i].circleObjects[j]);
+		}
+		ventana.draw(usuario.vShapes[i].freeLine.data(), usuario.vShapes[i].freeLine.size(), sf::PrimitiveType::Lines);
+	}
+}
+void App::drawTemporalShapes()
+{
+	if (bTemporalPositionMouse == true)
+	{
+		if (eTypeMessageActual == TYPE_SHAPE::shapes::RECTANGLE)
+		{
+			RectangleShape RectangleTemporal;
+			sf::Vector2f size = posFinal - posInicial;
+			RectangleTemporal.setSize(size);
+			RectangleTemporal.setPosition(posInicial);
+			RectangleTemporal.setFillColor(cActualColor);
+			ventana.draw(RectangleTemporal);
+		}
+		if (eTypeMessageActual == TYPE_SHAPE::shapes::CIRCLE)
+		{
+			CircleShape CircleTemporal;
+			float radio = DistanciaEntreDosPuntos2(posInicial, posFinal);
+			CircleTemporal.setRadius(radio);
+			CircleTemporal.setPosition(Vector2f(posInicial.x - radio, posInicial.y - radio));
+			CircleTemporal.setFillColor(cActualColor);
+			ventana.draw(CircleTemporal);
+		}
+		if (eTypeMessageActual == TYPE_SHAPE::shapes::LINE)
+		{
+			sf::Vertex vLinePt1 = posInicial;
+			vLinePt1.color = cActualColor;
+			sf::Vertex vLinePt2 = posFinal;
+			vLinePt2.color = cActualColor;
+			vector<sf::Vertex> Line;
+			Line.push_back(vLinePt1);
+			Line.push_back(vLinePt2);
+
+			ventana.draw(Line.data(), 2, sf::PrimitiveType::Lines);
+		}
+	}
 }
 
 void App::renderButtonsApp()

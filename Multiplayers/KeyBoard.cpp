@@ -2,7 +2,13 @@
 #include "States.h"
 using namespace sf;
 
-void KeyBoard::inputKeyBoard(levelKeyBoard& actualKeyBoard, User& actualUser)
+/// <summary>
+/// hola 3
+/// </summary>
+/// <param name="actualKeyBoard"></param>
+/// <param name="actualUser"></param>
+/// <param name="event"></param>
+void KeyBoard::inputKeyBoard(levelKeyBoard& actualKeyBoard, User& actualUser, Event& event)
 {
 	sf::Time tiempo;
 	const int limitCharacter = 29;
@@ -10,206 +16,32 @@ void KeyBoard::inputKeyBoard(levelKeyBoard& actualKeyBoard, User& actualUser)
 	float tiempoTecla = tiempo.asSeconds();
 	if (tiempoTecla > .14)
 	{
-		Event::TextEntered;
-		if (Keyboard::isKeyPressed(Keyboard::Q))
-		{
-			sInput += "Q";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::W))
-		{
-			sInput += "W";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::E))
-		{
-			sInput += "E";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::R))
-		{
-			sInput += "R";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::T))
-		{
-			sInput += "T";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Y))
-		{
-			sInput += "Y";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::U))
-		{
-			sInput += "U";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::I))
-		{
-			sInput += "I";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::O))
-		{
-			sInput += "O";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::P))
-		{
-			sInput += "P";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::A))
-		{
-			sInput += "A";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::S))
-		{
-			sInput += "S";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::D))
-		{
-			sInput += "D";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::F))
-		{
-			sInput += "F";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::G))
-		{
-			sInput += "G";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::H))
-		{
-			sInput += "H";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::J))
-		{
-			sInput += "J";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::K))
-		{
-			sInput += "K";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::L))
-		{
-			sInput += "L";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Z))
-		{
-			sInput += "Z";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::X))
-		{
-			sInput += "X";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::C))
-		{
-			sInput += "C";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::V))
-		{
-			sInput += "V";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::B))
-		{
-			sInput += "B";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::N))
-		{
-			sInput += "N";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::M))
-		{
-			sInput += "M";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Num0))
-		{
-			sInput += "0";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Num1))
-		{
-			sInput += "1";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Num2))
-		{
-			sInput += "2";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Num3))
-		{
-			sInput += "3";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Num4))
-		{
-			sInput += "4";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Num5))
-		{
-			sInput += "5";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Num6))
-		{
-			sInput += "6";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Num7))
-		{
-			sInput += "7";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Num8))
-		{
-			sInput += "8";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Num9))
-		{
-			sInput += "9";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Space))
-		{
-			sInput += " ";
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Backspace) && sInput.size() > 0)
-		{
-			sInput.pop_back();
-			reloj.restart();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Enter))
-		{
-			sendServer(actualUser);
-			sInput.clear();
-			reloj.restart();
-		}	
-		if (sInput.size() > limitCharacter && (actualKeyBoard == Client || actualKeyBoard == Password))
-		{
-			sInput.pop_back();
+		if (event.type == sf::Event::TextEntered) {
+			if (event.text.unicode < 128) {
+
+				char newChar = static_cast<char>(event.text.unicode);
+				if (newChar == '\b' && sInput.size() > 0)
+				{
+					sInput.pop_back();
+					reloj.restart();
+				}
+				else if (newChar == '\r')
+				{
+					sendServer(actualUser);
+					sInput.clear();
+					reloj.restart();
+				}
+				else if (sInput.size() > limitCharacter && (actualKeyBoard == Client || actualKeyBoard == Password))
+				{
+					reloj.restart();
+					sInput.pop_back();
+				}
+				else
+				{
+					reloj.restart();
+					sInput += newChar;
+				}
+			}
 		}
 	}
 }
@@ -252,7 +84,7 @@ void KeyBoard::sendServer(User& actualUser)
 	if (actualUser.enuEstado == Aplicacion)
 	{
 		MsgChat cMsgUsuario;
-		cMsgUsuario.m_msgDATA = sInput;
+		cMsgUsuario.m_msgData = sInput;
 		cMsgUsuario.packData();
 		auto connect = cMsgUsuario.packData();
 		Package finalPackage = getPackage(connect.data(), connect.size());

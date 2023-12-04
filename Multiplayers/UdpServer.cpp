@@ -34,20 +34,6 @@ void Server::conexion(string usser)
 	cout << "se mando el mensaje y se agrego a la lista\n";
 }
 
-//string unpackString(Package& unpackedData)
-//{
-//	string data;
-//	for (int i = 0; i < unpackedData.size(); i++)
-//	{
-//		if (unpackedData[i] == '\0')
-//		{
-//			data += unpackedData[i];
-//			return data;
-//		}
-//		data += unpackedData[i];
-//	}
-//}
-
 bool Server::checkUsser(string usser)
 {
 	for (int i = 0; i < vListClients.size(); i++)
@@ -115,6 +101,7 @@ void Server::inPutRecive()
 	commandInput(unpackedData, msgType);
 }
 
+/////////////////////////////////// Mensajes privados /////////////////////////////////////////////////////
 
 bool Server::outPutSend(Package& VCpackageMessage)
 {
@@ -125,6 +112,8 @@ bool Server::outPutSend(Package& VCpackageMessage)
 	}
 	return true;
 }
+
+/////////////////////////////////// Mensajes globales /////////////////////////////////////////////////////
 
 bool Server::outPutSendGlobal(Package& VCpackageMessage)
 {
@@ -140,7 +129,7 @@ bool Server::outPutSendGlobal(Package& VCpackageMessage)
 
 void Server::commandInput(Package& unpackedData, Unit16& msgType)
 {
-	MsgMouseData::MouseData realData;
+	//MsgMouseData::MouseData realData;
 	if (msgType == MESSAGE_TYPE::kCONNECT)
 	{ 
 		string msg;
@@ -157,7 +146,11 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 		{
 			if (checkUsser(usser))
 			{
-				cout << "Cliente ya registrado" << endl;
+				MsgError newMsg;
+				newMsg.m_msgData = "Cliente ya existente";
+				auto connect = newMsg.packData();
+				Package finalPackage = getPackage(connect.data(), connect.size());
+				outPutSend(finalPackage);
 				return;
 			}
 			DataClientRegister newClient;
@@ -169,119 +162,43 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 		{
 			if (!(comprobateUsser(usser, password)))
 			{
-				cout << "No se encontro el cliente" << endl;
-				//Agregar un error para cliente ya registrado, mandar kERROR
+				MsgError newMsg;
+				newMsg.m_msgData = "Wrong Password or Usser";
+				auto connect = newMsg.packData();
+				Package finalPackage = getPackage(connect.data(), connect.size());
+				outPutSend(finalPackage);
 				return;
 			}
+			checkUsserInServer(usser);
 		}
 		conexion(usser);
 		updateSendData();
 	}
-	//if (msgType == MESSAGE_TYPE::kLOGIN)
-	//{
-	//	MsgSignup::unPackData(&newSignup.m_msgData, unpackedData.data(), unpackedData.size());
-	//	if (!(comprobateUsser()))
-	//	{
-	//		cout << "No se encontro el cliente" << endl;
-	//		//Agregar un error para cliente ya registrado, mandar kERROR
-	//		return;
-	//	}
-	//
-	//	conexion();
-	//	updateSendData();
-	//	//MsgUsser cMsgUsuario;
-	//	////MsgUsser::unPackData(&cMsgUsuario.m_msgDATA, unpackedData.data(), unpackedData.size());
-	//	////cout << cMsgUsuario.m_msgDATA << endl;
-
-	//	//cMsgUsuario.m_msgDATA = "Aceptado";
-	//	//cMsgUsuario.packData();
-	//	//auto connect = cMsgUsuario.packData();
-	//	//Package finalPackage = getPackage(connect.data(), connect.size());
-	//	//outPutSend(finalPackage);
-	//	//cout << cMsgUsuario.m_msgDATA << " " << "Usser acept" << endl;
-	//}
-	//if (msgType == MESSAGE_TYPE::kSIGNUP)
-	//{
-	//	cout << "entro al registro \n\a";
-	//	MsgSignup::unPackData(&newSignup.m_msgData, unpackedData.data(), unpackedData.size());
-	//	if (checkUsser())
-	//	{
-	//		cout << "Cliente ya registrado" << endl;
-	//		//Agregar un error para cliente ya registrado, mandar kERROR
-	//		return;
-	//	}
-	//	DataClientRegister newClient;
-	//	newClient.sNameClient = newSignup.m_msgData.sUsser;
-	//	newClient.sPasswordClient = newSignup.m_msgData.sPassword;
-	//	vListClients.push_back(newClient);
-
-	//	MsgSignup oConfirmLogin;
-	//	auto connect = oConfirmLogin.packData();
-	//	Package finalPackage = getPackage(connect.data(), connect.size());
-	//	outPutSend(finalPackage);
-	//	/*MsgPass cMsgUsuario;
-	//	cMsgUsuario.m_msgDATA = "Aceptado";
-	//	cMsgUsuario.packData();
-	//	auto connect = cMsgUsuario.packData();
-	//	Package finalPackage = getPackage(connect.data(), connect.size());
-	//	outPutSend(finalPackage);
-	//	cout << cMsgUsuario.m_msgDATA << " " << "Passwor acept" << endl;*/
-	//}
-	if (msgType == MESSAGE_TYPE::kDISCONNECT)
-	{
-
-	}
 	if (msgType == MESSAGE_TYPE::kCHAT)
 	{
-
-	}
-	if (msgType == MESSAGE_TYPE::kMOUSESTATE)
-	{
-		MsgMouseData::unPackData(&realData, unpackedData.data(), unpackedData.size());
-		cout << "si\n";
+		string msg;
+		msg.insert(msg.begin(), unpackedData.begin(), unpackedData.end());
+		MsgChat newMsg;
+		newMsg.m_msgData = msg;
+		auto connect = newMsg.packData();
+		Package finalPackage = getPackage(connect.data(), connect.size());
+		outPutSendGlobal(finalPackage);
 	}
 	if (msgType == MESSAGE_TYPE::kSHAPE)
 	{
 		ShapesData temporalDataShape;
 		ShapesData::unPackData(&temporalDataShape.m_msgData, unpackedData.data(), unpackedData.size());
 		temporalDataShape.MSGTYPE = MESSAGE_TYPE::kSHAPE;
-		if (temporalDataShape.m_msgData.typeShape == TYPE_SHAPE::shapes::LINE)
+		if (temporalDataShape.m_msgData.typeShape == TYPE_SHAPE::shapes::LINE || 
+			temporalDataShape.m_msgData.typeShape == TYPE_SHAPE::shapes::FREEDRAW ||
+			temporalDataShape.m_msgData.typeShape == TYPE_SHAPE::shapes::RECTANGLE ||
+			temporalDataShape.m_msgData.typeShape == TYPE_SHAPE::shapes::CIRCLE)
 		{
 			ShapesInServer newShape;
 			uiNewIdShape += 1;
 			temporalDataShape.m_msgData.IdShape = uiNewIdShape;
 			newShape.msgShape = temporalDataShape;
-			newShape.uiIdUser = assignID();
-			vShapesInServer.push_back(newShape);
-			SendShapes();
-		}
-		if (temporalDataShape.m_msgData.typeShape == TYPE_SHAPE::shapes::FREEDRAW)
-		{
-			ShapesInServer newShape;
-			uiNewIdShape += 1;
-			temporalDataShape.m_msgData.IdShape = uiNewIdShape;
-			newShape.msgShape = temporalDataShape;
-			newShape.uiIdUser = assignID();
-			vShapesInServer.push_back(newShape);
-			SendShapes();
-		}
-		if (temporalDataShape.m_msgData.typeShape == TYPE_SHAPE::shapes::RECTANGLE)
-		{
-			ShapesInServer newShape;
-			uiNewIdShape += 1;
-			temporalDataShape.m_msgData.IdShape = uiNewIdShape;
-			newShape.msgShape = temporalDataShape;
-			newShape.uiIdUser = assignID();
-			vShapesInServer.push_back(newShape);
-			SendShapes();
-		}
-		if (temporalDataShape.m_msgData.typeShape == TYPE_SHAPE::shapes::CIRCLE)
-		{
-			ShapesInServer newShape;
-			uiNewIdShape += 1;
-			temporalDataShape.m_msgData.IdShape = uiNewIdShape;
-			newShape.msgShape = temporalDataShape;
-			newShape.uiIdUser = assignID();
+			newShape.uiIdUser = getID();
 			vShapesInServer.push_back(newShape);
 			SendShapes();
 		}
@@ -292,7 +209,7 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 		MsgDelete::unPackData(&commandDelete.m_msgData, unpackedData.data(), unpackedData.size());
 		for (int i = vShapesInServer.size() - 1; i >= 0; i--)
 		{
-			if (vShapesInServer[i].uiIdUser == assignID())
+			if (vShapesInServer[i].uiIdUser == getID())
 			{
 				commandDelete.m_msgData.IdShape = vShapesInServer[i].msgShape.m_msgData.IdShape;
 				vShapesInServer.erase(vShapesInServer.begin() + i);
@@ -329,27 +246,11 @@ void Server::updateSendData()
 			cout << "No se mando el mensaje\n";
 		}
 	}
-	/*for (int i = 0; i < vShapesInServer.size(); i++)
-	{
-		switch (vShapesInServer[i].m_msgData.MSGTYPE)
-		{
-		case (MESSAGE_TYPE::kCIRCLE):
-		{
-			ShapesData temporalDataShape;
-			ShapesData::unPackData(&temporalDataShape.m_msgData, unpackedData.data(), unpackedData.size());
-			vShapesInServer.push_back(temporalDataShape);
-			SendShapes();
-			break;
-		}
-		default:
-			break;
-		}
-	}*/
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-unsigned int Server::assignID()
+unsigned int Server::getID()
 {
 	for (int i = 0; i < vActiveClients.size(); i++)
 	{
@@ -358,6 +259,27 @@ unsigned int Server::assignID()
 			return vActiveClients[i].IDclient;
 		}
 	}
+}
+
+void Server::checkUsserInServer(string usser)
+{
+	for (int i = vActiveClients.size() - 1; i >= 0; i--)
+	{
+		if (vActiveClients[i].usserName == usser)
+		{
+			MsgDisconnect newMsg;
+			auto connect = newMsg.packData();
+			Package finalPackage = getPackage(connect.data(), connect.size());
+			if (socket.send(finalPackage.data(), finalPackage.size(), vActiveClients[i].clientIp.value(), vActiveClients[i].clientPort) != Socket::Status::Done)
+			{
+				cout << "No se mando el mensaje\n";
+				return;
+			}
+			vActiveClients.erase(vActiveClients.begin() + i);
+			break;
+		}
+	}
+
 }
 
 void Server::RunUdpServer(const unsigned short puerto)
@@ -389,46 +311,8 @@ void Server::RunUdpServer(const unsigned short puerto)
 		else
 		{
 			list_active = false;
-		}
-		/*
-		Time tiempo = reloj.getElapsedTime();
-		float segundos = tiempo.asSeconds();
-		if (segundos > 30)
-		{
-			usuario.estado = false;
-		}
-
-		if (direccion == usuario.direccion)
-		{
-			if (usuario.estado == true)
-			{
-				string entrada;
-				paquete >> entrada;
-				cout << "El cliente con la IP -> " << direccion.value() << " mando: " << entrada << "\n";
-
-				paquete.clear();
-				entrada = "Soy el servidor, mensaje recibido.";
-				paquete << entrada << usuario.estado;
-
-				if (socket.send(paquete, direccion.value(), senderPort) != Socket::Status::Done)
-					return;
-				cout << "El servidor mando: " << entrada << "\n";
-			}
-			else
-			{
-				string desconeccion = "Se te desconecto del servidor";
-				bool desconeccionBool = false;
-
-				cout << "Se desconecto al Cliente\n";
-
-				Packet paquete;
-				paquete << desconeccion << desconeccionBool;
-				if (socket.send(paquete, direccion.value(), senderPort) != Socket::Status::Done)
-					return;
-				cout << "El servidor mando: " << desconeccion << "\n";
-			}
-		}
-		*/
-		
+		}	
 	}
 }
+
+

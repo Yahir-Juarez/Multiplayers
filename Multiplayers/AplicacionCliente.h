@@ -31,6 +31,9 @@ private:
 
 	void createShapes();
 	void commandsApp();
+
+	void drawShapes();
+	void drawTemporalShapes();
 	Color cActualColor;
 
 	bool activeKeyBoard = true;

@@ -42,6 +42,8 @@ public:
 	virtual Package packData() = 0;
 };
 
+
+
 class ShapesData : public NetworkMessage
 {
 public:
@@ -66,36 +68,20 @@ public:
 	Package packData();
 };
 
-//class MsgConnected : public NetworkMessage
+
+
+//class MsgUsser : public NetworkMessage
 //{
 //public:
-//	MsgConnected() {
+//	MsgUsser() {
 //	}
-//	~MsgConnected() {
+//	~MsgUsser() {
 //	}
-//	struct MessageData
-//	{
-//		//string sMsgConecct = "CONNECT";
-//		//unsigned int uiIdClient;
-//	}m_msgData;
 //	Package packData();
 //	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
-//private:
-//	
+//
+//	string m_msgDATA;
 //};
-
-class MsgUsser : public NetworkMessage
-{
-public:
-	MsgUsser() {
-	}
-	~MsgUsser() {
-	}
-	Package packData();
-	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
-
-	string m_msgDATA;
-};
 
 class MsgDelete : public NetworkMessage
 {
@@ -125,16 +111,30 @@ public:
 	Package packData();
 };
 
-class MsgPass : public NetworkMessage
+class MsgChat : public NetworkMessage
 {
 public:
-	MsgPass() {
+	MsgChat() {
 	}
-	~MsgPass() {
+	~MsgChat() {
 	}
-	Package packData();
 
-	string m_msgDATA;
+	string m_msgData;
+
+	Package packData();
+};
+
+class MsgError : public NetworkMessage
+{
+public:
+	MsgError() {
+	}
+	~MsgError() {
+	}
+
+	string m_msgData;
+
+	Package packData();
 };
 
 class MsgDisconnect : public NetworkMessage
@@ -146,43 +146,44 @@ public:
 	}
 	Package packData();
 private:
-	string m_msgDATA = "Disconnect";
+	string m_msgData = "Disconnect";
 };
 
-class MsgChat : public NetworkMessage
-{
-public:
-	MsgChat() {
-	}
-	~MsgChat() {
-	}
-	Package packData();
+//class MsgPass : public NetworkMessage
+//{
+//public:
+//	MsgPass() {
+//	}
+//	~MsgPass() {
+//	}
+//	Package packData();
+//
+//	string m_msgDATA;
+//};
 
-	string m_msgDATA;
-};
 
-class MsgMouseData : public NetworkMessage
-{
-public:
-	struct MouseData
-	{
-		Unit32 m_posX;
-		Unit32 m_posY;
-		union
-		{
-			Unit32 buttons;
-			struct
-			{
-				Unit32 left : 1;
-				Unit32 right : 1;
-				Unit32 middle : 1;
-				Unit32 xButton1 : 1;
-				Unit32 xButton2 : 1;
-			};
-		}m_buttonStates;
-	}m_msgData;
-	Package packData() override;
-
-	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
-	void fillCurrentMouseData();
-};
+//class MsgMouseData : public NetworkMessage
+//{
+//public:
+//	struct MouseData
+//	{
+//		Unit32 m_posX;
+//		Unit32 m_posY;
+//		union
+//		{
+//			Unit32 buttons;
+//			struct
+//			{
+//				Unit32 left : 1;
+//				Unit32 right : 1;
+//				Unit32 middle : 1;
+//				Unit32 xButton1 : 1;
+//				Unit32 xButton2 : 1;
+//			};
+//		}m_buttonStates;
+//	}m_msgData;
+//	Package packData() override;
+//
+//	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
+//	void fillCurrentMouseData();
+//};
