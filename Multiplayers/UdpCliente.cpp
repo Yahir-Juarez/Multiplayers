@@ -18,7 +18,7 @@ using sf::Time;
 User::User()
 {
 	socket.setBlocking(false);
-	cout << "Ingresa la IP";
+	cout << "Ingresa la IP" << endl;
 	cin >> prueba;
 	cout << "Ingresa el puerto" << endl;
 	cin >> serverPort;
@@ -68,15 +68,6 @@ void User::inPutRecive()
 			commandInput(unpackedData, msgType);
 		}
 	}
-	cout << "El servidor mando: ";
-
-	////////////////////////////////////Borrar////////////////////////////////////////
-	for (int i = 0; i << VCpackageInput.size(); i++)
-	{
-		cout << VCpackageInput[i];
-	}
-	cout << endl;
-	//////////////////////////////////////////////////////////////////////////////////
 }
 
 void User::commandInput(Package& unpackedData, Unit16& msgType)
@@ -85,24 +76,40 @@ void User::commandInput(Package& unpackedData, Unit16& msgType)
 	
 	if (msgType == MESSAGE_TYPE::kERROR)
 	{
+		timerMsg.restart();
+		msgActual.clear();
 		estado = false;
 		enuEstado = Inicio;
 		msgActual.insert(msgActual.begin(), unpackedData.begin(), unpackedData.end());
+		cout << msgActual << endl;
 	}
-	else if (msgType == MESSAGE_TYPE::kCONNECT)
+	if (msgType == MESSAGE_TYPE::kPING)
+	{
+		restartClock();
+	}
+	else
+	{
+		restartClock();
+	}
+	if (msgType == MESSAGE_TYPE::kCONNECT)
 	{
 		MsgConnect dataConnect;
 		estado = true;
 		enuEstado = Aplicacion;
+		timerPing.restart();
 	}
 	else if (msgType == MESSAGE_TYPE::kDISCONNECT)
 	{
+		timerMsg.restart();
+		msgActual.clear();
 		estado = false;
 		enuEstado = Inicio;
 		msgActual.insert(msgActual.begin(), unpackedData.begin(), unpackedData.end());
+		cout << msgActual << endl;
 	}
 	else if (msgType == MESSAGE_TYPE::kCHAT)
 	{
+		timerMsg.restart();
 		msgActual.clear();
 		msgActual.insert(msgActual.begin(), unpackedData.begin(), unpackedData.end());
 		cout << msgActual << endl;
@@ -159,12 +166,21 @@ float DistanciaEntreDosPuntos(Vector2f& inicial, Vector2f & final)
 
 void User::createCircle(ShapesData::ShapeData& temporalDataShape)
 {
-	CircleShape* oTemporalCircleShape = new CircleShape();
 	sf::Vector2f sizeInicial(temporalDataShape.m_posInitialX, temporalDataShape.m_posInitialY);
 	sf::Vector2f sizeFinal(temporalDataShape.m_posFinalX, temporalDataShape.m_posFinalY);
-	float radio = DistanciaEntreDosPuntos(sizeInicial, sizeFinal);
-	oTemporalCircleShape->setRadius(radio);
-	oTemporalCircleShape->setPosition(Vector2f(sizeInicial.x - radio, sizeInicial.y - radio));
+
+	auto diffPossVect = sizeFinal - sizeInicial;
+	diffPossVect.x = std::abs(diffPossVect.x);
+	diffPossVect.y = std::abs(diffPossVect.y);
+
+	float diameter = static_cast<float>(std::max(diffPossVect.x, diffPossVect.y));
+	float radius = diameter * 0.5f;
+
+	CircleShape* oTemporalCircleShape = new CircleShape(radius);
+	Vector2f sfPos(std::min(sizeInicial.x, sizeFinal.x), std::min(sizeInicial.y, sizeFinal.y));
+	Vector2f scale(diffPossVect.x / diameter, diffPossVect.y / diameter);
+	oTemporalCircleShape->setPosition(sfPos);
+	oTemporalCircleShape->setScale(scale);
 	oTemporalCircleShape->setFillColor(temporalDataShape.m_cTypeColor);
 	shapes newShape;
 	newShape.circleObjects.push_back(oTemporalCircleShape);
@@ -215,6 +231,8 @@ bool User::usuario(Package& VCpackageMessage)
 void User::UdpClient()
 {
 	inPutRecive();
+	sendPing();
+	checkPingAndTimerMsg();
 }
 
 User::~User()
@@ -229,5 +247,46 @@ User::~User()
 		{
 			delete vShapes[i].shapesTypes[j];
 		}
+	}
+}
+
+void User::restartClock()
+{
+	Ping.restart();
+}
+
+void User::sendPing()
+{
+	sf::Time tiempo;
+	tiempo = timerPing.getElapsedTime();
+	float timeInSeconds = tiempo.asSeconds();
+	if (timeInSeconds > 3)
+	{
+			MsgPing newMsg;
+			auto connect = newMsg.packData();
+			Package finalPackage = getPackage(connect.data(), connect.size());
+			usuario(finalPackage);
+			timerPing.restart();
+			cout << "Mando ping" << endl;	
+	}
+}
+
+void User::checkPingAndTimerMsg()
+{
+	sf::Time tiempo;
+	tiempo = timerMsg.getElapsedTime();
+	float timeInSeconds = tiempo.asSeconds();
+	if (timeInSeconds > 10)
+	{
+		msgActual.clear();
+	}
+	tiempo = Ping.getElapsedTime();
+	timeInSeconds = tiempo.asSeconds();
+	if (timeInSeconds > 20 && enuEstado == Aplicacion)
+	{
+		timerMsg.restart();
+		msgActual.clear();
+		msgActual = "Desconeccion del servidor";
+		enuEstado = Inicio;
 	}
 }

@@ -65,23 +65,31 @@ public:
 
 	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
 
+	/////////////////////////////////////////////
+	/// <summary>
+	/// Package the messages
+	/// </summary>
+	/// <returns></Package>
+	/////////////////////////////////////////////
 	Package packData();
 };
 
+class MsgPing : public NetworkMessage
+{
+public:
+	MsgPing() {
+	}
+	~MsgPing() {
+	}
 
-
-//class MsgUsser : public NetworkMessage
-//{
-//public:
-//	MsgUsser() {
-//	}
-//	~MsgUsser() {
-//	}
-//	Package packData();
-//	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
-//
-//	string m_msgDATA;
-//};
+	/////////////////////////////////////////////
+	/// <summary>
+	/// Package the messages
+	/// </summary>
+	/// <returns></Package>
+	/////////////////////////////////////////////
+	Package packData();
+};
 
 class MsgDelete : public NetworkMessage
 {
@@ -94,7 +102,15 @@ public:
 	{
 		unsigned int IdShape;
 	}m_msgData;
+
+	/////////////////////////////////////////////
+	/// <summary>
+	/// Package the messages
+	/// </summary>
+	/// <returns></Package>
+	/////////////////////////////////////////////
 	Package packData();
+
 	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
 };
 
@@ -108,6 +124,12 @@ public:
 
 	string m_msgData;
 
+	/////////////////////////////////////////////
+	/// <summary>
+	/// Package the messages
+	/// </summary>
+	/// <returns></Package>
+	/////////////////////////////////////////////
 	Package packData();
 };
 
@@ -121,6 +143,12 @@ public:
 
 	string m_msgData;
 
+	/////////////////////////////////////////////
+	/// <summary>
+	/// Package the messages
+	/// </summary>
+	/// <returns></Package>
+	/////////////////////////////////////////////
 	Package packData();
 };
 
@@ -134,6 +162,12 @@ public:
 
 	string m_msgData;
 
+	/////////////////////////////////////////////
+	/// <summary>
+	/// Package the messages
+	/// </summary>
+	/// <returns></Package>
+	/////////////////////////////////////////////
 	Package packData();
 };
 
@@ -144,46 +178,15 @@ public:
 	}
 	~MsgDisconnect() {
 	}
+
+	/////////////////////////////////////////////
+	/// <summary>
+	/// Package the messages
+	/// </summary>
+	/// <returns></Package>
+	/////////////////////////////////////////////
 	Package packData();
+
 private:
 	string m_msgData = "Disconnect";
 };
-
-//class MsgPass : public NetworkMessage
-//{
-//public:
-//	MsgPass() {
-//	}
-//	~MsgPass() {
-//	}
-//	Package packData();
-//
-//	string m_msgDATA;
-//};
-
-
-//class MsgMouseData : public NetworkMessage
-//{
-//public:
-//	struct MouseData
-//	{
-//		Unit32 m_posX;
-//		Unit32 m_posY;
-//		union
-//		{
-//			Unit32 buttons;
-//			struct
-//			{
-//				Unit32 left : 1;
-//				Unit32 right : 1;
-//				Unit32 middle : 1;
-//				Unit32 xButton1 : 1;
-//				Unit32 xButton2 : 1;
-//			};
-//		}m_buttonStates;
-//	}m_msgData;
-//	Package packData() override;
-//
-//	static bool unPackData(void* pDestData, void* pScrData, size_t numBytes);
-//	void fillCurrentMouseData();
-//};

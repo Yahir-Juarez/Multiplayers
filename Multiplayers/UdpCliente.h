@@ -46,9 +46,32 @@ public:
 	void createRect(ShapesData::ShapeData& temporalDataShape);
 	void createCircle(ShapesData::ShapeData& temporalDataShape);
 	void createLine(ShapesData::ShapeData& temporalDataShape);
-	
 
+	/////////////////////////////////////////////
+	/// <summary>
+	/// Reset the clock clients.
+	/// </summary>
+	void restartClock();
+	/////////////////////////////////////////////
 
+	/////////////////////////////////////////////
+	/// <summary>
+	/// Send ping to the clients
+	/// </summary>
+	void sendPing();
+	/////////////////////////////////////////////
+
+	/////////////////////////////////////////////
+	/// <summary>
+	/// Check if the ping reception time is 
+	/// exceeded and reset the message clock.
+	/// </summary>
+	void checkPingAndTimerMsg();
+	/////////////////////////////////////////////
+
+	Clock timerMsg;
+	Clock timerPing;
+	Clock Ping;
 	bool estado = false;
 	estadoApp enuEstado;
 	std::optional<sf::IpAddress> ipServer;

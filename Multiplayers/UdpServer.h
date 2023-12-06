@@ -19,6 +19,7 @@ struct ClientData
 	unsigned short clientPort;
 	string usserName;
 	unsigned int IDclient;
+	Clock cTimerPing;
 };
 
 struct ShapesInServer
@@ -58,6 +59,39 @@ private:
 	bool outPutSendGlobal(Package& VCpackageMessage);
 	bool comprobateUsser(string usser, string password);
 	unsigned int getID();
+
+	/////////////////////////////////////////////
+	/// <summary>
+	/// Checks the elapsed time of the clients 
+	/// last reduced message to decide whether 
+	/// to remove it from the server or not.
+	/// </summary>
+	void checkPingClient();
+	/////////////////////////////////////////////
+
+	/////////////////////////////////////////////
+	/// <summary>
+	/// Reset the clock clients.
+	/// </summary>
+	void restartClock();
+	/////////////////////////////////////////////
+
+	/////////////////////////////////////////////
+	/// <summary>
+	/// Check if the client that sent the 
+	/// message is on the server. 
+	/// </summary>
+	bool checkClientInServer();
+	/////////////////////////////////////////////
+
+	/////////////////////////////////////////////
+	/// <summary>
+	/// Send ping to the clients
+	/// </summary>
+	void sendPing();
+	/////////////////////////////////////////////
+
+	Clock timerPing;
 
 	unsigned int uiNewId = 0;
 	unsigned int uiNewIdShape = 0;

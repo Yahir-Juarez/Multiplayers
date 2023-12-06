@@ -69,7 +69,6 @@ void KeyBoard::sendServer(User& actualUser)
 			auto connect = oLoginRegister.packData();
 			Package finalPackage = getPackage(connect.data(), connect.size());
 			actualUser.usuario(finalPackage);
-			cout << "Se registro el usuario -> " << oLoginRegister.m_msgData << "\nPassword -> " << oLoginRegister.m_msgData << '\n';
 			return;
 		}
 		m_password = sInput;
@@ -78,7 +77,6 @@ void KeyBoard::sendServer(User& actualUser)
 		auto connect = oLoginRegister.packData();
 		Package finalPackage = getPackage(connect.data(), connect.size());
 		actualUser.usuario(finalPackage);
-		//cout << "Inicio el usuario -> " << oLogin.m_msgData.sUsser << "\nPassword -> " << oLogin.m_msgData.sPassword << '\n';
 		return;
 	}
 	if (actualUser.enuEstado == Aplicacion)
@@ -89,7 +87,6 @@ void KeyBoard::sendServer(User& actualUser)
 		auto connect = cMsgUsuario.packData();
 		Package finalPackage = getPackage(connect.data(), connect.size());
 		actualUser.usuario(finalPackage);
-		cout << sInput << " " << "Mensaje enviado" << endl;
 	}
 }
 

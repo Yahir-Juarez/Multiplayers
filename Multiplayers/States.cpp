@@ -70,6 +70,16 @@
 //	return data;
 //}
 
+Package MsgPing::packData()
+{
+	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kPING;
+	Package data;
+	data.resize(sizeof(MESSAGE_TYPE_VAR));
+	memcpy(data.data(), &MSGTYPE, sizeof(MESSAGE_TYPE_VAR));
+
+	return data;
+}
+
 Package MsgDelete::packData()
 {
 	MESSAGE_TYPE_VAR MSGTYPE = MESSAGE_TYPE::kDELETE_SHAPE;

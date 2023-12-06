@@ -31,7 +31,6 @@ void Server::conexion(string usser)
 	temporalData.usserName = usser;
 	temporalData.IDclient = uiNewId;
 	vActiveClients.push_back(temporalData);
-	cout << "se mando el mensaje y se agrego a la lista\n";
 }
 
 bool Server::checkUsser(string usser)
@@ -174,6 +173,20 @@ void Server::commandInput(Package& unpackedData, Unit16& msgType)
 		conexion(usser);
 		updateSendData();
 	}
+
+	if (!checkClientInServer())
+	{
+		return;
+	}
+
+	if (msgType == MESSAGE_TYPE::kPING)
+	{
+		restartClock();
+	}
+	else
+	{
+		restartClock();
+	}
 	if (msgType == MESSAGE_TYPE::kCHAT)
 	{
 		string msg;
@@ -284,15 +297,12 @@ void Server::checkUsserInServer(string usser)
 
 void Server::RunUdpServer(const unsigned short puerto)
 {
-
-	//Se crea un socket
-	//El puerto se hace escucha enlazandose tambien con el socket
-	Packet paquete;
-	Clock reloj;
 	bool servidor_activo = true;
 	while (servidor_activo == true)
 	{
 		inPutRecive();
+		sendPing();
+		checkPingClient();
 		if (Keyboard::isKeyPressed(Keyboard::L))
 		{
 			if (list_active == false)
@@ -315,4 +325,59 @@ void Server::RunUdpServer(const unsigned short puerto)
 	}
 }
 
+void Server::checkPingClient()
+{
+	sf::Time tiempo;
+	for (int i = vActiveClients.size() - 1; i >= 0; i--)
+	{
+		tiempo = vActiveClients[i].cTimerPing.getElapsedTime();
+		float timeInSeconds = tiempo.asSeconds();
+		if (timeInSeconds > 20)
+		{
+			vActiveClients.erase(vActiveClients.begin() + i);
+			break;
+		}
+	}
+}
 
+void Server::restartClock()
+{
+	for (int i = 0; i < vActiveClients.size(); i++)
+	{
+		if (vActiveClients[i].clientPort == senderPort && vActiveClients[i].clientIp == ipClient)
+		{
+			vActiveClients[i].cTimerPing.restart();
+		}
+	}
+}
+
+bool Server::checkClientInServer()
+{
+	for (int i = 0; i < vActiveClients.size(); i++)
+	{
+		if (vActiveClients[i].clientPort == senderPort && vActiveClients[i].clientIp == ipClient)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void Server::sendPing()
+{
+	sf::Time tiempo;
+	tiempo = timerPing.getElapsedTime();
+	float timeInSeconds = tiempo.asSeconds();
+	if (timeInSeconds > 3)
+	{
+		for (int i = 0; i < vActiveClients.size(); i++)
+		{
+			MsgPing newMsg;
+			auto connect = newMsg.packData();
+			Package finalPackage = getPackage(connect.data(), connect.size());
+			outPutSendGlobal(finalPackage);
+			timerPing.restart();
+			cout << "mando ping" << endl;
+		}
+	}
+}

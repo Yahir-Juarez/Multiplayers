@@ -1,4 +1,6 @@
 #include "AplicacionCliente.h"
+#include <cmath>
+
 
 App::App()
 {
@@ -16,7 +18,7 @@ App::App()
 	keyboardOff.createButton("Textures/TecladoApagado.png", sizeTeclado, posicionTeclado);
 
 	Vector2f posicionColor((window_x * 1) / 40, (window_y * 1) / 40);
-	Vector2f sizeColor(20, 20);
+	Vector2f sizeColor(25, 25);
 	oColorBlack.createButton(Color::Black, sizeColor, posicionColor);
 	posicionColor.x = ((window_x * 2) / 40);
 	posicionColor.y = ((window_y * 1) / 40);
@@ -33,21 +35,24 @@ App::App()
 	posicionColor.x = ((window_x * 2) / 40);
 	posicionColor.y = ((window_y * 5) / 40);
 	oColorRed.createButton(Color::Red, sizeColor, posicionColor);
-	posicionColor.x = ((window_x * 1.5) / 40);
+	posicionColor.x = ((window_x * 1) / 40);
 	posicionColor.y = ((window_y * 7) / 40);
 	oColorYellow.createButton(Color::Yellow, sizeColor, posicionColor);
 	posicionColor.x = ((window_x * 2) / 40);
-	posicionColor.y = ((window_y * 10) / 40);
+	posicionColor.y = ((window_y * 7) / 40);
+	oColorWhite.createButton(Color::White, sizeColor, posicionColor);
+	posicionColor.x = ((window_x * 4) / 40);
+	posicionColor.y = ((window_y * 2.5) / 40);
 	Vector2f sizeShapestype(60, 60);
 	oRectangle.createButton("Textures/cuadrado.png", sizeShapestype, posicionColor);
-	posicionColor.x = ((window_x * 2) / 40);
-	posicionColor.y = ((window_y * 14) / 40);
+	posicionColor.x = ((window_x * 6) / 40);
+	posicionColor.y = ((window_y * 2.5) / 40);
 	oCircle.createButton("Textures/circle.png", sizeShapestype, posicionColor);
-	posicionColor.x = ((window_x * 2) / 40);
-	posicionColor.y = ((window_y * 18) / 40);
+	posicionColor.x = ((window_x * 4) / 40);
+	posicionColor.y = ((window_y * 6.5) / 40);
 	oLine.createButton("Textures/FLine.png", sizeShapestype, posicionColor);
-	posicionColor.x = ((window_x * 2) / 40);
-	posicionColor.y = ((window_y * 22) / 40);
+	posicionColor.x = ((window_x * 6) / 40);
+	posicionColor.y = ((window_y * 6.5) / 40);
 	oFLine.createButton("Textures/Line.png", sizeShapestype, posicionColor);
 	mainloop();
 }
@@ -166,14 +171,12 @@ void App::buttonPressed()
 			{
 				usuario.bNewUsser = false;
 				usuario.enuEstado = estadoApp::InicioUser;
-				//usuario.conexion();
 				relojButtons.restart();
 			}
 			if (oLogin.buttonEvent(eventos))
 			{
 				usuario.bNewUsser = true;
 				usuario.enuEstado = estadoApp::InicioUser;
-				//usuario.conexion();
 				relojButtons.restart();
 			}
 		}
@@ -218,6 +221,12 @@ void App::buttonPressed()
 			else if (oColorYellow.buttonEvent(eventos))
 			{
 				cActualColor = Color::Yellow;
+				relojButtons.restart();
+				bPressButton = true;
+			}
+			else if (oColorWhite.buttonEvent(eventos))
+			{
+				cActualColor = Color::White;
 				relojButtons.restart();
 				bPressButton = true;
 			}
@@ -379,12 +388,22 @@ void App::drawTemporalShapes()
 		}
 		if (eTypeMessageActual == TYPE_SHAPE::shapes::CIRCLE)
 		{
-			CircleShape CircleTemporal;
-			float radio = DistanciaEntreDosPuntos2(posInicial, posFinal);
-			CircleTemporal.setRadius(radio);
-			CircleTemporal.setPosition(Vector2f(posInicial.x - radio, posInicial.y - radio));
-			CircleTemporal.setFillColor(cActualColor);
-			ventana.draw(CircleTemporal);
+			auto diffPossVect = posFinal - posInicial;
+			cout << diffPossVect.x  << " 1 " << diffPossVect.y << endl;
+			diffPossVect.x = std::abs(diffPossVect.x);
+			diffPossVect.y = std::abs(diffPossVect.y);
+			cout << diffPossVect.x << " 2 " << diffPossVect.y << endl;
+
+			float diameter = static_cast<float>(std::max(diffPossVect.x, diffPossVect.y));
+			float radius = diameter * 0.5f;
+
+			CircleShape circleTemporal(radius);
+			Vector2f sfPos(std::min(posInicial.x, posFinal.x), std::min(posInicial.y, posFinal.y));
+			Vector2f scale(diffPossVect.x / diameter, diffPossVect.y / diameter);
+			circleTemporal.setPosition(sfPos);
+			circleTemporal.setScale(scale);
+			circleTemporal.setFillColor(cActualColor);
+			ventana.draw(circleTemporal);
 		}
 		if (eTypeMessageActual == TYPE_SHAPE::shapes::LINE)
 		{
@@ -414,6 +433,7 @@ void App::renderButtonsApp()
 	oColorMagenta.render(ventana);
 	oColorRed.render(ventana);
 	oColorYellow.render(ventana);
+	oColorWhite.render(ventana);
 }
 
 void App::commandsApp()
