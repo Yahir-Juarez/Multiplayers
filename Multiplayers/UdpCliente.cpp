@@ -231,6 +231,7 @@ bool User::usuario(Package& VCpackageMessage)
 void User::UdpClient()
 {
 	inPutRecive();
+	if (enuEstado == Aplicacion)
 	sendPing();
 	checkPingAndTimerMsg();
 }
