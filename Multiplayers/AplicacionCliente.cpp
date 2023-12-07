@@ -379,20 +379,22 @@ void App::drawTemporalShapes()
 	{
 		if (eTypeMessageActual == TYPE_SHAPE::shapes::RECTANGLE)
 		{
+			float sizeOutLine = 2.0f;
 			RectangleShape RectangleTemporal;
 			sf::Vector2f size = posFinal - posInicial;
 			RectangleTemporal.setSize(size);
 			RectangleTemporal.setPosition(posInicial);
-			RectangleTemporal.setFillColor(cActualColor);
+			RectangleTemporal.setFillColor(Color::Transparent);
+			RectangleTemporal.setOutlineColor(cActualColor);
+			RectangleTemporal.setOutlineThickness(sizeOutLine);
 			ventana.draw(RectangleTemporal);
 		}
 		if (eTypeMessageActual == TYPE_SHAPE::shapes::CIRCLE)
 		{
+			float sizeOutLine = 2.0f;
 			auto diffPossVect = posFinal - posInicial;
-			cout << diffPossVect.x  << " 1 " << diffPossVect.y << endl;
 			diffPossVect.x = std::abs(diffPossVect.x);
 			diffPossVect.y = std::abs(diffPossVect.y);
-			cout << diffPossVect.x << " 2 " << diffPossVect.y << endl;
 
 			float diameter = static_cast<float>(std::max(diffPossVect.x, diffPossVect.y));
 			float radius = diameter * 0.5f;
@@ -402,7 +404,9 @@ void App::drawTemporalShapes()
 			Vector2f scale(diffPossVect.x / diameter, diffPossVect.y / diameter);
 			circleTemporal.setPosition(sfPos);
 			circleTemporal.setScale(scale);
-			circleTemporal.setFillColor(cActualColor);
+			circleTemporal.setFillColor(Color::Transparent);
+			circleTemporal.setOutlineColor(cActualColor);
+			circleTemporal.setOutlineThickness(sizeOutLine);
 			ventana.draw(circleTemporal);
 		}
 		if (eTypeMessageActual == TYPE_SHAPE::shapes::LINE)

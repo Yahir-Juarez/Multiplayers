@@ -166,6 +166,7 @@ float DistanciaEntreDosPuntos(Vector2f& inicial, Vector2f & final)
 
 void User::createCircle(ShapesData::ShapeData& temporalDataShape)
 {
+	float sizeOutLine = 2.0f;
 	sf::Vector2f sizeInicial(temporalDataShape.m_posInitialX, temporalDataShape.m_posInitialY);
 	sf::Vector2f sizeFinal(temporalDataShape.m_posFinalX, temporalDataShape.m_posFinalY);
 
@@ -181,7 +182,10 @@ void User::createCircle(ShapesData::ShapeData& temporalDataShape)
 	Vector2f scale(diffPossVect.x / diameter, diffPossVect.y / diameter);
 	oTemporalCircleShape->setPosition(sfPos);
 	oTemporalCircleShape->setScale(scale);
-	oTemporalCircleShape->setFillColor(temporalDataShape.m_cTypeColor);
+	oTemporalCircleShape->setFillColor(temporalDataShape.m_cTypeColor);;
+	oTemporalCircleShape->setFillColor(Color::Transparent);
+	oTemporalCircleShape->setOutlineColor(temporalDataShape.m_cTypeColor);
+	oTemporalCircleShape->setOutlineThickness(sizeOutLine);
 	shapes newShape;
 	newShape.circleObjects.push_back(oTemporalCircleShape);
 	newShape.idShape = temporalDataShape.IdShape;
@@ -190,14 +194,16 @@ void User::createCircle(ShapesData::ShapeData& temporalDataShape)
 
 void User::createRect(ShapesData::ShapeData& temporalDataShape)
 {
+	float sizeOutLine = 2.0f;
 	sf::RectangleShape* oTemporalRectangle = new RectangleShape;
 	sf::Vector2f sizeInicial(temporalDataShape.m_posInitialX, temporalDataShape.m_posInitialY);
 	sf::Vector2f sizeFinal(temporalDataShape.m_posFinalX, temporalDataShape.m_posFinalY);
 	oTemporalRectangle->setPosition(sizeInicial);
 	sf::Vector2f size = sizeFinal - sizeInicial;
 	oTemporalRectangle->setSize(size);
-	//temporalshape.setSize(sf::Vector2f(std::abs(size.x), std::abs(size.y)));
-	oTemporalRectangle->setFillColor(temporalDataShape.m_cTypeColor);
+	oTemporalRectangle->setFillColor(Color::Transparent);
+	oTemporalRectangle->setOutlineColor(temporalDataShape.m_cTypeColor);
+	oTemporalRectangle->setOutlineThickness(sizeOutLine);
 	shapes newShape;
 	newShape.shapesTypes.push_back(oTemporalRectangle);
 	newShape.idShape = temporalDataShape.IdShape;
